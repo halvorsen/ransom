@@ -9,6 +9,15 @@
 import Foundation
 
 struct Selection {
+  
+    
+    func linearCheckForNumberAfterLast(last: Int, prior: Int) -> Int {
+        
+        let index =  2*last - prior
+        
+        return index
+        
+    }
     
     func selectableIndexesWithOneAlreadySelected(first: Int) -> [Int] {
        var returnList = [Int]()
@@ -314,12 +323,6 @@ struct Selection {
 //        
 //    }
     
-    func linearCheckForNumberAfterLast(last: Int, prior: Int) -> Int {
-        
-        let index =  2*last - prior
-      
-        return index
     
-    }
     
 }

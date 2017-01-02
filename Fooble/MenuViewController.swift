@@ -249,7 +249,7 @@ class MenuViewController: UIViewController {
             levelButton.frame.origin.y = CGFloat(i-1)*((120/750)*screenWidth) + header
             self.view.addSubview(levelButton)
             levelButton.setTitle(String(n[i-1]), for: UIControlState.normal)
-            levelButton.titleLabel!.font = UIFont(name: "HelveticaNeue-Bold", size: fontSizeMultiplier*16)
+            levelButton.titleLabel!.font = UIFont(name: "HelveticaNeue-Bold", size: fontSizeMultiplier*18)
             levelButton.setTitleColor(UIColor(red: 42/255, green: 42/255, blue: 42/255, alpha: 1.0), for: .normal)
             levelButton.tag = n[i-1]
             levelButton.addTarget(self, action: #selector(MenuViewController.levels(_:)), for: .touchUpInside)
