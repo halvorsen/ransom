@@ -28,8 +28,7 @@ class Calculator: ShuffleAndDeal {
             }
             n += 1
         }
-        var orderedHand = _hand.sorted { $0 < $1 }
-        var orderedAccordingToNumbers = [Int]()
+        let orderedHand = _hand.sorted { $0 < $1 }
         
         return orderedHand
     }

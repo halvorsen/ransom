@@ -64,6 +64,7 @@
                     </view>
                     <connections>
                         <segue destination="BYZ-38-t0r" kind="show" identifier="fromGameToMenu" id="gVo-V8-Xpq"/>
+                        <segue destination="k7p-7N-CgK" kind="show" identifier="fromGameToIntro" id="NUS-Oz-Ojt"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="jMX-QB-CA0" userLabel="First Responder" sceneMemberID="firstResponder"/>
@@ -72,7 +73,8 @@
         </scene>
     </scenes>
     <inferredMetricsTieBreakers>
-        <segue reference="pJC-gV-t5v"/>
+        <segue reference="gVo-V8-Xpq"/>
         <segue reference="xeY-ss-iXb"/>
+        <segue reference="NUS-Oz-Ojt"/>
     </inferredMetricsTieBreakers>
 </document>

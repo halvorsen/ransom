@@ -18,6 +18,9 @@ class IntroViewController: UIViewController {
     let screenWidth = UIScreen.main.bounds.width
     let screenHeight = UIScreen.main.bounds.height
     var fontSizeMultiplier = UIScreen.main.bounds.width / 375
+    var seg = String()
+    var tagLevelIdentifier = Int()
+    var isFirstTime = true //ADD THIS TO CORE DATA
 
     override var prefersStatusBarHidden: Bool {
         return true
@@ -31,6 +34,18 @@ class IntroViewController: UIViewController {
 
     }
 
+    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
+        
+        if seg == "game" {
+            
+            let gameView: GameViewController = segue.destination as! GameViewController
+            
+            gameView.tagLevelIdentifier = tagLevelIdentifier
+            
+        } else {
+            
+        }
+    }
     
     private func addButtons() {
 //        
@@ -115,12 +130,22 @@ class IntroViewController: UIViewController {
         self.performSegue(withIdentifier: "fromIntroToGame", sender: self)
     }
     @objc private func solo(_ button: UIButton) {
+        seg = "game"
+        if isFirstTime {
+        tagLevelIdentifier = 100
+        } else {
+           tagLevelIdentifier = 101
+        }
         self.performSegue(withIdentifier: "fromIntroToGame", sender: self)
     }
     @objc private func playerVsPlayer(_ button: UIButton) {
+        seg = "game"
+        tagLevelIdentifier = 300
         self.performSegue(withIdentifier: "fromIntroToGame", sender: self)
     }
     @objc private func aI(_ button: UIButton) {
+        seg = "game"
+        tagLevelIdentifier = 200
         self.performSegue(withIdentifier: "fromIntroToGame", sender: self)
     }
 

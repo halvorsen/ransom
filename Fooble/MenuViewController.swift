@@ -261,9 +261,6 @@ class MenuViewController: UIViewController {
             
         }
         
-        
-        let a: CGFloat = 0.25
-        
         //top add more levels labels
         let menuHeader1 = UILabel()
         menuHeader1.text = "More Levels Super Soon"
