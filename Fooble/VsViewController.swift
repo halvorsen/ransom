@@ -1,23 +1,22 @@
 //
-//  GameViewController.swift
+//  VsViewController.swift
 //  Fooble
 //
-//  Created by Aaron Halvorsen on 12/28/16.
-//  Copyright © 2016 Aaron Halvorsen. All rights reserved.
+//  Created by Aaron Halvorsen on 1/3/17.
+//  Copyright © 2017 Aaron Halvorsen. All rights reserved.
 //
 
 import UIKit
 import AudioToolbox
 
-class GameViewController: UIViewController {
+class VsViewController: UIViewController {
+    
     
     var center = Int()
     var centerPoint = CGPoint()
-    var passedLevel = Bool()
     var panTouchLocation = CGPoint()
     var locationOfBeganPan = CGPoint()
     var locationOfEndPan = CGPoint()
-    var tagLevelIdentifier = Int()
     let screenWidth = UIScreen.main.bounds.width
     let screenHeight = UIScreen.main.bounds.height
     var fontSizeMultiplier = UIScreen.main.bounds.width / 375
@@ -29,14 +28,16 @@ class GameViewController: UIViewController {
     var currentScoreString = String()
     var currentScoreInt = Int() {didSet{currentScoreString = String(currentScoreInt)}}
     let dotSize = (1/16)*UIScreen.main.bounds.width
-    let score = UILabel()
     let hint = UIButton()
     let exit = UIButton()
     let scoreFlash = UILabel()
     var displayLayers = [CAShapeLayer]()
     var shapeLayers = [CAShapeLayer?]()
     var shapeLayers2 = [CAShapeLayer]()
-    let restart = UIButton()
+    var yellowPointsInt = Int() {didSet{yellowPointsString = String(yellowPointsInt)}}
+    var yellowPointsString = "Score"
+    var redPointsInt = Int() {didSet{redPointsString = String(redPointsInt)}}
+    var redPointsString = "Score"
     let sequence = UIButton()
     let sequences = UILabel()
     let back = UIButton()
@@ -47,18 +48,13 @@ class GameViewController: UIViewController {
     var hintDisplay = [CAShapeLayer]()
     var hintNumbersAsStrings = [String]()
     var hintNumberLabels = [UILabel]()
-    let finishMessage = UILabel()
-    var questButtons = [UIButton]()
+    var tagLevelIdentifier = Int()
+    
     let menuX = UIButton()
     let menuX2 = UIButton()
     let menuBox = UIButton()
-    let continueToPlay = UIButton()
-    let tutorialAnnotation = UILabel()
-    let tutorialAnnotation2 = UILabel()
-    let tutorialAnnotation3 = UILabel()
     let sequenceRowOne = UILabel()
     let sequenceRowTwo = UILabel()
-    let okay = UIButton()
     let dotNumbersAsStrings = [String]()
     var dotLabels = [UILabel?]()
     var displayLabels = [UILabel]()
@@ -81,13 +77,12 @@ class GameViewController: UIViewController {
     var isDropInProgress = false
     var bool = true
     var backBlack = UILabel()
-    var highestHand = [1,1,1,1,1]
-    var _highestHand = [1,1,1,1,1]
-    var highestSoFar = 1
-    var questString = String()
-    var iWantToFinish = false
-    let imageView = UIImageView()
-    var imageViewGlobal = UIImageView()
+    var futureIndexes = [Int]()
+    var priorIndex = Int()
+    var lastIndex = Int()
+    var thisTurn: Team = .red
+    var oneTurnAgo: Team = .start
+    var twoTurnsAgo: Team = .start
     
     
     override var prefersStatusBarHidden: Bool {
@@ -110,38 +105,30 @@ class GameViewController: UIViewController {
         }
         
         addButtons()
+        view.addSubview(redScore)
+        view.addSubview(yellowScore)
         
     }
     
     override func viewDidAppear(_ animated: Bool) {
-        switch tagLevelIdentifier {
-        case 100, 101:
-            var shuffled = [Int]()
-            var allNumbers = [Int]()
-            for i in 0..<84 {
-                allNumbers.append(i)
-            }
-            for _ in 0..<67 {
-                let randomNumber = Int(arc4random_uniform(UInt32(allNumbers.count)))
-                if let index = allNumbers.index(of: allNumbers[randomNumber]) {
-                    shuffled.append(allNumbers[randomNumber])
-                    allNumbers.remove(at:index)
-                }
-            }
-            deck = shuffled
-            lastCardDisplayed = 999
-            populateDots()
-        case 200:
-            break
-        case 300:
-            break
-        case 0...99:
-            deck = myShuffleAndDeal.levelDeals[tagLevelIdentifier-1]
-            populateDots()
-        default: break
-            
+        
+        var shuffled = [Int]()
+        var allNumbers = [Int]()
+        for i in 0..<84 {
+            allNumbers.append(i)
         }
+        for _ in 0..<67 {
+            let randomNumber = Int(arc4random_uniform(UInt32(allNumbers.count)))
+            if let index = allNumbers.index(of: allNumbers[randomNumber]) {
+                shuffled.append(allNumbers[randomNumber])
+                allNumbers.remove(at:index)
+            }
+        }
+        deck = shuffled
+        lastCardDisplayed = 999
+        populateDots()
         view.addSubview(menuX)
+        startTimer()
     }
     
     private func populateDots() {
@@ -160,7 +147,7 @@ class GameViewController: UIViewController {
                 
             case .red: //red
                 shapeLayers[i]!.strokeColor = UIColor(red: 101/255, green: 34/255, blue: 35/255, alpha: 1.0).cgColor
-           
+                
             }
             let linewidth = 2.0*screenWidth/750
             shapeLayers[i]!.lineWidth = linewidth
@@ -168,26 +155,16 @@ class GameViewController: UIViewController {
             view.layer.addSublayer(shapeLayers[i]!)
             self.view.addSubview(dotLabels[i]!)
         }
-        if tagLevelIdentifier == 100 {
-            displayTutorial()
-        } else if tagLevelIdentifier == 1 {
-            displayTutorialForCampaign()
-        } else {
-            view.addSubview(menuX)
-        }
+        
+        view.addSubview(menuX)
+        
     }
     
     
-    var futureIndexes = [Int]()
-    var priorIndex = Int()
-    var lastIndex = Int()
+    
     @objc func respondToPanGesture(_ gesture: UIPanGestureRecognizer) {
         
-        if tagLevelIdentifier == 1 {
-            if tutorialAnnotation3.isDescendant(of: view) {
-            tutorialAnnotation3.removeFromSuperview()
-        }
-        }
+        
         
         if gesture.state == UIGestureRecognizerState.began {
             hand.removeAll()
@@ -213,7 +190,7 @@ class GameViewController: UIViewController {
                             displayLayers[0].strokeColor = UIColor(red: 190/255, green: 154/255, blue: 35/255, alpha: 1.0).cgColor
                         case .red: //red
                             displayLayers[0].strokeColor = UIColor(red: 101/255, green: 34/255, blue: 35/255, alpha: 1.0).cgColor
-                   
+                            
                         }
                         
                         displayLabels[0].text = String(deck[i]!%7 + 1)
@@ -295,15 +272,13 @@ class GameViewController: UIViewController {
         }
         if gesture.state == UIGestureRecognizerState.ended {
             
-            if hand.count == 5 {
-                _highestHand = hand
-            }
+            
             hand = myCalculator.reorderHand(hand: hand)
-            print("hand: \(hand)")
+           
             additionalScoreInt = myCalculator.pointAmount(hand: myCalculator.reorderHand(hand: hand))
-            questString = myCalculator.questString(hand: myCalculator.reorderHand(hand: hand))
-            print("additional points: \(additionalScoreInt)")
+ 
             if additionalScoreInt != 0 {
+                stopTimer()
                 for i in handIndexes {
                     dotLabels[i]!.removeFromSuperview()
                     deck[i] = nil
@@ -314,47 +289,37 @@ class GameViewController: UIViewController {
                             displayLayers[i].removeFromSuperlayer()
                         }
                     }
-                    
-                    
                 }
-                if tagLevelIdentifier > 99 {
-                    scoreFlash.text = additionalScoreString
-                } else {
-                    scoreFlash.text = questString
-                }
+                scoreFlash.text = additionalScoreString
                 scoreFlash.alpha = 0
                 self.view.addSubview(scoreFlash)
                 UIView.animate(withDuration: 0.5, animations: {
                     self.scoreFlash.alpha = 1.0
                 })
-                _ = Timer.scheduledTimer(timeInterval: 1.5, target: self, selector: #selector(GameViewController.scoreFlashEnd), userInfo: nil, repeats: false)
-                if additionalScoreInt > highestSoFar {
-                    highestHand = _highestHand
-                    highestSoFar = additionalScoreInt
+                _ = Timer.scheduledTimer(timeInterval: 1.5, target: self, selector: #selector(VsViewController.scoreFlashEnd), userInfo: nil, repeats: false)
+                if thisTurn == .red {
+                    redPointsInt += additionalScoreInt
+                } else {
+                    yellowPointsInt += additionalScoreInt
                 }
-                currentScoreInt += additionalScoreInt
                 dropRight(currentDeck: deck)
                 
                 delay(bySeconds: 0.5) {
                     self.dropLeft(currentDeck: self.deck)
                 }
-             
-               
-                
             }
         }
-        
     }
     
     
     
     private func dropLeft(currentDeck: [Int?]) {
         while isDropInProgress {
-            print("dropinprogress")
+      
         }
         isDropInProgress = true
         delay(bySeconds: 0.2) { while self.trackerSum != self.trackerSumPrior || self.bool {
-            print("enteredWhileLoop")
+        
             self.trackerSumPrior = self.trackerSum
             //
             for i in self.iReverse {
@@ -405,7 +370,7 @@ class GameViewController: UIViewController {
     
     private func dropRight(currentDeck: [Int?]) {
         while isDropInProgress {
-            print("dropinprogess")
+           
         }
         isDropInProgress = true
         
@@ -462,53 +427,132 @@ class GameViewController: UIViewController {
         bool = true
         
     }
-    
+    enum Team {
+        case red
+        case yellow
+        case start
+    }
     
     @objc private func scoreFlashEnd() {
         UIView.animate(withDuration: 0.5, animations: {
             self.scoreFlash.alpha = 0.0
         })
         // scoreFlash.removeFromSuperview()
-        score.text = currentScoreString
-        if questButtons.count > 0 {
-            var counter = 0
-        outerloop: for i in questButtons {
-  
-            if questString == i.title(for: .normal) {
-                self.questButtons[counter].removeFromSuperview()
-                AudioServicesPlayAlertSound(SystemSoundID(kSystemSoundID_Vibrate))
-                questButtons.remove(at: counter)
-                print("questbuttons: \(questButtons)")
-               break outerloop
+        if thisTurn == .red {
+            redScore.text = redPointsString
+        } else {
+            yellowScore.text = yellowPointsString
+        }
+        switch thisTurn {
+        case .red:
+            if oneTurnAgo == .start {
+                thisTurn = .yellow
+                startTimer()
+                oneTurnAgo = .red
+            } else if oneTurnAgo == .red {
+                thisTurn = .yellow
+                startTimer()
+                twoTurnsAgo = .red
+            } else {
+                thisTurn = .red
+                twoTurnsAgo = .yellow
             }
-            counter += 1
+            
+            oneTurnAgo = .red
+            
+        case .yellow:
+            if twoTurnsAgo == .start {
+                thisTurn = .yellow
+                twoTurnsAgo = .red
+                oneTurnAgo = .yellow
+            } else if oneTurnAgo == .yellow {
+                thisTurn = .red
+                startTimer()
+                twoTurnsAgo = .yellow
+            } else {
+                thisTurn = .yellow
+                twoTurnsAgo = .red
+            }
+            
+            oneTurnAgo = .yellow
+            
+        case .start: break
         }
+        
+        if thisTurn == .red {
+            redScore.frame = CGRect(x: (300/750)*screenWidth, y: (1180/1334)*screenHeight, width: (400/750)*screenWidth, height: (106/750)*screenWidth)
+            redScore.font = UIFont(name: "HelveticaNeue-Bold", size: fontSizeMultiplier*55)
+            yellowScore.frame = CGRect(x: (49/750)*screenWidth, y: (1230/1334)*screenHeight, width: (150/750)*screenWidth, height: (60/750)*screenWidth)
+            yellowScore.font = UIFont(name: "HelveticaNeue-Bold", size: fontSizeMultiplier*20)
+        } else {
+            yellowScore.frame = CGRect(x: (54/750)*screenWidth, y: (1180/1334)*screenHeight, width: (400/750)*screenWidth, height: (106/750)*screenWidth)
+            yellowScore.font = UIFont(name: "HelveticaNeue-Bold", size: fontSizeMultiplier*55)
+            redScore.frame = CGRect(x: (565/750)*screenWidth, y: (1230/1334)*screenHeight, width: (150/750)*screenWidth, height: (60/750)*screenWidth)
+            redScore.font = UIFont(name: "HelveticaNeue-Bold", size: fontSizeMultiplier*20)
         }
-        if tagLevelIdentifier < 100 {
-        if questButtons.count == 0 && !iWantToFinish {
-            gameWinSequence()
-        }
+        
+    }
+    var myTimer = Timer()
+    var startVisual = Timer()
+    func startTimer() {
+        dynamicBarCue = Timer.scheduledTimer(timeInterval: 0.1, target: self, selector: #selector(VsViewController.updateBar), userInfo: nil, repeats: true)
+    }
+    
+    var dynamicBarCue = Timer()
+    var ticker: Float = 0.0
+    var percentageOfBar: CGFloat = 1.0
+    
+    func pauseTimer() {
+        dynamicBarCue.invalidate()
+    }
+    
+    func stopTimer() {
+        dynamicBarCue.invalidate()
+        if bar.isDescendant(of: view) {
+            bar.removeFromSuperview()
         }
     }
     
-    private func gameWinSequence() {
-        
-        view.addSubview(backBlack)
-        view.bringSubview(toFront: backBlack)
-        view.addSubview(menuBox)
-        view.addSubview(continueToPlay)
-        finishMessage.text = myNarrative.finishMessages[tagLevelIdentifier-1]
-        view.addSubview(finishMessage)
-        //add save coredata checkmark win
-        let array = [1,9,17,25,33,41,43]
-        if array.contains(tagLevelIdentifier) {
-            let image = UIImage(named: "Icon.png")
-            let imageView = UIImageView(image: image)
-            imageView.frame = CGRect(x: 0.28*screenWidth, y: (100/1334)*screenHeight, width: 0.93*screenWidth/2, height: 0.6205*screenWidth)
-            view.addSubview(imageView)
-            imageViewGlobal = imageView
+    
+    let bar = UILabel()
+    @objc private func updateBar() {
+        if ticker == 0 { //700 hack
+            
+            bar.frame = CGRect(x: (CGFloat(1)-percentageOfBar)*(screenWidth/2), y: (1319/1334)*screenHeight, width: screenWidth*percentageOfBar, height: (15/1334)*screenHeight)
+            bar.backgroundColor = UIColor(red: 69/255, green: 125/255, blue: 59/255, alpha: 1.0)
+            view.addSubview(bar)
+        }
+        if ticker == 500 {
+            timerRanOut()
+            dynamicBarCue.invalidate()
+        } else if ticker > 0 { //hack 700
+            percentageOfBar = CGFloat(1 - ticker/150) //hack first 300 is 1000
+            print(percentageOfBar)
+            bar.frame = CGRect(x: (CGFloat(1)-percentageOfBar)*(screenWidth/2), y: (1319/1334)*screenHeight, width: screenWidth*percentageOfBar, height: (15/1334)*screenHeight)
         }
         
+        ticker += 1
+        print(ticker)
+    }
+    @objc private func timerRanOut() {
+        AudioServicesPlayAlertSound(SystemSoundID(kSystemSoundID_Vibrate))
+        switch thisTurn {
+        case .red:
+            
+            thisTurn = .yellow
+            startTimer()
+            oneTurnAgo = .red
+            twoTurnsAgo = .red
+            
+        case .yellow:
+            
+            thisTurn = .red
+            twoTurnsAgo = .yellow
+            oneTurnAgo = .yellow
+            
+        case .start: break
+            
+        }
     }
     
     func addButtons() {
@@ -523,11 +567,7 @@ class GameViewController: UIViewController {
         scoreFlash.text = additionalScoreString
         scoreFlash.textColor = UIColor(red: 255/255, green: 255/255, blue: 255/255, alpha: 1.0)
         scoreFlash.textAlignment = NSTextAlignment.center
-        if tagLevelIdentifier > 99 {
         scoreFlash.font = UIFont(name: "HelveticaNeue-Bold", size: fontSizeMultiplier*70)
-        } else {
-            scoreFlash.font = UIFont(name: "HelveticaNeue-Bold", size: fontSizeMultiplier*50)
-        }
         scoreFlash.frame = CGRect(x: 0, y: (88/1334)*screenHeight, width: screenWidth, height: (110/750)*screenWidth)
         
         //back button
@@ -540,19 +580,9 @@ class GameViewController: UIViewController {
         back.layer.cornerRadius = 5
         back.layer.borderWidth = 1
         back.layer.borderColor = UIColor(red: 215/255, green: 215/255, blue: 215/255, alpha: 1.0).cgColor
-        back.addTarget(self, action: #selector(GameViewController.back(_:)), for: .touchUpInside)
+        back.addTarget(self, action: #selector(VsViewController.back(_:)), for: .touchUpInside)
         
-        //restart button
         
-        restart.frame = CGRect(x: (59/750)*screenWidth, y: (324/1334)*screenHeight, width: 633*screenWidth/750, height: 85*screenWidth/750)
-        restart.setTitle("Restart", for: UIControlState.normal)
-        restart.titleLabel!.font = UIFont(name: "HelveticaNeue-Bold", size: fontSizeMultiplier*30)
-        restart.setTitleColor(UIColor(red: 215/255, green: 215/255, blue: 215/255, alpha: 1.0), for: .normal)
-        restart.backgroundColor = .clear
-        restart.layer.cornerRadius = 5
-        restart.layer.borderWidth = 1
-        restart.layer.borderColor = UIColor(red: 215/255, green: 215/255, blue: 215/255, alpha: 1.0).cgColor
-        restart.addTarget(self, action: #selector(GameViewController.restart(_:)), for: .touchUpInside)
         
         //sequencebutton
         
@@ -564,7 +594,7 @@ class GameViewController: UIViewController {
         sequence.layer.cornerRadius = 5
         sequence.layer.borderWidth = 1
         sequence.layer.borderColor = UIColor(red: 215/255, green: 215/255, blue: 215/255, alpha: 1.0).cgColor
-        sequence.addTarget(self, action: #selector(GameViewController.sequence(_:)), for: .touchUpInside)
+        sequence.addTarget(self, action: #selector(VsViewController.sequence(_:)), for: .touchUpInside)
         
         //sequence label
         
@@ -576,61 +606,41 @@ class GameViewController: UIViewController {
         
         // show list button
         
-        showList.frame = CGRect(x: (50/750)*screenWidth, y: (1044/1334)*screenHeight, width: 650*screenWidth/750, height: 87*screenWidth/750)
-        showList.setTitle("List On", for: UIControlState.normal)
-        showList.titleLabel!.font = UIFont(name: "HelveticaNeue-Bold", size: fontSizeMultiplier*30)
-        showList.setTitleColor(UIColor(red: 215/255, green: 215/255, blue: 215/255, alpha: 1.0), for: .normal)
-        showList.backgroundColor = .clear
-        showList.layer.cornerRadius = 5
-        showList.layer.borderWidth = 1
-        showList.layer.borderColor = UIColor(red: 215/255, green: 215/255, blue: 215/255, alpha: 1.0).cgColor
-        showList.addTarget(self, action: #selector(GameViewController.showList(_:)), for: .touchUpInside)
         
         
         
-        yellowScore.text = currentScoreString
+        yellowScore.text = yellowPointsString
         yellowScore.textColor = UIColor(red: 190/255, green: 154/255, blue: 35/255, alpha: 1.0)
         yellowScore.textAlignment = NSTextAlignment.left
-        yellowScore.font = UIFont(name: "HelveticaNeue-Bold", size: fontSizeMultiplier*36)
-        yellowScore.frame = CGRect(x: (50/750)*screenWidth, y: (1231/1334)*screenHeight, width: (250/750)*screenWidth, height: (46/750)*screenWidth)
+        yellowScore.font = UIFont(name: "HelveticaNeue-Bold", size: fontSizeMultiplier*25)
+        yellowScore.frame = CGRect(x: (49/750)*screenWidth, y: (1230/1334)*screenHeight, width: (150/750)*screenWidth, height: (60/750)*screenWidth)
         
         // red score label
         
-        redScore.text = currentScoreString
+        redScore.text = redPointsString
         redScore.textColor = UIColor(red: 101/255, green: 34/255, blue: 35/255, alpha: 1.0)
         redScore.textAlignment = NSTextAlignment.right
-        redScore.font = UIFont(name: "HelveticaNeue-Bold", size: fontSizeMultiplier*36)
-        redScore.frame = CGRect(x: (450/750)*screenWidth, y: (1231/1334)*screenHeight, width: (250/750)*screenWidth, height: (46/750)*screenWidth)
+        redScore.frame = CGRect(x: (300/750)*screenWidth, y: (1180/1334)*screenHeight, width: (400/750)*screenWidth, height: (106/750)*screenWidth)
+        redScore.font = UIFont(name: "HelveticaNeue-Bold", size: fontSizeMultiplier*55)
         
-        tutorialAnnotation2.text = "Pair; 3 Flush; 3 Straight; 3 of a Kind; 3 Straight Flush; 5 Straight; 5 Flush; 5 Full House; 4 of a Kind; 5 of a Kind; 5 Straight Flush\nTAP TO REMOVE"
-        tutorialAnnotation2.textColor = UIColor(red: 215/255, green: 215/255, blue: 215/255, alpha: 1.0)
-        tutorialAnnotation2.textAlignment = NSTextAlignment.center
-        tutorialAnnotation2.font = UIFont(name: "HelveticaNeue-Bold", size: fontSizeMultiplier*12)
-        tutorialAnnotation2.frame = CGRect(x: (100/750)*screenWidth, y: (1077/1334)*screenHeight, width: (550/750)*screenWidth, height: (150/750)*screenWidth)
-        tutorialAnnotation2.numberOfLines = 0
-        tutorialAnnotation2.isUserInteractionEnabled = true
-        let tap: UITapGestureRecognizer = UITapGestureRecognizer(
-            target: self, action: #selector(GameViewController.disappear(_:)))
-        tutorialAnnotation2.addGestureRecognizer(tap)
-        //tap.delegate = self
+        //        //hint dots
+        //        for i in 0...4 {
+        //            let _x = CGFloat(i)*(37/750)*screenWidth
+        //            let circlePath = UIBezierPath(arcCenter: CGPoint(x: (60/750)*screenWidth + _x,y: (1283/1334)*screenHeight), radius: CGFloat((16/750)*screenWidth), startAngle: CGFloat(0), endAngle:CGFloat(M_PI * 2), clockwise: true)
+        //
+        //            let shapeLayer = CAShapeLayer()
+        //            hintDisplay.append(shapeLayer)
+        //            shapeLayer.path = circlePath.cgPath
+        //            let hintLabel = UILabel()
+        //            hintNumberLabels.append(hintLabel)
+        //            hintLabel.text = currentScoreString + "/" + goalScoreString
+        //            hintLabel.textColor = UIColor(red: 42/255, green: 42/255, blue: 42/255, alpha: 1.0)
+        //            hintLabel.textAlignment = NSTextAlignment.center
+        //            hintLabel.font = UIFont(name: "HelveticaNeue-Bold", size: fontSizeMultiplier*10)
+        //            hintLabel.frame = CGRect(x: ((44/750) + CGFloat(i)*(37/750))*screenWidth, y: (1268/1334)*screenHeight, width: (31/750)*screenWidth, height: (31/750)*screenWidth)
+        //        }
         
-        //tutorialAnnotation label
-        
-        tutorialAnnotation.text = "Find the following sequences to score points and climb the Game Center ranks\n(draw finger over dots to select)."
-        tutorialAnnotation.textColor = UIColor(red: 215/255, green: 215/255, blue: 215/255, alpha: 1.0)
-        tutorialAnnotation.textAlignment = NSTextAlignment.center
-        tutorialAnnotation.font = UIFont(name: "HelveticaNeue-Bold", size: fontSizeMultiplier*14)
-        tutorialAnnotation.numberOfLines = 0
-        tutorialAnnotation.frame = CGRect(x: (100/750)*screenWidth, y: (60/1334)*screenHeight, width: (550/750)*screenWidth, height: (130/750)*screenWidth)
-        
-        //tutorialAnnotation3 label
-        
-        tutorialAnnotation3.text = "Find the below sequences to advance\n(draw finger over dots to select)."
-        tutorialAnnotation3.textColor = UIColor(red: 215/255, green: 215/255, blue: 215/255, alpha: 1.0)
-        tutorialAnnotation3.textAlignment = NSTextAlignment.center
-        tutorialAnnotation3.font = UIFont(name: "HelveticaNeue-Bold", size: fontSizeMultiplier*14)
-        tutorialAnnotation3.numberOfLines = 0
-        tutorialAnnotation3.frame = CGRect(x: (100/750)*screenWidth, y: (60/1334)*screenHeight, width: (550/750)*screenWidth, height: (130/750)*screenWidth)
+        //tutorialAnnotation, list of sequences, label
         
         
         //Menux Button (transition in exiting game)
@@ -639,7 +649,7 @@ class GameViewController: UIViewController {
         menuX.setTitle("X", for: UIControlState.normal)
         menuX.titleLabel!.font = UIFont(name: "HelveticaNeue-Bold", size: fontSizeMultiplier*30)
         menuX.setTitleColor(UIColor(red: 215/255, green: 215/255, blue: 215/255, alpha: 1.0), for: .normal)
-        menuX.addTarget(self, action: #selector(GameViewController.menuX(_:)), for: .touchUpInside)
+        menuX.addTarget(self, action: #selector(VsViewController.menuX(_:)), for: .touchUpInside)
         
         //Menux2 Button (transition in exiting game)
         
@@ -647,35 +657,9 @@ class GameViewController: UIViewController {
         menuX2.setTitle("X", for: UIControlState.normal)
         menuX2.titleLabel!.font = UIFont(name: "HelveticaNeue-Bold", size: fontSizeMultiplier*30)
         menuX2.setTitleColor(UIColor(red: 215/255, green: 215/255, blue: 215/255, alpha: 1.0), for: .normal)
-        menuX2.addTarget(self, action: #selector(GameViewController.menuX2(_:)), for: .touchUpInside)
-        
-        //Okay Button
-        
-        okay.frame = CGRect(x: (199/750)*screenWidth, y: (1250/1334)*screenHeight, width: 353*screenWidth/750, height: 55*screenWidth/750)
-        if tagLevelIdentifier == 100 {
-            okay.frame.origin.y -= 50
-        }
-        okay.setTitle("Okay", for: UIControlState.normal)
-        okay.titleLabel!.font = UIFont(name: "HelveticaNeue-Bold", size: fontSizeMultiplier*20)
-        okay.setTitleColor(UIColor(red: 215/255, green: 215/255, blue: 215/255, alpha: 1.0), for: .normal)
-        okay.backgroundColor = UIColor(red: 42/255, green: 42/255, blue: 42/255, alpha: 1.0)
-        okay.layer.cornerRadius = 5
-        okay.layer.borderWidth = 1
-        okay.layer.borderColor = UIColor(red: 215/255, green: 215/255, blue: 215/255, alpha: 1.0).cgColor
-        okay.addTarget(self, action: #selector(GameViewController.okay(_:)), for: .touchUpInside)
+        menuX2.addTarget(self, action: #selector(VsViewController.menuX2(_:)), for: .touchUpInside)
         
         
-        
-        // finish Messages
-        if tagLevelIdentifier < 100 {
-        finishMessage.text = myNarrative.finishMessages[tagLevelIdentifier]
-        }
-        finishMessage.textColor = UIColor(red: 215/255, green: 215/255, blue: 215/255, alpha: 1.0)
-        finishMessage.textAlignment = NSTextAlignment.center
-        finishMessage.font = UIFont(name: "HelveticaNeue-Bold", size: fontSizeMultiplier*18)
-        finishMessage.frame = CGRect(x: (100/750)*screenWidth, y: (557/1334)*screenHeight, width:(550/750)*screenWidth, height: (200/750)*screenWidth)
-        finishMessage.lineBreakMode = NSLineBreakMode.byWordWrapping
-        finishMessage.numberOfLines = 0
         
         //sequence row two label
         
@@ -701,49 +685,15 @@ class GameViewController: UIViewController {
         sequenceRowOne.frame = CGRect(x: (80/750)*screenWidth, y: (237/1334)*screenHeight, width: (500/750)*screenWidth, height: (750/750)*screenWidth)
         sequenceRowTwo.frame = CGRect(x: (173/750)*screenWidth, y: (262/1334)*screenHeight, width: (500/750)*screenWidth, height: (750/750)*screenWidth)
         
-        //Continue To Play Button
         
-        continueToPlay.frame = CGRect(x: (59/750)*screenWidth, y: (1209/1334)*screenHeight, width: 633*screenWidth/750, height: 85*screenWidth/750)
-        continueToPlay.setTitle("Continue To Play", for: UIControlState.normal)
-        continueToPlay.titleLabel!.font = UIFont(name: "HelveticaNeue-Bold", size: fontSizeMultiplier*30)
-        continueToPlay.setTitleColor(UIColor(red: 215/255, green: 215/255, blue: 215/255, alpha: 1.0), for: .normal)
-        continueToPlay.backgroundColor = .clear
-        continueToPlay.layer.cornerRadius = 5
-        continueToPlay.layer.borderWidth = 1
-        continueToPlay.layer.borderColor = UIColor(red: 215/255, green: 215/255, blue: 215/255, alpha: 1.0).cgColor
-        continueToPlay.addTarget(self, action: #selector(GameViewController.continueToPlay(_:)), for: .touchUpInside)
-        
-        
-        //MenuBox Button
-        
-        menuBox.frame = CGRect(x: (59/750)*screenWidth, y: (1084/1334)*screenHeight, width: 633*screenWidth/750, height: 85*screenWidth/750)
-        menuBox.setTitle("Menu", for: UIControlState.normal)
-        menuBox.titleLabel!.font = UIFont(name: "HelveticaNeue-Bold", size: fontSizeMultiplier*30)
-        menuBox.setTitleColor(UIColor(red: 215/255, green: 215/255, blue: 215/255, alpha: 1.0), for: .normal)
-        menuBox.backgroundColor = .clear
-        menuBox.layer.cornerRadius = 5
-        menuBox.layer.borderWidth = 1
-        menuBox.layer.borderColor = UIColor(red: 215/255, green: 215/255, blue: 215/255, alpha: 1.0).cgColor
-        menuBox.addTarget(self, action: #selector(GameViewController.menuBox(_:)), for: .touchUpInside)
-        
-        
-        //score label
-        
-        score.text = "SCORE"
-        score.textColor = UIColor(red: 215/255, green: 215/255, blue: 215/255, alpha: 1.0)
-        score.textAlignment = NSTextAlignment.right
-        score.font = UIFont(name: "HelveticaNeue-CondensedBold", size: fontSizeMultiplier*36)
-        //score.backgroundColor = UIColor(red: 42/255, green: 42/255, blue: 42/255, alpha: 1.0)
-        score.frame = CGRect(x: (200/750)*screenWidth, y: (1252/1334)*screenHeight, width: (525/750)*screenWidth, height: (60/750)*screenWidth)
-       // view.addSubview(score)
         
         //Hint Button
         
         hint.frame = CGRect(x: (33/750)*screenWidth, y: (1252/1334)*screenHeight, width: 150*screenWidth/750, height: 60*screenWidth/750)
-        hint.setTitle(String(tagLevelIdentifier), for: UIControlState.normal) //hack relace taglevel with "Hint"
+        hint.setTitle("Hint", for: UIControlState.normal) //hack relace taglevel with "Hint"
         hint.titleLabel!.font = UIFont(name: "HelveticaNeue-Bold", size: fontSizeMultiplier*36)
         hint.setTitleColor(UIColor(red: 215/255, green: 215/255, blue: 215/255, alpha: 1.0), for: .normal)
-        hint.addTarget(self, action: #selector(GameViewController.hint(_:)), for: .touchUpInside)
+        hint.addTarget(self, action: #selector(VsViewController.hint(_:)), for: .touchUpInside)
         //self.view.addSubview(hint)
         
         //Exit Button
@@ -751,7 +701,7 @@ class GameViewController: UIViewController {
         exit.setTitle("Exit", for: UIControlState.normal)
         exit.titleLabel!.font = UIFont(name: "HelveticaNeue-Bold", size: fontSizeMultiplier*30)
         exit.setTitleColor(UIColor(red: 215/255, green: 215/255, blue: 215/255, alpha: 1.0), for: .normal)
-        exit.addTarget(self, action: #selector(GameViewController.exit(_:)), for: .touchUpInside)
+        exit.addTarget(self, action: #selector(VsViewController.exit(_:)), for: .touchUpInside)
         exit.backgroundColor = .clear
         exit.layer.cornerRadius = 5
         exit.layer.borderWidth = 1
@@ -881,42 +831,11 @@ class GameViewController: UIViewController {
             displayLayers.append(shapeLayer)
             shapeLayer.lineWidth = 4.0*screenWidth/750
             
-            //
-            //            view.layer.addSublayer(shapeLayer)
-            //            self.view.addSubview(dotLabel)
         }
         
-        // quest buttons
         
-        if tagLevelIdentifier < 100 {
-            var counterForSwitch: Int = 0
-            for i in myShuffleAndDeal.quests[tagLevelIdentifier-1] {
-                print(myShuffleAndDeal.quests[tagLevelIdentifier-1])
-                let questButton = UIButton()
-                questButtons.append(questButton)
-                let multiplierx: CGFloat = CGFloat(counterForSwitch%3)*(150/705)*screenWidth
-                var multipliery = CGFloat()
-                switch counterForSwitch {
-                case 0,1,2: multipliery = 0
-                case 3,4,5: multipliery = 49
-                case 6,7,8: multipliery = 98
-                default: break
-                }
-                print("multipliery,multiplierx: \(multipliery), \(multiplierx)")
-                counterForSwitch += 1
-                questButton.setTitle(i, for: UIControlState.normal)
-                questButton.frame = CGRect(x: (145/750)*screenWidth + multiplierx, y: ((1135 + multipliery)/1334)*screenHeight, width:(137/750)*screenWidth, height: (36/750)*screenWidth)
-                questButton.setTitleColor(UIColor(red: 215/255, green: 215/255, blue: 215/255, alpha: 1.0), for: .normal)
-                //questButton.textAlignment = NSTextAlignment.center
-                questButton.titleLabel!.font = UIFont(name: "HelveticaNeue-Bold", size: fontSizeMultiplier*12)
-                questButton.backgroundColor = .clear
-                questButton.layer.cornerRadius = 3
-                questButton.layer.borderWidth = 1
-                questButton.layer.borderColor = UIColor(red: 215/255, green: 215/255, blue: 215/255, alpha: 1.0).cgColor
-                questButton.addTarget(self, action: #selector(GameViewController.describeQuest(_:)), for: .touchUpInside)
-                view.addSubview(questButton)
-            }
-        }
+        
+        
         
     }
     
@@ -933,163 +852,38 @@ class GameViewController: UIViewController {
         
         view.addSubview(backBlack)
         view.bringSubview(toFront: backBlack)
-        view.addSubview(restart)
+        
         view.addSubview(sequence)
         view.addSubview(back)
         view.addSubview(menuX2)
         
     }
     @objc private func menuX2(_ button: UIButton) {
-        if tagLevelIdentifier > 99 {
-            self.performSegue(withIdentifier: "fromGameToIntro", sender: self)
-        } else {
-            self.performSegue(withIdentifier: "fromGameToMenu", sender: self)
-        }
+        
+        self.performSegue(withIdentifier: "fromVsToIntro", sender: self)
+        
     }
     
-    @objc private func menuBox(_ button: UIButton) {
-        self.performSegue(withIdentifier: "fromGameToMenu", sender: self)
-    }
-    @objc private func okay(_ button: UIButton) {
-        self.backBlack.removeFromSuperview()
-        self.tutorialAnnotation3.removeFromSuperview()
-        self.sequenceRowOne.removeFromSuperview()
-        self.sequenceRowTwo.removeFromSuperview()
-        self.okay.removeFromSuperview()
-        
-        if tagLevelIdentifier == 100 {
-            view.addSubview(tutorialAnnotation2)
-            view.addSubview(score)
-            self.tutorialAnnotation.removeFromSuperview()
-        }
-        
-    }
-    @objc private func continueToPlay(_ button: UIButton) {
-        self.backBlack.removeFromSuperview()
-        self.menuBox.removeFromSuperview()
-        self.continueToPlay.removeFromSuperview()
-        self.finishMessage.removeFromSuperview()
-        iWantToFinish = true
-        if imageViewGlobal.isDescendant(of: view) {
-            imageViewGlobal.removeFromSuperview()
-        }
-    }
+    
     @objc private func hint(_ button: UIButton) {
         
     }
     
-    @objc private func describeQuest(_ button: UIButton) {
-        switch button.title(for: .normal)! {
-        case "Pair": addDescriptionNamed(named: "pair.png")
-        case "3 Kind": addDescriptionNamed(named: "3Kind.png")
-        case "3 Straight": addDescriptionNamed(named: "3Straight.png")
-        case "3 Flush": addDescriptionNamed(named: "3Flush.png")
-        case "3 Str. Flush": addDescriptionNamed(named: "3StraightFlush.png")
-        case "4 Kind": addDescriptionNamed(named: "4Kind.png")
-        case "5 Kind": addDescriptionNamed(named: "5Kind.png")
-        case "5 Straight": addDescriptionNamed(named: "5Straight.png")
-        case "5 Flush": addDescriptionNamed(named: "5Flush.png")
-        case "5 Full House": addDescriptionNamed(named: "5FullHouse")
-        case "5 Str. Flush": addDescriptionNamed(named: "5StraightFlush.png")
-        default: break
-        }
-        _ = Timer.scheduledTimer(timeInterval: 2.5, target: self, selector: #selector(GameViewController.disappear3), userInfo: nil, repeats: false)
-    }
-     @objc private func disappear3(_ button: UIButton) {
-        imageView.removeFromSuperview()
-    }
     
-    @objc private func showList(_ button: UIButton) {
-        self.backBlack.removeFromSuperview()
-        self.sequences.removeFromSuperview()
-        self.showList.removeFromSuperview()
-        self.sequenceRowTwo.removeFromSuperview()
-        self.sequenceRowOne.removeFromSuperview()
-        self.exit.removeFromSuperview()
-        self.menuX2.removeFromSuperview()
-        view.addSubview(tutorialAnnotation2)
-    }
-    @objc private func disappear(_ button: UIButton) {
-        tutorialAnnotation2.text = "CLICK X TO SEE SEQUENCES ANY TIME"
-        _ = Timer.scheduledTimer(timeInterval: 2.0, target: self, selector: #selector(GameViewController.disappear2), userInfo: nil, repeats: false)
-    }
-    @objc private func disappear2(_ button: UIButton) {
-        self.tutorialAnnotation2.removeFromSuperview()
-        tutorialAnnotation2.text = "Pair; 3 Flush; 3 Straight; 3 of a Kind; 3 Straight Flush; 5 Straight; 5 Flush; 5 Full House; 4 of a Kind; 5 of a Kind; 5 Straight Flush\nTAP TO REMOVE"
-    }
+    
     
     
     @objc private func back(_ button: UIButton) {
         self.backBlack.removeFromSuperview()
-        self.restart.removeFromSuperview()
+        
         self.sequence.removeFromSuperview()
         self.back.removeFromSuperview()
         self.menuX2.removeFromSuperview()
         
     }
-    @objc private func restart(_ button: UIButton) {
-        for view in self.view.subviews {
-            view.removeFromSuperview()
-        }
-        shapeLayers.removeAll()
-        view.addSubview(menuX)
-        currentScoreInt = 0
-        goalScoreInt = 20000
-        highestHand = [1,1,1,1,1]
-        _highestHand = [1,1,1,1,1]
-        highestSoFar = 1
-        
-        addButtons()
-        
-        switch tagLevelIdentifier {
-        case 100, 101:
-            var shuffled = [Int]()
-            var allNumbers = [Int]()
-            for i in 0..<84 {
-                allNumbers.append(i)
-            }
-            for _ in 0..<67 {
-                let randomNumber = Int(arc4random_uniform(UInt32(allNumbers.count)))
-                if let index = allNumbers.index(of: allNumbers[randomNumber]) {
-                    shuffled.append(allNumbers[randomNumber])
-                    allNumbers.remove(at:index)
-                }
-            }
-            deck = shuffled
-            lastCardDisplayed = 999
-            populateDots()
-        case 200:
-            break
-        case 300:
-            break
-        case 0...99:
-            deck.removeAll()
-            deck = myShuffleAndDeal.levelDeals[tagLevelIdentifier-1]
-            populateDots()
-        default: break
-            
-        }
-        view.addSubview(menuX)
-    }
-    private func displayTutorial() {
-        
-        view.addSubview(backBlack)
-        view.addSubview(tutorialAnnotation)
-        view.addSubview(sequenceRowOne)
-        view.addSubview(sequenceRowTwo)
-        view.addSubview(okay)
-    }
-    
-    private func displayTutorialForCampaign() {
-        
-        //view.addSubview(backBlack)
-        // ADD SEQUENCE BOXES
-        view.addSubview(tutorialAnnotation3)
-       // view.addSubview(okay)
-    }
     
     @objc private func sequence(_ button: UIButton) {
-        self.restart.removeFromSuperview()
+        
         self.sequence.removeFromSuperview()
         self.back.removeFromSuperview()
         
@@ -1117,15 +911,8 @@ class GameViewController: UIViewController {
             }
         }
     }
-
     
-    private func addDescriptionNamed(named: String) {
-        let image = UIImage(named: named)
-        imageView.image = image!
-        imageView.frame.origin.x = (123/750)*screenWidth
-        imageView.frame.origin.y = (359/1334)*screenHeight
-        imageView.frame.size = CGSize( width: (504/750)*screenWidth, height: (220/750)*screenWidth)
-       
-        view.addSubview(imageView)
-    }
+    
+    
+    
 }

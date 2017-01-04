@@ -42,8 +42,10 @@ class IntroViewController: UIViewController {
             
             gameView.tagLevelIdentifier = tagLevelIdentifier
             
-        } else {
+        } else if seg == "vs" {
+            let gameView: VsViewController = segue.destination as! VsViewController
             
+            gameView.tagLevelIdentifier = tagLevelIdentifier
         }
     }
     
@@ -127,7 +129,12 @@ class IntroViewController: UIViewController {
         self.performSegue(withIdentifier: "fromIntroToMenu", sender: self)
     }
     @objc private func multiplayer(_ button: UIButton) {
-        self.performSegue(withIdentifier: "fromIntroToGame", sender: self)
+        
+        campaign.removeFromSuperview()
+        solo.removeFromSuperview()
+        multiplayer.removeFromSuperview()
+        view.addSubview(playerVsPlayer)
+        view.addSubview(aI)
     }
     @objc private func solo(_ button: UIButton) {
         seg = "game"
@@ -139,14 +146,14 @@ class IntroViewController: UIViewController {
         self.performSegue(withIdentifier: "fromIntroToGame", sender: self)
     }
     @objc private func playerVsPlayer(_ button: UIButton) {
-        seg = "game"
+        seg = "vs"
         tagLevelIdentifier = 300
-        self.performSegue(withIdentifier: "fromIntroToGame", sender: self)
+        self.performSegue(withIdentifier: "fromIntroToVs", sender: self)
     }
     @objc private func aI(_ button: UIButton) {
-        seg = "game"
+        seg = "vs"
         tagLevelIdentifier = 200
-        self.performSegue(withIdentifier: "fromIntroToGame", sender: self)
+        self.performSegue(withIdentifier: "fromIntroToVs", sender: self)
     }
 
 

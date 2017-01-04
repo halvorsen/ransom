@@ -32,6 +32,89 @@ class Calculator: ShuffleAndDeal {
         
         return orderedHand
     }
+    func questString(hand: [Int]) -> String {
+        var quest = String()
+        var numbers = [Int]()
+        for i in hand {
+            numbers.append(i%7)
+        }
+        numbers = numbers.sorted { $0 < $1 }
+        print("numbers: \(numbers)")
+        if hand.count == 0 || hand.count == 1 {
+            quest = ""
+        }
+        if hand.count == 2 {
+            if numbers[0] == numbers[1] {
+                quest = "Pair"
+            }
+        }
+        if hand.count == 3 {
+            if whatColorIsCard(card: hand[0]) == whatColorIsCard(card: hand[1]) && whatColorIsCard(card: hand[0]) == whatColorIsCard(card: hand[2]) {
+                if numbers[2] - 1 == numbers[1] && numbers[1] - 1 == numbers[0] {
+                    quest = "3 Str. Flush"
+                } else {
+                    quest = "3 Flush"
+                }
+            } else if numbers[2] - 1 == numbers[1] && numbers[1] - 1 == numbers[0] {
+                quest = "3 Straight"
+            } else if numbers[2] == numbers[1] && numbers[2] == numbers[0] {
+                quest = "3 Kind"
+            }
+        }
+        
+        if hand.count == 4 {
+            if numbers[2] == numbers[1] && numbers[2] == numbers[0] {
+                if numbers[2] == numbers[3] {
+                    quest = "4 Kind"
+                }
+            }
+        }
+        
+        if hand.count == 5 {
+            print("0")
+            var b = false
+            var c = false
+            var d = false
+            if whatColorIsCard(card: hand[0]) == whatColorIsCard(card: hand[1]) && whatColorIsCard(card: hand[1]) == whatColorIsCard(card: hand[2]) { b = true; print("1") }
+            if numbers[4] - 1 == numbers[3] && numbers[3] - 1 == numbers[2] { c = true; print("1") }
+            if numbers[4] == numbers[3] && numbers[3] == numbers[2] { d = true; print("1") }
+            
+            if whatColorIsCard(card: hand[2]) == whatColorIsCard(card: hand[3]) && whatColorIsCard(card: hand[3]) == whatColorIsCard(card: hand[4]) && b { print("2")
+                
+                if numbers[4] - 1 == numbers[3] && numbers[3] - 1 == numbers[2] {
+                    print("3")
+                    if numbers[2] - 1 == numbers[1] && numbers[1] - 1 == numbers[0] {
+                        print("4")
+                        quest = "5 Str. Flush"
+                    } else {
+                        print("5")
+                        quest = "5 Flush"
+                    }
+                } else {
+                    print("6")
+                    quest = "5 Flush"
+                }
+            } else if c && numbers[2] - 1 == numbers[1] && numbers[1] - 1 == numbers[0] {
+                print("8")
+                quest = "5 Sraight"
+            } else if d && numbers[2] == numbers[1] && numbers[1] == numbers[0] {
+                print("10")
+                quest = "5 Kind"
+            } else if numbers[4] == numbers[3] && numbers[1] == numbers[0] {
+                print("11")
+                print("\(numbers[0]),\(numbers[1]),\(numbers[2]),\(numbers[3]),\(numbers[4])")
+                if numbers[2] == numbers[3] || numbers[2] == numbers[1] {
+                    print("12")
+                    quest = "5 Full House"
+                }
+                
+                
+            }
+            
+            
+        }
+        return quest
+    }
     
     func pointAmount(hand: [Int]) -> Int {
         var points = Int()

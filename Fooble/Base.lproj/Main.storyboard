@@ -6,6 +6,27 @@
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
     <scenes>
+        <!--Vs View Controller-->
+        <scene sceneID="IOf-ax-iDN">
+            <objects>
+                <viewController id="uIR-il-ZBl" customClass="VsViewController" customModule="Fooble" customModuleProvider="target" sceneMemberID="viewController">
+                    <layoutGuides>
+                        <viewControllerLayoutGuide type="top" id="Zuu-oh-pf4"/>
+                        <viewControllerLayoutGuide type="bottom" id="tEC-6H-Ui2"/>
+                    </layoutGuides>
+                    <view key="view" contentMode="scaleToFill" id="cQh-Pf-4Wj">
+                        <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                    </view>
+                    <connections>
+                        <segue destination="k7p-7N-CgK" kind="show" identifier="fromVsToIntro" id="JM0-aw-4uY"/>
+                    </connections>
+                </viewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="Vqg-VH-mgG" userLabel="First Responder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="-781" y="-628"/>
+        </scene>
         <!--Intro View Controller-->
         <scene sceneID="kYr-6A-cnh">
             <objects>
@@ -22,6 +43,7 @@
                     <connections>
                         <segue destination="BYZ-38-t0r" kind="show" identifier="fromIntroToMenu" id="pJC-gV-t5v"/>
                         <segue destination="Zd6-IM-ZdD" kind="show" identifier="fromIntroToGame" id="rZX-oT-tQ3"/>
+                        <segue destination="uIR-il-ZBl" kind="show" identifier="fromIntroToVs" id="WtO-hX-V74"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="rg5-MS-DNZ" userLabel="First Responder" sceneMemberID="firstResponder"/>
@@ -73,8 +95,8 @@
         </scene>
     </scenes>
     <inferredMetricsTieBreakers>
-        <segue reference="gVo-V8-Xpq"/>
-        <segue reference="xeY-ss-iXb"/>
-        <segue reference="NUS-Oz-Ojt"/>
+        <segue reference="JM0-aw-4uY"/>
+        <segue reference="pJC-gV-t5v"/>
+        <segue reference="rZX-oT-tQ3"/>
     </inferredMetricsTieBreakers>
 </document>

@@ -18,6 +18,7 @@
 		0688665A1E0DB76D005B2577 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 068866591E0DB76D005B2577 /* Assets.xcassets */; };
 		0688665D1E0DB76D005B2577 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 0688665B1E0DB76D005B2577 /* LaunchScreen.storyboard */; };
 		06AF4F2B1E1ACE95009AE9ED /* Narrative.swift in Sources */ = {isa = PBXBuildFile; fileRef = 06AF4F2A1E1ACE95009AE9ED /* Narrative.swift */; };
+		06AF4F2D1E1C7D23009AE9ED /* VsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 06AF4F2C1E1C7D23009AE9ED /* VsViewController.swift */; };
 		06F7AB1A1E157BE900A929DE /* IntroViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 06F7AB191E157BE900A929DE /* IntroViewController.swift */; };
 /* End PBXBuildFile section */
 
@@ -35,6 +36,7 @@
 		0688665C1E0DB76D005B2577 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		0688665E1E0DB76D005B2577 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		06AF4F2A1E1ACE95009AE9ED /* Narrative.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Narrative.swift; sourceTree = "<group>"; };
+		06AF4F2C1E1C7D23009AE9ED /* VsViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = VsViewController.swift; sourceTree = "<group>"; };
 		06F7AB191E157BE900A929DE /* IntroViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = IntroViewController.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
@@ -71,6 +73,7 @@
 				0688664F1E0DB76C005B2577 /* AppDelegate.swift */,
 				068866511E0DB76C005B2577 /* MenuViewController.swift */,
 				061BA5D81E14BA56003EA7E1 /* GameViewController.swift */,
+				06AF4F2C1E1C7D23009AE9ED /* VsViewController.swift */,
 				06AF4F2A1E1ACE95009AE9ED /* Narrative.swift */,
 				061F8FB81E184E0200970955 /* Calculator.swift */,
 				061F8FB61E17F27C00970955 /* Selection.swift */,
@@ -161,6 +164,7 @@
 				06AF4F2B1E1ACE95009AE9ED /* Narrative.swift in Sources */,
 				061F8FB71E17F27C00970955 /* Selection.swift in Sources */,
 				06F7AB1A1E157BE900A929DE /* IntroViewController.swift in Sources */,
+				06AF4F2D1E1C7D23009AE9ED /* VsViewController.swift in Sources */,
 				061BA5D91E14BA56003EA7E1 /* GameViewController.swift in Sources */,
 				068866521E0DB76C005B2577 /* MenuViewController.swift in Sources */,
 				068866501E0DB76C005B2577 /* AppDelegate.swift in Sources */,
