@@ -1,4 +1,31 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
-<model type="com.apple.IDECoreDataModeler.DataModel" documentVersion="1.0" lastSavedToolsVersion="1" systemVersion="11A491" minimumToolsVersion="Automatic" sourceLanguage="Swift" userDefinedModelVersionIdentifier="">
-    <elements/>
+<model type="com.apple.IDECoreDataModeler.DataModel" documentVersion="1.0" lastSavedToolsVersion="11232" systemVersion="15G1004" minimumToolsVersion="Automatic" sourceLanguage="Swift" userDefinedModelVersionIdentifier="">
+    <entity name="Campaign" syncable="YES">
+        <attribute name="tried" optional="YES" attributeType="Boolean" usesScalarValueType="YES" syncable="YES"/>
+    </entity>
+    <entity name="HighScores" syncable="YES">
+        <attribute name="solo" optional="YES" attributeType="Integer 32" defaultValueString="0" usesScalarValueType="YES" syncable="YES"/>
+    </entity>
+    <entity name="Levels" syncable="YES">
+        <attribute name="name" optional="YES" attributeType="Integer 16" defaultValueString="0" usesScalarValueType="YES" syncable="YES"/>
+    </entity>
+    <entity name="Multiplayer" syncable="YES">
+        <attribute name="tried" optional="YES" attributeType="Boolean" defaultValueString="0" usesScalarValueType="YES" syncable="YES"/>
+    </entity>
+    <entity name="Purchase" syncable="YES">
+        <attribute name="campaign" optional="YES" attributeType="Boolean" usesScalarValueType="YES" syncable="YES"/>
+        <attribute name="multiplayer" optional="YES" attributeType="Boolean" usesScalarValueType="YES" syncable="YES"/>
+        <attribute name="solo" optional="YES" attributeType="Boolean" usesScalarValueType="YES" syncable="YES"/>
+    </entity>
+    <entity name="Solo" syncable="YES">
+        <attribute name="tried" optional="YES" attributeType="Boolean" defaultValueString="0" usesScalarValueType="YES" syncable="YES"/>
+    </entity>
+    <elements>
+        <element name="Purchase" positionX="-63" positionY="-18" width="128" height="90"/>
+        <element name="HighScores" positionX="-54" positionY="18" width="128" height="60"/>
+        <element name="Levels" positionX="-36" positionY="27" width="128" height="60"/>
+        <element name="Solo" positionX="-18" positionY="54" width="128" height="60"/>
+        <element name="Campaign" positionX="0" positionY="63" width="128" height="60"/>
+        <element name="Multiplayer" positionX="18" positionY="72" width="128" height="60"/>
+    </elements>
 </model>

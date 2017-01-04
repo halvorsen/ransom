@@ -83,6 +83,11 @@ class VsViewController: UIViewController {
     var thisTurn: Team = .red
     var oneTurnAgo: Team = .start
     var twoTurnsAgo: Team = .start
+    var extraDots = [Int]()
+    var swipeLeft = UISwipeGestureRecognizer()
+    var swipeRight = UISwipeGestureRecognizer()
+    var swipeDown = UISwipeGestureRecognizer()
+    var pan = UIPanGestureRecognizer()
     
     
     override var prefersStatusBarHidden: Bool {
@@ -94,7 +99,7 @@ class VsViewController: UIViewController {
         
         self.view.backgroundColor = UIColor(red: 42/255, green: 42/255, blue: 42/255, alpha: 1.0)
         
-        let pan = UIPanGestureRecognizer(target: self, action: #selector(GameViewController.respondToPanGesture(_:)))
+        pan = UIPanGestureRecognizer(target: self, action: #selector(GameViewController.respondToPanGesture(_:)))
         self.view.addGestureRecognizer(pan)
         currentScoreInt = 0
         goalScoreInt = 20000
@@ -124,11 +129,37 @@ class VsViewController: UIViewController {
                 allNumbers.remove(at:index)
             }
         }
+        
         deck = shuffled
         lastCardDisplayed = 999
         populateDots()
         view.addSubview(menuX)
         startTimer()
+        
+        for _ in 0..<allNumbers.count {
+            let randomNumber = Int(arc4random_uniform(UInt32(allNumbers.count)))
+            if let index = allNumbers.index(of: allNumbers[randomNumber]) {
+                extraDots.append(allNumbers[randomNumber])
+                allNumbers.remove(at:index)
+            }
+        }
+        for i in 0..<84 {
+            allNumbers.append(i)
+        }
+        for _ in 0..<84 {
+            let randomNumber = Int(arc4random_uniform(UInt32(allNumbers.count)))
+            if let index = allNumbers.index(of: allNumbers[randomNumber]) {
+                extraDots.append(allNumbers[randomNumber])
+                allNumbers.remove(at:index)
+            }
+        }
+        
+        swipeRight = UISwipeGestureRecognizer(target: self, action: #selector(VsViewController.respondToSwipeRight(_:)))
+        swipeRight.direction = UISwipeGestureRecognizerDirection.right
+        swipeLeft = UISwipeGestureRecognizer(target: self, action: #selector(VsViewController.respondToSwipeLeft(_:)))
+        swipeLeft.direction = UISwipeGestureRecognizerDirection.left
+        swipeDown = UISwipeGestureRecognizer(target: self, action: #selector(VsViewController.respondToSwipeDown(_:)))
+        swipeDown.direction = UISwipeGestureRecognizerDirection.down
     }
     
     private func populateDots() {
@@ -302,17 +333,109 @@ class VsViewController: UIViewController {
                 } else {
                     yellowPointsInt += additionalScoreInt
                 }
-                dropRight(currentDeck: deck)
+                view.removeGestureRecognizer(pan as UIGestureRecognizer)
                 
-                delay(bySeconds: 0.5) {
-                    self.dropLeft(currentDeck: self.deck)
-                }
+                
             }
         }
     }
+    var imageView = UIImageView()
+    private func swipeChoices() {
+       
+        self.view.addGestureRecognizer(swipeRight)
+        self.view.addGestureRecognizer(swipeLeft)
+        self.view.addGestureRecognizer(swipeDown)
+        
+        let image = UIImage(named: "Swipe.png")
+        imageView.image = image!
+        imageView.frame = CGRect(x: (308/750)*screenWidth, y: (104/1334)*screenHeight, width: (133/750)*screenWidth, height: (90/750)*screenWidth)
+        view.addSubview(imageView)
+        
+        
+    }
     
-    
-    
+    @objc private func respondToSwipeLeft(_ gesture: UIGestureRecognizer) {
+        imageView.removeFromSuperview()
+        dropLeft(currentDeck: deck)
+        
+        delay(bySeconds: 0.5) {
+            self.dropRight(currentDeck: self.deck)
+            
+        }
+        view.removeGestureRecognizer(swipeRight as UIGestureRecognizer)
+        view.removeGestureRecognizer(swipeLeft as UIGestureRecognizer)
+        view.removeGestureRecognizer(swipeDown as UIGestureRecognizer)
+        self.view.addGestureRecognizer(pan)
+        
+    }
+    @objc private func respondToSwipeRight(_ gesture: UIGestureRecognizer) {
+        imageView.removeFromSuperview()
+        dropRight(currentDeck: deck)
+        
+        delay(bySeconds: 0.5) {
+            self.dropLeft(currentDeck: self.deck)
+        }
+        view.removeGestureRecognizer(swipeRight as UIGestureRecognizer)
+        view.removeGestureRecognizer(swipeLeft as UIGestureRecognizer)
+        view.removeGestureRecognizer(swipeDown as UIGestureRecognizer)
+        self.view.addGestureRecognizer(pan)
+    }
+    @objc private func respondToSwipeDown(_ gesture: UIGestureRecognizer) {
+        imageView.removeFromSuperview()
+        for i in handIndexes {
+ 
+                deck[i] = extraDots[0]
+                dotLabels[i]!.text = String(deck[i]!%7 + 1)
+                dotLabels[i]!.alpha = 0.0
+            
+                extraDots.remove(at:0)
+            switch myShuffleAndDeal.whatColorIsCard(card: deck[i]!) {
+            case .blue: //blue
+                shapeLayers[i]!.strokeColor = UIColor(red: 60/255, green: 54/255, blue: 116/255, alpha: 0.0).cgColor
+                view.layer.addSublayer(shapeLayers[i]!)
+                UIView.animate(withDuration: 1.0, animations: {
+                    self.shapeLayers[i]!.strokeColor = UIColor(red: 60/255, green: 54/255, blue: 116/255, alpha: 1.0).cgColor
+                })
+                
+            case .green: //green
+                shapeLayers[i]!.strokeColor = UIColor(red: 69/255, green: 125/255, blue: 59/255, alpha: 0.0).cgColor
+                view.layer.addSublayer(shapeLayers[i]!)
+                UIView.animate(withDuration: 1.0, animations: {
+                    self.shapeLayers[i]!.strokeColor = UIColor(red: 69/255, green: 125/255, blue: 59/255, alpha: 1.0).cgColor
+                })
+                
+            case .yellow: //yellow
+                shapeLayers[i]!.strokeColor = UIColor(red: 190/255, green: 154/255, blue: 35/255, alpha: 0.0).cgColor
+                view.layer.addSublayer(shapeLayers[i]!)
+                UIView.animate(withDuration: 1.0, animations: {
+                    self.shapeLayers[i]!.strokeColor = UIColor(red: 190/255, green: 154/255, blue: 35/255, alpha: 1.0).cgColor
+                })
+                
+            case .red: //red
+                shapeLayers[i]!.strokeColor = UIColor(red: 101/255, green: 34/255, blue: 35/255, alpha: 0.0).cgColor
+                view.layer.addSublayer(shapeLayers[i]!)
+                UIView.animate(withDuration: 1.0, animations: {
+                    self.shapeLayers[i]!.strokeColor = UIColor(red: 101/255, green: 34/255, blue: 35/255, alpha: 1.0).cgColor
+                })
+                
+            }
+            view.addSubview(dotLabels[i]!)
+            
+  
+            
+            UIView.animate(withDuration: 1.0, animations: {
+                self.dotLabels[i]!.alpha = 1.0
+            })
+        }
+        
+        
+        
+        view.removeGestureRecognizer(swipeRight as UIGestureRecognizer)
+        view.removeGestureRecognizer(swipeLeft as UIGestureRecognizer)
+        view.removeGestureRecognizer(swipeDown as UIGestureRecognizer)
+        self.view.addGestureRecognizer(pan)
+    }
+
     private func dropLeft(currentDeck: [Int?]) {
         while isDropInProgress {
       
@@ -447,11 +570,9 @@ class VsViewController: UIViewController {
         case .red:
             if oneTurnAgo == .start {
                 thisTurn = .yellow
-                startTimer()
                 oneTurnAgo = .red
             } else if oneTurnAgo == .red {
                 thisTurn = .yellow
-                startTimer()
                 twoTurnsAgo = .red
             } else {
                 thisTurn = .red
@@ -467,7 +588,6 @@ class VsViewController: UIViewController {
                 oneTurnAgo = .yellow
             } else if oneTurnAgo == .yellow {
                 thisTurn = .red
-                startTimer()
                 twoTurnsAgo = .yellow
             } else {
                 thisTurn = .yellow
@@ -490,8 +610,10 @@ class VsViewController: UIViewController {
             redScore.frame = CGRect(x: (565/750)*screenWidth, y: (1230/1334)*screenHeight, width: (150/750)*screenWidth, height: (60/750)*screenWidth)
             redScore.font = UIFont(name: "HelveticaNeue-Bold", size: fontSizeMultiplier*20)
         }
-        
+        swipeChoices()
     }
+    
+    
     var myTimer = Timer()
     var startVisual = Timer()
     func startTimer() {
@@ -516,23 +638,23 @@ class VsViewController: UIViewController {
     
     let bar = UILabel()
     @objc private func updateBar() {
-        if ticker == 0 { //700 hack
+        if ticker == 700 {
             
             bar.frame = CGRect(x: (CGFloat(1)-percentageOfBar)*(screenWidth/2), y: (1319/1334)*screenHeight, width: screenWidth*percentageOfBar, height: (15/1334)*screenHeight)
             bar.backgroundColor = UIColor(red: 69/255, green: 125/255, blue: 59/255, alpha: 1.0)
             view.addSubview(bar)
         }
-        if ticker == 500 {
+        if ticker == 1000 {
             timerRanOut()
             dynamicBarCue.invalidate()
-        } else if ticker > 0 { //hack 700
-            percentageOfBar = CGFloat(1 - ticker/150) //hack first 300 is 1000
-            print(percentageOfBar)
+            bar.removeFromSuperview()
+        } else if ticker > 700 {
+            percentageOfBar = CGFloat(1 - (ticker - 700)/300)
+            
             bar.frame = CGRect(x: (CGFloat(1)-percentageOfBar)*(screenWidth/2), y: (1319/1334)*screenHeight, width: screenWidth*percentageOfBar, height: (15/1334)*screenHeight)
         }
-        
         ticker += 1
-        print(ticker)
+        
     }
     @objc private func timerRanOut() {
         AudioServicesPlayAlertSound(SystemSoundID(kSystemSoundID_Vibrate))
@@ -540,6 +662,7 @@ class VsViewController: UIViewController {
         case .red:
             
             thisTurn = .yellow
+            ticker = 0
             startTimer()
             oneTurnAgo = .red
             twoTurnsAgo = .red
@@ -547,11 +670,30 @@ class VsViewController: UIViewController {
         case .yellow:
             
             thisTurn = .red
+            ticker = 0
+            startTimer()
             twoTurnsAgo = .yellow
             oneTurnAgo = .yellow
             
         case .start: break
             
+        }
+        
+        if imageView.isDescendant(of: view) {
+            imageView.removeFromSuperview()
+        }
+        
+        
+        if thisTurn == .red {
+            redScore.frame = CGRect(x: (300/750)*screenWidth, y: (1180/1334)*screenHeight, width: (400/750)*screenWidth, height: (106/750)*screenWidth)
+            redScore.font = UIFont(name: "HelveticaNeue-Bold", size: fontSizeMultiplier*55)
+            yellowScore.frame = CGRect(x: (49/750)*screenWidth, y: (1230/1334)*screenHeight, width: (150/750)*screenWidth, height: (60/750)*screenWidth)
+            yellowScore.font = UIFont(name: "HelveticaNeue-Bold", size: fontSizeMultiplier*20)
+        } else {
+            yellowScore.frame = CGRect(x: (54/750)*screenWidth, y: (1180/1334)*screenHeight, width: (400/750)*screenWidth, height: (106/750)*screenWidth)
+            yellowScore.font = UIFont(name: "HelveticaNeue-Bold", size: fontSizeMultiplier*55)
+            redScore.frame = CGRect(x: (565/750)*screenWidth, y: (1230/1334)*screenHeight, width: (150/750)*screenWidth, height: (60/750)*screenWidth)
+            redScore.font = UIFont(name: "HelveticaNeue-Bold", size: fontSizeMultiplier*20)
         }
     }
     
@@ -832,11 +974,7 @@ class VsViewController: UIViewController {
             shapeLayer.lineWidth = 4.0*screenWidth/750
             
         }
-        
-        
-        
-        
-        
+
     }
     
     @objc private func exit(_ button: UIButton) {
@@ -869,10 +1007,7 @@ class VsViewController: UIViewController {
         
     }
     
-    
-    
-    
-    
+
     @objc private func back(_ button: UIButton) {
         self.backBlack.removeFromSuperview()
         
@@ -911,8 +1046,5 @@ class VsViewController: UIViewController {
             }
         }
     }
-    
-    
-    
-    
+
 }
