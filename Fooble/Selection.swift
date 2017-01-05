@@ -9,6 +9,24 @@
 import Foundation
 
 struct Selection {
+    
+    func thisRow(index: Int) -> Int {
+        var row = Int()
+        switch index {
+        case 0...6: row = 1
+        case 7...14: row = 2
+        case 15...21: row = 3
+        case 22...29: row = 4
+        case 30...38: row = 5
+        case 38...45: row = 6
+        case 46...52: row = 7
+        case 53...60: row = 8
+        case 61...67: row = 9
+        default: break
+        }
+        
+        return row
+    }
   
     
     func linearCheckForNumberAfterLast(last: Int, prior: Int) -> Int {

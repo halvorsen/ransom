@@ -65,6 +65,7 @@ class VsViewController: UIViewController {
     let mySelection = Selection()
     let myCalculator = Calculator()
     let myNarrative = Narrative()
+    let myLoadSaveCoreData = LoadSaveCoreData()
     var count: Int = 0
     var lastCardDisplayed = Int()
     var firstIndexDisplayed = Int()
@@ -226,6 +227,7 @@ class VsViewController: UIViewController {
                         
                         displayLabels[0].text = String(deck[i]!%7 + 1)
                         lastIndex = i
+                        
                         futureIndexes = mySelection.selectableIndexesWithOneAlreadySelected(first: i)
                         
                         view.layer.addSublayer(displayLayers[0])
@@ -259,10 +261,11 @@ class VsViewController: UIViewController {
                     
                     
                     for i in futureIndexes {
-                        
+                        let futureRow = mySelection.thisRow(index: i)
+                        let lastRow = mySelection.thisRow(index: priorIndex)
                         if shapeLayers2[i].path!.contains(locationOfPan) && dotLabels[i]!.isDescendant(of: self.view) && (lastCardDisplayed != deck[i]!) {
                             
-                            
+                            if futureRow == lastRow - 1 || futureRow == lastRow + 1 {
                             switch myShuffleAndDeal.whatColorIsCard(card: deck[i]!) {
                             case .blue: //blue
                                 displayLayers[count].strokeColor = UIColor(red: 60/255, green: 54/255, blue: 116/255, alpha: 1.0).cgColor
@@ -296,6 +299,7 @@ class VsViewController: UIViewController {
                             hand.append(deck[i]!)
                             handIndexes.append(i)
                             count += 1
+                        }
                         }
                     }
                 }
@@ -353,6 +357,25 @@ class VsViewController: UIViewController {
         
         
     }
+    
+    private func noMoreMoves() {
+            myLoadSaveCoreData.saveDemo(mode: "Multiplayer")
+            view.addSubview(backBlack)
+            view.addSubview(menuX)
+        if yellowPointsInt > redPointsInt {
+            sequences.text = "Yellow Wins!"
+        } else if redPointsInt > yellowPointsInt {
+            sequences.text = "Red Wins!"
+        } else {
+            sequences.text = "Flip a coin?"
+        }
+        
+            view.addSubview(sequences)
+            
+        }
+        
+        
+    
     
     @objc private func respondToSwipeLeft(_ gesture: UIGestureRecognizer) {
         imageView.removeFromSuperview()

@@ -69,6 +69,7 @@ class GameViewController: UIViewController {
     let mySelection = Selection()
     let myCalculator = Calculator()
     let myNarrative = Narrative()
+    let myLoadSaveCoreData = LoadSaveCoreData()
     var count: Int = 0
     var lastCardDisplayed = Int()
     var firstIndexDisplayed = Int()
@@ -160,7 +161,7 @@ class GameViewController: UIViewController {
                 
             case .red: //red
                 shapeLayers[i]!.strokeColor = UIColor(red: 101/255, green: 34/255, blue: 35/255, alpha: 1.0).cgColor
-           
+                
             }
             let linewidth = 2.0*screenWidth/750
             shapeLayers[i]!.lineWidth = linewidth
@@ -185,8 +186,8 @@ class GameViewController: UIViewController {
         
         if tagLevelIdentifier == 1 {
             if tutorialAnnotation3.isDescendant(of: view) {
-            tutorialAnnotation3.removeFromSuperview()
-        }
+                tutorialAnnotation3.removeFromSuperview()
+            }
         }
         
         if gesture.state == UIGestureRecognizerState.began {
@@ -213,11 +214,12 @@ class GameViewController: UIViewController {
                             displayLayers[0].strokeColor = UIColor(red: 190/255, green: 154/255, blue: 35/255, alpha: 1.0).cgColor
                         case .red: //red
                             displayLayers[0].strokeColor = UIColor(red: 101/255, green: 34/255, blue: 35/255, alpha: 1.0).cgColor
-                   
+                            
                         }
                         
                         displayLabels[0].text = String(deck[i]!%7 + 1)
                         lastIndex = i
+                        
                         futureIndexes = mySelection.selectableIndexesWithOneAlreadySelected(first: i)
                         
                         view.layer.addSublayer(displayLayers[0])
@@ -252,42 +254,47 @@ class GameViewController: UIViewController {
                     
                     for i in futureIndexes {
                         
+                        let futureRow = mySelection.thisRow(index: i)
+                        let lastRow = mySelection.thisRow(index: priorIndex)
                         if shapeLayers2[i].path!.contains(locationOfPan) && dotLabels[i]!.isDescendant(of: self.view) && (lastCardDisplayed != deck[i]!) {
                             
-                            
-                            switch myShuffleAndDeal.whatColorIsCard(card: deck[i]!) {
-                            case .blue: //blue
-                                displayLayers[count].strokeColor = UIColor(red: 60/255, green: 54/255, blue: 116/255, alpha: 1.0).cgColor
-                            case .green: //green
-                                displayLayers[count].strokeColor = UIColor(red: 69/255, green: 125/255, blue: 59/255, alpha: 1.0).cgColor
-                            case .yellow: //yellow
-                                displayLayers[count].strokeColor = UIColor(red: 190/255, green: 154/255, blue: 35/255, alpha: 1.0).cgColor
-                            case .red: //red
-                                displayLayers[count].strokeColor = UIColor(red: 101/255, green: 34/255, blue: 35/255, alpha: 1.0).cgColor
-                            }
-                            
-                            displayLabels[count].text = String(deck[i]!%7 + 1)
-                            lastCardDisplayed = deck[i]!
-                            priorIndex = lastIndex
-                            lastIndex = i
-                            var potentialFutureIndex = Int()
-                            potentialFutureIndex = mySelection.linearCheckForNumberAfterLast(last: i, prior: priorIndex)
-                            
-                            if potentialFutureIndex > -1 && potentialFutureIndex < 67 {
-                                if dotLabels[potentialFutureIndex] != nil {
-                                    if dotLabels[potentialFutureIndex]!.isDescendant(of: self.view) {
-                                        
-                                        futureIndexes.removeAll()
-                                        futureIndexes.append(potentialFutureIndex)
+                            if futureRow == lastRow - 1 || futureRow == lastRow + 1 {
+                                
+                                
+                                switch myShuffleAndDeal.whatColorIsCard(card: deck[i]!) {
+                                case .blue: //blue
+                                    displayLayers[count].strokeColor = UIColor(red: 60/255, green: 54/255, blue: 116/255, alpha: 1.0).cgColor
+                                case .green: //green
+                                    displayLayers[count].strokeColor = UIColor(red: 69/255, green: 125/255, blue: 59/255, alpha: 1.0).cgColor
+                                case .yellow: //yellow
+                                    displayLayers[count].strokeColor = UIColor(red: 190/255, green: 154/255, blue: 35/255, alpha: 1.0).cgColor
+                                case .red: //red
+                                    displayLayers[count].strokeColor = UIColor(red: 101/255, green: 34/255, blue: 35/255, alpha: 1.0).cgColor
+                                }
+                                
+                                displayLabels[count].text = String(deck[i]!%7 + 1)
+                                lastCardDisplayed = deck[i]!
+                                priorIndex = lastIndex
+                                lastIndex = i
+                                var potentialFutureIndex = Int()
+                                potentialFutureIndex = mySelection.linearCheckForNumberAfterLast(last: i, prior: priorIndex)
+                                
+                                if potentialFutureIndex > -1 && potentialFutureIndex < 67 {
+                                    if dotLabels[potentialFutureIndex] != nil {
+                                        if dotLabels[potentialFutureIndex]!.isDescendant(of: self.view) {
+                                            
+                                            futureIndexes.removeAll()
+                                            futureIndexes.append(potentialFutureIndex)
+                                        }
                                     }
                                 }
+                                
+                                view.layer.addSublayer(displayLayers[count])
+                                self.view.addSubview(displayLabels[count])
+                                hand.append(deck[i]!)
+                                handIndexes.append(i)
+                                count += 1
                             }
-                            
-                            view.layer.addSublayer(displayLayers[count])
-                            self.view.addSubview(displayLabels[count])
-                            hand.append(deck[i]!)
-                            handIndexes.append(i)
-                            count += 1
                         }
                     }
                 }
@@ -338,8 +345,8 @@ class GameViewController: UIViewController {
                 delay(bySeconds: 0.5) {
                     self.dropLeft(currentDeck: self.deck)
                 }
-             
-               
+                
+                
                 
             }
         }
@@ -472,23 +479,42 @@ class GameViewController: UIViewController {
         score.text = currentScoreString
         if questButtons.count > 0 {
             var counter = 0
-        outerloop: for i in questButtons {
-  
-            if questString == i.title(for: .normal) {
-                self.questButtons[counter].removeFromSuperview()
-                AudioServicesPlayAlertSound(SystemSoundID(kSystemSoundID_Vibrate))
-                questButtons.remove(at: counter)
-                print("questbuttons: \(questButtons)")
-               break outerloop
+            outerloop: for i in questButtons {
+                
+                if questString == i.title(for: .normal) {
+                    self.questButtons[counter].removeFromSuperview()
+                    AudioServicesPlayAlertSound(SystemSoundID(kSystemSoundID_Vibrate))
+                    questButtons.remove(at: counter)
+                    print("questbuttons: \(questButtons)")
+                    break outerloop
+                }
+                counter += 1
             }
-            counter += 1
-        }
         }
         if tagLevelIdentifier < 100 {
-        if questButtons.count == 0 && !iWantToFinish {
-            gameWinSequence()
+            if questButtons.count == 0 && !iWantToFinish {
+                gameWinSequence()
+            }
         }
+    }
+    
+    private func noMoreMoves() {
+        if tagLevelIdentifier < 100 {
+            view.addSubview(backBlack)
+            view.addSubview(restart)
+            
+        } else {
+            myLoadSaveCoreData.saveScore(score: currentScoreInt)
+            myLoadSaveCoreData.saveDemo(mode: "Solo")
+            view.addSubview(backBlack)
+            view.addSubview(restart)
+            view.addSubview(menuX)
+            sequences.text = "Score: " + currentScoreString
+            view.addSubview(sequences)
+            
         }
+        
+        
     }
     
     private func gameWinSequence() {
@@ -499,7 +525,10 @@ class GameViewController: UIViewController {
         view.addSubview(continueToPlay)
         finishMessage.text = myNarrative.finishMessages[tagLevelIdentifier-1]
         view.addSubview(finishMessage)
-        //add save coredata checkmark win
+        myLoadSaveCoreData.saveLevel(tagLevelIdentifier: tagLevelIdentifier)
+        if tagLevelIdentifier == 1 {
+            myLoadSaveCoreData.saveDemo(mode: "Campaign")
+        }
         let array = [1,9,17,25,33,41,43]
         if array.contains(tagLevelIdentifier) {
             let image = UIImage(named: "Icon.png")
@@ -524,7 +553,7 @@ class GameViewController: UIViewController {
         scoreFlash.textColor = UIColor(red: 255/255, green: 255/255, blue: 255/255, alpha: 1.0)
         scoreFlash.textAlignment = NSTextAlignment.center
         if tagLevelIdentifier > 99 {
-        scoreFlash.font = UIFont(name: "HelveticaNeue-Bold", size: fontSizeMultiplier*70)
+            scoreFlash.font = UIFont(name: "HelveticaNeue-Bold", size: fontSizeMultiplier*70)
         } else {
             scoreFlash.font = UIFont(name: "HelveticaNeue-Bold", size: fontSizeMultiplier*50)
         }
@@ -668,7 +697,7 @@ class GameViewController: UIViewController {
         
         // finish Messages
         if tagLevelIdentifier < 100 {
-        finishMessage.text = myNarrative.finishMessages[tagLevelIdentifier]
+            finishMessage.text = myNarrative.finishMessages[tagLevelIdentifier]
         }
         finishMessage.textColor = UIColor(red: 215/255, green: 215/255, blue: 215/255, alpha: 1.0)
         finishMessage.textAlignment = NSTextAlignment.center
@@ -735,7 +764,7 @@ class GameViewController: UIViewController {
         score.font = UIFont(name: "HelveticaNeue-CondensedBold", size: fontSizeMultiplier*36)
         //score.backgroundColor = UIColor(red: 42/255, green: 42/255, blue: 42/255, alpha: 1.0)
         score.frame = CGRect(x: (200/750)*screenWidth, y: (1252/1334)*screenHeight, width: (525/750)*screenWidth, height: (60/750)*screenWidth)
-       // view.addSubview(score)
+        // view.addSubview(score)
         
         //Hint Button
         
@@ -995,7 +1024,7 @@ class GameViewController: UIViewController {
         }
         _ = Timer.scheduledTimer(timeInterval: 2.5, target: self, selector: #selector(GameViewController.disappear3), userInfo: nil, repeats: false)
     }
-     @objc private func disappear3(_ button: UIButton) {
+    @objc private func disappear3(_ button: UIButton) {
         imageView.removeFromSuperview()
     }
     
@@ -1085,7 +1114,7 @@ class GameViewController: UIViewController {
         //view.addSubview(backBlack)
         // ADD SEQUENCE BOXES
         view.addSubview(tutorialAnnotation3)
-       // view.addSubview(okay)
+        // view.addSubview(okay)
     }
     
     @objc private func sequence(_ button: UIButton) {
@@ -1117,7 +1146,7 @@ class GameViewController: UIViewController {
             }
         }
     }
-
+    
     
     private func addDescriptionNamed(named: String) {
         let image = UIImage(named: named)
@@ -1125,7 +1154,7 @@ class GameViewController: UIViewController {
         imageView.frame.origin.x = (123/750)*screenWidth
         imageView.frame.origin.y = (359/1334)*screenHeight
         imageView.frame.size = CGSize( width: (504/750)*screenWidth, height: (220/750)*screenWidth)
-       
+        
         view.addSubview(imageView)
     }
 }

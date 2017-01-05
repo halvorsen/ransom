@@ -1,0 +1,15 @@
+PODS:
+  - GCHelper (0.4.1)
+  - SwiftyStoreKit (0.5.4)
+
+DEPENDENCIES:
+  - GCHelper (~> 0.3)
+  - SwiftyStoreKit
+
+SPEC CHECKSUMS:
+  GCHelper: 168bb32ef2b045580ccc384cf6be11db5aae8fd8
+  SwiftyStoreKit: a8b02a708c6e2bf52207836d58afd3738e2f6670
+
+PODFILE CHECKSUM: 3fd0dc67bd18dce764a48d9bffcea1ba9ffb65e8
+
+COCOAPODS: 1.1.1

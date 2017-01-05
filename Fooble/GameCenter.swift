@@ -7,10 +7,13 @@
 //
 
 import Foundation
+import GCHelper
+import CoreData
 
 struct GameCenter {
     
-    private func loadDataGC() {
+    private func loadDataGC() -> Int {
+        var maxNumber = Int()
         print("loaddata")
         var resultsScoreRequest = [AnyObject]()
         let appDel = (UIApplication.shared.delegate as! AppDelegate)
@@ -24,38 +27,31 @@ struct GameCenter {
         
         if resultsScoreRequest.count > 0 {
             
-            for i in 0...8 {
-                
-                //   var score: Int? = 0
-                var maxNumber: Int
-                for result in resultsScoreRequest {
-                    if let score = result.value(forKey: levels[i]) as! Int? {
-                        
-                        array.append(score)
-                    }
+            var array = [Int]()
+            
+            for result in resultsScoreRequest {
+                if let score = result.value(forKey: "solo") as! Int? {
                     
+                    array.append(score)
                 }
-                if array.count > 0 {
-                    maxNumber = array.max()!
-                    annotations[i+9] = String(maxNumber)
-                    print("maxscore")
-                    print(maxNumber)
-                    print("i: \(i)")
-                    highScores[i] = maxNumber
-                }
-                array.removeAll()
                 
             }
+            if array.count > 0 {
+                maxNumber = array.max()!
+            } else { maxNumber = 0
+            }
         }
+        
+        return maxNumber
     }
     
     private func addDataToGameCenter() {
-        
-        for i in 0...8 {
-            if highScores[i] > 0 {
-                GCHelper.sharedInstance.reportLeaderboardIdentifier(annotations[i], score: highScores[i])
-            }
+        var highScore = Int()
+        highScore = loadDataGC()
+        if highScore > 0 {
+            GCHelper.sharedInstance.reportLeaderboardIdentifier("Ransom High Score", score: highScore)
         }
+        
         
     }
     
