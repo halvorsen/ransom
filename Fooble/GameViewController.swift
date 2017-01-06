@@ -70,6 +70,7 @@ class GameViewController: UIViewController {
     let myCalculator = Calculator()
     let myNarrative = Narrative()
     let myLoadSaveCoreData = LoadSaveCoreData()
+    let myGameCenter = GameCenter()
     var count: Int = 0
     var lastCardDisplayed = Int()
     var firstIndexDisplayed = Int()
@@ -89,7 +90,8 @@ class GameViewController: UIViewController {
     var iWantToFinish = false
     let imageView = UIImageView()
     var imageViewGlobal = UIImageView()
-    
+    var shuffled = [Int]()
+    var allNumbers = [Int]()
     
     override var prefersStatusBarHidden: Bool {
         return true
@@ -112,8 +114,7 @@ class GameViewController: UIViewController {
         
         addButtons()
         
-        var shuffled = [Int]()
-        var allNumbers = [Int]()
+
         for i in 0..<84 {
             allNumbers.append(i)
         }
@@ -164,6 +165,7 @@ class GameViewController: UIViewController {
         }
         if tagLevelIdentifier == 100 {
             displayTutorial()
+            menuX.removeFromSuperview()
         } else if tagLevelIdentifier == 1 {
             displayTutorialForCampaign()
         } else {
@@ -247,8 +249,19 @@ class GameViewController: UIViewController {
                     
                     for i in futureIndexes {
                         
-                        let futureRow = mySelection.thisRow(index: i)
+                        var futureRow = mySelection.thisRow(index: i)
                         let lastRow = mySelection.thisRow(index: lastIndex)
+                        switch lastIndex {
+                        case 6,14,21,29,36,44,51,59:
+                            if i == lastIndex + 1 {
+                                futureRow = lastRow + 2
+                            }
+                        case 7,15,22,30,37,45,52,60:
+                            if i == lastIndex - 1 {
+                                futureRow = lastRow + 2
+                            }
+                        default: break
+                        }
                         if shapeLayers2[i].path!.contains(locationOfPan) && dotLabels[i]!.isDescendant(of: self.view) && (lastCardDisplayed != deck[i]!) {
                             
                             if futureRow == lastRow - 1 || futureRow == lastRow + 1 || futureRow == lastRow {
@@ -515,7 +528,7 @@ class GameViewController: UIViewController {
         view.addSubview(backBlack)
         view.bringSubview(toFront: backBlack)
         view.addSubview(menuBox)
-        view.addSubview(continueToPlay)
+        //view.addSubview(continueToPlay)
         finishMessage.text = myNarrative.finishMessages[tagLevelIdentifier-1]
         view.addSubview(finishMessage)
         myLoadSaveCoreData.saveLevel(tagLevelIdentifier: tagLevelIdentifier)
@@ -529,6 +542,9 @@ class GameViewController: UIViewController {
             imageView.frame = CGRect(x: 0.28*screenWidth, y: (100/1334)*screenHeight, width: 0.93*screenWidth/2, height: 0.6205*screenWidth)
             view.addSubview(imageView)
             imageViewGlobal = imageView
+            
+        } else {
+            finishMessage.frame.origin.y -= screenHeight/4
         }
         
     }
@@ -956,7 +972,10 @@ class GameViewController: UIViewController {
         view.addSubview(backBlack)
         view.bringSubview(toFront: backBlack)
         view.addSubview(restart)
-        view.addSubview(sequence)
+        if tagLevelIdentifier < 99 {view.addSubview(sequence); back.frame.origin.y = (460/1334)*screenHeight
+        } else {
+            view.addSubview(sequence)
+        }
         view.addSubview(back)
         view.addSubview(menuX2)
         
@@ -982,6 +1001,7 @@ class GameViewController: UIViewController {
         if tagLevelIdentifier == 100 {
             view.addSubview(tutorialAnnotation2)
             view.addSubview(score)
+            view.addSubview(menuX)
             self.tutorialAnnotation.removeFromSuperview()
         }
         
@@ -1061,37 +1081,27 @@ class GameViewController: UIViewController {
         _highestHand = [1,1,1,1,1]
         highestSoFar = 1
         
-        addButtons()
         
-        switch tagLevelIdentifier {
-        case 100, 101:
-            var shuffled = [Int]()
-            var allNumbers = [Int]()
-            for i in 0..<84 {
-                allNumbers.append(i)
-            }
-            for _ in 0..<67 {
-                let randomNumber = Int(arc4random_uniform(UInt32(allNumbers.count)))
-                if let index = allNumbers.index(of: allNumbers[randomNumber]) {
-                    shuffled.append(allNumbers[randomNumber])
-                    allNumbers.remove(at:index)
-                }
-            }
-            deck = shuffled
-            lastCardDisplayed = 999
-            populateDots()
-        case 200:
-            break
-        case 300:
-            break
-        case 0...99:
-            deck.removeAll()
-            deck = myShuffleAndDeal.levelDeals[tagLevelIdentifier-1]
-            populateDots()
-        default: break
-            
+        shuffled.removeAll()
+        allNumbers.removeAll()
+        dotLabels.removeAll()
+        addButtons()
+        for i in 0..<84 {
+            allNumbers.append(i)
         }
-        view.addSubview(menuX)
+        for _ in 0..<67 {
+            let randomNumber = Int(arc4random_uniform(UInt32(allNumbers.count)))
+            if let index = allNumbers.index(of: allNumbers[randomNumber]) {
+                shuffled.append(allNumbers[randomNumber])
+                allNumbers.remove(at:index)
+            }
+        }
+        deck = shuffled
+        lastCardDisplayed = 999
+   
+        
+                   populateDots()
+                view.addSubview(menuX)
     }
     private func displayTutorial() {
         

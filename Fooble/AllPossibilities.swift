@@ -15,13 +15,16 @@ struct AllPossibilities {
     var allNilIndexes = [Int]()
     let mySelection = Selection()
     let myCalculator = Calculator()
+    var highScoreIndex: Int = 0
+    var lastScore: Int? = 0
     var handScore: Int?
+    var stopEverything = true
     
-//    mutating func calculateNumberOfMovesLeft(deck: [Int?]) -> Int {
-//        
-//    }
+    //    mutating func calculateNumberOfMovesLeft(deck: [Int?]) -> Int {
+    //
+    //    }
     
-
+    
     mutating func calculateBestHandIndexes(deck: [Int?]) -> [Int] {
         var nextIndexes = [Int]()
         var twoCardHands = [[Int]]()
@@ -43,31 +46,31 @@ struct AllPossibilities {
                         let futureRow = mySelection.thisRow(index: m)
                         let lastRow = mySelection.thisRow(index: n)
                         if m < 67 && m > -1 {
-                        if (lastRow == futureRow - 1 || lastRow == futureRow + 1) && deck[m] != nil {
-                            
-                            var o = Int()
-                            o = mySelection.linearCheckForNumberAfterLast(last: m, prior: n)
-                            let futureRow = mySelection.thisRow(index: o)
-                            let lastRow = mySelection.thisRow(index: m)
-                            if o < 67 && o > -1 {
-                            if (lastRow == futureRow - 1 || lastRow == futureRow + 1) && deck[o] != nil {
+                            if (lastRow == futureRow - 1 || lastRow == futureRow + 1) && deck[m] != nil {
                                 
-                                var p = Int()
-                                p = mySelection.linearCheckForNumberAfterLast(last: o, prior: m)
-                                let futureRow = mySelection.thisRow(index: p)
-                                let lastRow = mySelection.thisRow(index: o)
-                                if p < 67 && p > -1 {
-                                if (lastRow == futureRow - 1 || lastRow == futureRow + 1) && deck[p] != nil {
-                                    let score = myCalculator.pointAmount(hand: myCalculator.reorderHand(hand: [deck[i]!,deck[m]!,deck[n]!,deck[o]!,deck[p]!]))
-                                    if score > 0 {
-                                        fiveCardHands.append([i,n,m,o,p])
-                                        allHands.append([i,n,m,o,p])
-                                        points.append(score)
+                                var o = Int()
+                                o = mySelection.linearCheckForNumberAfterLast(last: m, prior: n)
+                                let futureRow = mySelection.thisRow(index: o)
+                                let lastRow = mySelection.thisRow(index: m)
+                                if o < 67 && o > -1 {
+                                    if (lastRow == futureRow - 1 || lastRow == futureRow + 1) && deck[o] != nil {
+                                        
+                                        var p = Int()
+                                        p = mySelection.linearCheckForNumberAfterLast(last: o, prior: m)
+                                        let futureRow = mySelection.thisRow(index: p)
+                                        let lastRow = mySelection.thisRow(index: o)
+                                        if p < 67 && p > -1 {
+                                            if (lastRow == futureRow - 1 || lastRow == futureRow + 1) && deck[p] != nil {
+                                                let score = myCalculator.pointAmount(hand: myCalculator.reorderHand(hand: [deck[i]!,deck[m]!,deck[n]!,deck[o]!,deck[p]!]))
+                                                if score > 0 {
+                                                    fiveCardHands.append([i,n,m,o,p])
+                                                    allHands.append([i,n,m,o,p])
+                                                    points.append(score)
+                                                }
+                                            }
+                                        }
                                     }
                                 }
-                                }
-                            }
-                            }
                             }
                         }
                     }
@@ -90,25 +93,25 @@ struct AllPossibilities {
                         let futureRow = mySelection.thisRow(index: m)
                         let lastRow = mySelection.thisRow(index: n)
                         if m < 67 && m > -1 {
-                        if (lastRow == futureRow - 1 || lastRow == futureRow + 1) && deck[m] != nil {
-                            
-                            var o = Int()
-                            o = mySelection.linearCheckForNumberAfterLast(last: m, prior: n)
-                            let futureRow = mySelection.thisRow(index: o)
-                            let lastRow = mySelection.thisRow(index: m)
-                            if o < 67 && o > -1 {
-                            if (lastRow == futureRow - 1 || lastRow == futureRow + 1) && deck[o] != nil {
-                                let score = myCalculator.pointAmount(hand: myCalculator.reorderHand(hand: [deck[i]!,deck[m]!,deck[n]!,deck[o]!]))
-                                if score > 0 {
-                                    fourCardHands.append([i,n,m,o])
-                                    allHands.append([i,n,m,o])
-                                    points.append(score)
-                                }
+                            if (lastRow == futureRow - 1 || lastRow == futureRow + 1) && deck[m] != nil {
                                 
-                            }
+                                var o = Int()
+                                o = mySelection.linearCheckForNumberAfterLast(last: m, prior: n)
+                                let futureRow = mySelection.thisRow(index: o)
+                                let lastRow = mySelection.thisRow(index: m)
+                                if o < 67 && o > -1 {
+                                    if (lastRow == futureRow - 1 || lastRow == futureRow + 1) && deck[o] != nil {
+                                        let score = myCalculator.pointAmount(hand: myCalculator.reorderHand(hand: [deck[i]!,deck[m]!,deck[n]!,deck[o]!]))
+                                        if score > 0 {
+                                            fourCardHands.append([i,n,m,o])
+                                            allHands.append([i,n,m,o])
+                                            points.append(score)
+                                        }
+                                        
+                                    }
+                                }
                             }
                         }
-                    }
                     }
                 }
                 
@@ -129,13 +132,13 @@ struct AllPossibilities {
                             let futureRow = mySelection.thisRow(index: m)
                             let lastRow = mySelection.thisRow(index: n)
                             if m < 67 && m > -1 {
-                            if (lastRow == futureRow - 1 || lastRow == futureRow + 1) && deck[m] != nil {
-                                let score = myCalculator.pointAmount(hand: myCalculator.reorderHand(hand: [deck[i]!,deck[m]!,deck[n]!]))
-                                if score > 0 {
-                                    threeCardHands.append([i,n,m])
-                                    allHands.append([i,n,m])
-                                    points.append(score)
-                                }
+                                if (lastRow == futureRow - 1 || lastRow == futureRow + 1) && deck[m] != nil {
+                                    let score = myCalculator.pointAmount(hand: myCalculator.reorderHand(hand: [deck[i]!,deck[m]!,deck[n]!]))
+                                    if score > 0 {
+                                        threeCardHands.append([i,n,m])
+                                        allHands.append([i,n,m])
+                                        points.append(score)
+                                    }
                                 }
                             }
                             
@@ -146,19 +149,19 @@ struct AllPossibilities {
                 
             }
             
-  
+            
             for i in 0..<67 {  //two card hands by their index
                 if deck[i] != nil {
                     
                     nextIndexes = mySelection.selectableIndexesWithOneAlreadySelected(first: i)
                     for n in nextIndexes {
-                        if deck[n] != nil {
-                            if deck[i] == deck[n] {
-                                twoCardHands.append([i,n])
-                                allHands.append([i,n])
-                                points.append(50)
-                            }
+                        
+                        if deck[i] == deck[n] {
+                            twoCardHands.append([i,n])
+                            allHands.append([i,n])
+                            points.append(50)
                         }
+                        
                     }
                     
                 }
@@ -166,28 +169,58 @@ struct AllPossibilities {
             }
             
         }
-        var highScoreIndex: Int = 0
-        var lastScore: Int? = 0
-        if allHands.count > 0 {
+        // pick bad score third of time
+        let randomNumber = Int(arc4random_uniform(3))
+        if randomNumber == 0 {
             
-            var counter: Int = 0
-            
-            for score in points {
+            if allHands.count > 0 {
                 
-                if score > lastScore! {
-                    lastScore = score
-                    highScoreIndex = counter
-                }
-                counter += 1
+                let randomNumber2 = Int(arc4random_uniform(UInt32(allHands.count)))
+                lastScore = points[randomNumber2]
+                highScoreIndex = randomNumber2
+                
+                
+                
+                
+            } else {
+                
+                allHands = [[0]] //filler that's never used because stopeverything is called
+                stopEverything = false
             }
+            handScore = lastScore
+            
+            
+            
         } else {
-            lastScore = nil; allHands[0] = [0,0]
+            
+            if allHands.count > 0 {
+                
+                var counter: Int = 0
+                
+                for score in points {
+                    
+                    if score > lastScore! {
+                        lastScore = score
+                        highScoreIndex = counter
+                    }
+                    counter += 1
+                }
+            } else {
+                
+                allHands = [[0]] //filler that's never used because stopeverything is called
+                stopEverything = false
+            }
+            handScore = lastScore
         }
-        handScore = lastScore
-        print(allHands)
+        
+        
+        
+        print("counts")
+        print(allHands.count)
+        print(points.count)
         print(allHands[highScoreIndex])
         return allHands[highScoreIndex]  // what if allHands are nil and I try calling allHands[0], when using this function make sure to check for a lastscore first, if no score then there are no moves left and the allHands array is outputting [0,0]
     }
-
-  
+    
+    
 }

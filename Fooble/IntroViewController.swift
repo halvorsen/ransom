@@ -7,6 +7,8 @@
 //
 
 import UIKit
+import StoreKit
+import SwiftyStoreKit
 
 class IntroViewController: UIViewController {
     
@@ -26,7 +28,7 @@ class IntroViewController: UIViewController {
     var fontSizeMultiplier = UIScreen.main.bounds.width / 375
     var seg = String()
     var tagLevelIdentifier = Int()
-    var isFirstTime = true //ADD THIS TO CORE DATA
+
     var myIAP = IAP()
     var triedSolo = false
     var triedMultiplayer = false
@@ -224,7 +226,7 @@ class IntroViewController: UIViewController {
     
     @objc private func campaign(_ button: UIButton) {
         let hack = true
-        if isCampaignPurchased || !triedCampaign || hack {
+        if isCampaignPurchased || !triedCampaign {
         self.performSegue(withIdentifier: "fromIntroToMenu", sender: self)
         } else {
             campaignIAP2()
@@ -234,7 +236,7 @@ class IntroViewController: UIViewController {
     }
     @objc private func multiplayer(_ button: UIButton) {
         let hack = true
-        if isMultiplayerPurchased || !triedMultiplayer || hack {
+        if isMultiplayerPurchased || !triedMultiplayer {
         campaign.removeFromSuperview()
         solo.removeFromSuperview()
         multiplayer.removeFromSuperview()
@@ -250,14 +252,14 @@ class IntroViewController: UIViewController {
     }
     @objc private func solo(_ button: UIButton) {
         let hack = true
-        if isSoloPurchased || !triedSolo || hack {
-        seg = "game"
-        if isFirstTime {
-        tagLevelIdentifier = 100
-        } else {
-           tagLevelIdentifier = 101
-        }
-        self.performSegue(withIdentifier: "fromIntroToGame", sender: self)
+        if isSoloPurchased || !triedSolo {
+            if !triedSolo {
+                tagLevelIdentifier = 100
+            } else {
+                tagLevelIdentifier = 101
+            }
+            seg = "game"
+            self.performSegue(withIdentifier: "fromIntroToGame", sender: self)
         } else {
             soloIAP2()
             isSoloPurchased = myLoadSaveCoreData.isSoloUnlocked()
@@ -296,7 +298,94 @@ class IntroViewController: UIViewController {
     
     
     @objc private func restore(_ button: UIButton) {
+        let refreshAlert = UIAlertController(title: "RESTORE", message: "Restore previously purchased items?", preferredStyle: UIAlertControllerStyle.alert)
         
+        refreshAlert.addAction(UIAlertAction(title: "Ok", style: .default, handler: { (action: UIAlertAction!) in
+            
+            SwiftyStoreKit.restorePurchases() { results in
+                if results.restoreFailedProducts.count > 0 {
+                    print("Restore Failed: \(results.restoreFailedProducts)")
+                    SwiftyStoreKit.restorePurchases() { results in
+                        if results.restoreFailedProducts.count > 0 {
+                            print("Restore Failed: \(results.restoreFailedProducts)")
+                        }
+                        else if results.restoredProductIds.count > 0 {
+                            print("Restore Success: \(results.restoredProductIds)")
+                            let refreshAlert = UIAlertController(title: "Success", message: "You're all set", preferredStyle: UIAlertControllerStyle.alert)
+                            
+                            refreshAlert.addAction(UIAlertAction(title: "Ok", style: .default, handler: { (action: UIAlertAction!) in
+                            }))
+                            self.present(refreshAlert, animated: true, completion: nil)
+                            for r in results.restoredProductIds {
+                                switch r {
+                                case "ransom.iap.campaign":
+                                    self.myIAP.savePurchase(purchase: "campaign")
+                                case "ransom.iap.multiplayer":
+                                    self.myIAP.savePurchase(purchase: "multiplayer")
+                                    
+                                case "ransom.iap.solo":
+                                    self.myIAP.savePurchase(purchase: "solo")
+                                default:
+                                    break
+                                    
+                                }
+                                
+                            }
+                            
+                        }
+                        else {
+                            print("Nothing to Restore")
+                            
+                            
+                            let alert = UIAlertController(title: "RESTORE ERROR", message: "Nothing to Restore", preferredStyle: UIAlertControllerStyle.alert)
+                            alert.addAction(UIAlertAction(title: "Okay", style: UIAlertActionStyle.default, handler: nil))
+                            self.present(alert, animated: true, completion: nil)
+                            
+                        }
+                    }
+                }
+                else if results.restoredProductIds.count > 0 {
+                    print("Restore Success: \(results.restoredProductIds)")
+                    let refreshAlert = UIAlertController(title: "Success", message: "You're all set", preferredStyle: UIAlertControllerStyle.alert)
+                    
+                    refreshAlert.addAction(UIAlertAction(title: "Ok", style: .default, handler: { (action: UIAlertAction!) in
+                    }))
+                    self.present(refreshAlert, animated: true, completion: nil)
+                    for r in results.restoredProductIds {
+                        switch r {
+                        case "ransom.iap.campaign":
+                            self.myIAP.savePurchase(purchase: "campaign")
+                        case "ransom.iap.multiplayer":
+                            self.myIAP.savePurchase(purchase: "multiplayer")
+                            
+                        case "ransom.iap.solo":
+                           self.myIAP.savePurchase(purchase: "solo")
+                        default:
+                            break
+                            
+                        }
+                        
+                    }
+                    
+                    
+                } else {
+                    print("Nothing to Restore")
+                    
+                    let alert = UIAlertController(title: "RESTORE ERROR", message: "Nothing to Restore", preferredStyle: UIAlertControllerStyle.alert)
+                    alert.addAction(UIAlertAction(title: "Okay", style: UIAlertActionStyle.default, handler: nil))
+                    self.present(alert, animated: true, completion: nil)
+                }
+            }
+            
+            
+        }))
+        
+        refreshAlert.addAction(UIAlertAction(title: "Cancel", style: .cancel, handler: { (action: UIAlertAction!) in
+            
+        }))
+        
+        present(refreshAlert, animated: true, completion: nil)
+
     }
     @objc private func menuX(_ button: UIButton) {
         view.subviews.forEach({ $0.removeFromSuperview() })

@@ -29,8 +29,8 @@ class VsViewController: UIViewController {
     var currentScoreString = String()
     var currentScoreInt = Int() {didSet{currentScoreString = String(currentScoreInt)}}
     let dotSize = (1/16)*UIScreen.main.bounds.width
-    let hint = UIButton()
     let exit = UIButton()
+    
     let scoreFlash = UILabel()
     var displayLayers = [CAShapeLayer]()
     var shapeLayers = [CAShapeLayer?]()
@@ -58,7 +58,7 @@ class VsViewController: UIViewController {
     let dotNumbersAsStrings = [String]()
     var dotLabels = [UILabel?]()
     var displayLabels = [UILabel]()
-    var additionalScoreString = String()
+    var additionalScoreString: String = "0"
     var additionalScoreInt = Int() {didSet{additionalScoreString = String(additionalScoreInt)}}
     var deck = [Int?]()
     var myShuffleAndDeal = ShuffleAndDeal()
@@ -85,19 +85,24 @@ class VsViewController: UIViewController {
     var thisTurn: Team = .red
     var oneTurnAgo: Team = .start
     var twoTurnsAgo: Team = .start
-    var extraDots = [Int]()
+    var extraDots = [Int]() {didSet{
+        if extraDots.count == 7 && test { sequences.text = "Game Over (5 deck max)"; sequences.font = UIFont(name: "HelveticaNeue-Bold", size: fontSizeMultiplier*20); view.addSubview(sequences)
+            self.view.removeGestureRecognizer(self.swipeRight as UIGestureRecognizer)
+            self.view.removeGestureRecognizer(self.swipeLeft as UIGestureRecognizer)
+            self.view.removeGestureRecognizer(self.swipeDown as UIGestureRecognizer)
+            self.view.removeGestureRecognizer(self.pan as UIGestureRecognizer) }}}
     var swipeLeft = UISwipeGestureRecognizer()
     var swipeRight = UISwipeGestureRecognizer()
     var swipeDown = UISwipeGestureRecognizer()
     var pan = UIPanGestureRecognizer()
     var imageView = UIImageView()
     var dynamicBarCue = Timer()
-    var ticker: Float = 0.0 {didSet { print(ticker)}}
+    var ticker: Float = 0.0 //{didSet { print(ticker)}}
     var percentageOfBar: CGFloat = 1.0
     var shuffled = [Int]()
     var allNumbers = [Int]()
-    
-    
+    var test = false
+
     override var prefersStatusBarHidden: Bool {
         return true
     }
@@ -120,8 +125,6 @@ class VsViewController: UIViewController {
         addButtons()
         view.addSubview(redScore)
         view.addSubview(yellowScore)
-        
-
         for i in 0..<84 {
             allNumbers.append(i)
         }
@@ -132,15 +135,17 @@ class VsViewController: UIViewController {
                 allNumbers.remove(at:index)
             }
         }
-        
         deck = shuffled
         lastCardDisplayed = 999
         populateDots()
         view.addSubview(menuX)
         
+
+        
     }
     
     override func viewDidAppear(_ animated: Bool) {
+        
         
 
         startTimer()
@@ -162,7 +167,7 @@ class VsViewController: UIViewController {
                 allNumbers.remove(at:index)
             }
         }
-        
+        test = true
         swipeRight = UISwipeGestureRecognizer(target: self, action: #selector(VsViewController.respondToSwipeRight))
         swipeRight.direction = UISwipeGestureRecognizerDirection.right
         swipeLeft = UISwipeGestureRecognizer(target: self, action: #selector(VsViewController.respondToSwipeLeft))
@@ -270,8 +275,20 @@ class VsViewController: UIViewController {
                         
                         
                         for i in futureIndexes {
-                            let futureRow = mySelection.thisRow(index: i)
+                            var futureRow = mySelection.thisRow(index: i)
                             let lastRow = mySelection.thisRow(index: lastIndex)
+                            switch lastIndex {
+                            case 6,14,21,29,36,44,51,59:
+                                if i == lastIndex + 1 {
+                                    futureRow = lastRow + 2
+                                }
+                            case 7,15,22,30,37,45,52,60:
+                                if i == lastIndex - 1 {
+                                    futureRow = lastRow + 2
+                                }
+                            default: break
+                            }
+                            
                             if shapeLayers2[i].path!.contains(locationOfPan) && dotLabels[i]!.isDescendant(of: self.view) && (lastCardDisplayed != deck[i]!) {
                                 
                                 if futureRow == lastRow - 1 || futureRow == lastRow + 1 || futureRow == lastRow {
@@ -322,7 +339,7 @@ class VsViewController: UIViewController {
                 additionalScoreInt = myCalculator.pointAmount(hand: hand)
                 
                 if additionalScoreInt != 0 {
-                    stopTimer()
+                 
                     for i in handIndexes {
                         dotLabels[i]!.removeFromSuperview()
                         deck[i] = nil
@@ -370,18 +387,18 @@ class VsViewController: UIViewController {
             self.view.removeGestureRecognizer(self.swipeDown as UIGestureRecognizer)
         }
         
-        if timerBool == true {
-            startTimer()
-            timerBool=false
-        }
+
         
         
     }
     
     private func noMoreMoves() {
         myLoadSaveCoreData.saveDemo(mode: "Multiplayer")
+        backBlack.alpha = 0.9
         view.addSubview(backBlack)
-        view.addSubview(menuX)
+        menuX.removeFromSuperview()
+        menuX2.layer.zPosition = 5
+        view.addSubview(menuX2)
         if yellowPointsInt > redPointsInt {
             sequences.text = "Yellow Wins!"
         } else if redPointsInt > yellowPointsInt {
@@ -389,7 +406,16 @@ class VsViewController: UIViewController {
         } else {
             sequences.text = "Flip a coin?"
         }
+        yellowScore.frame = CGRect(x: (0/750)*screenWidth, y: (460/1334)*screenHeight, width: screenWidth, height: (140/750)*screenWidth)
+        redScore.frame = CGRect(x: (0/750)*screenWidth, y: (600/1334)*screenHeight, width: screenWidth, height: (140/750)*screenWidth)
+        yellowScore.font = UIFont(name: "HelveticaNeue-Bold", size: fontSizeMultiplier*80)
+        redScore.font = UIFont(name: "HelveticaNeue-Bold", size: fontSizeMultiplier*80)
+        yellowScore.textAlignment = NSTextAlignment.center
+        redScore.textAlignment = NSTextAlignment.center
         
+        redScore.layer.zPosition = 5
+        yellowScore.layer.zPosition = 5
+        sequences.layer.zPosition = 5
         view.addSubview(sequences)
         
     }
@@ -401,6 +427,13 @@ class VsViewController: UIViewController {
         
         delay(bySeconds: 0.5) {
             self.dropRight(currentDeck: self.deck)
+            if self.dotLabels[45] == nil && self.dotLabels[45] == nil {
+                self.myAllPossibilities.calculateBestHandIndexes(deck: self.deck)}
+            if !self.myAllPossibilities.stopEverything {
+                self.noMoreMoves()
+                self.stopTimer()
+                self.bar.removeFromSuperview()
+            }
         }
         if self.tagLevelIdentifier == 1000 && thisTurn == .yellow {
             self.delay(bySeconds: 1.3) {self.takeAITurn() }
@@ -419,7 +452,13 @@ class VsViewController: UIViewController {
         
         delay(bySeconds: 0.5) {
             self.dropLeft(currentDeck: self.deck)
-            
+            if self.dotLabels[45] == nil && self.dotLabels[45] == nil {
+                self.myAllPossibilities.calculateBestHandIndexes(deck: self.deck)}
+            if !self.myAllPossibilities.stopEverything {
+                self.noMoreMoves()
+                self.stopTimer()
+                self.bar.removeFromSuperview()
+            }
         }
         if self.tagLevelIdentifier == 1000 && thisTurn == .yellow {
             self.delay(bySeconds: 1.3)  {self.takeAITurn() }
@@ -436,6 +475,10 @@ class VsViewController: UIViewController {
         print("swipedownfunc")
         imageView.removeFromSuperview()
         if tagLevelIdentifier == 1000 && oneTurnAgo == .red {
+            a = handIndexes
+        } else if tagLevelIdentifier == 1000 {
+            // do nothing
+        } else {
             a = handIndexes
         }
         for i in 0..<a.count {
@@ -468,7 +511,14 @@ class VsViewController: UIViewController {
                 
             }
             view.addSubview(dotLabels[a[i]]!)
+            if dotLabels[45] == nil && dotLabels[45] == nil {
+                myAllPossibilities.calculateBestHandIndexes(deck: deck)}
             
+            if !myAllPossibilities.stopEverything {
+                noMoreMoves()
+                stopTimer()
+                bar.removeFromSuperview()
+            }
             
             
             UIView.animate(withDuration: 1.0, animations: {
@@ -653,6 +703,7 @@ class VsViewController: UIViewController {
         if myAllPossibilities.handScore != nil {
             p = myAllPossibilities.handScore!
         }
+        if myAllPossibilities.stopEverything {
         if p != 0 {
             hand.removeAll()
             for i in a {
@@ -710,6 +761,12 @@ class VsViewController: UIViewController {
             self.yellowPointsInt += self.additionalScoreInt
         }
         }
+        } else {
+            noMoreMoves()
+            stopTimer()
+            bar.removeFromSuperview()
+           
+        }
     }
     
     
@@ -728,14 +785,18 @@ class VsViewController: UIViewController {
         case .red:
             if oneTurnAgo == .start {
                 thisTurn = .yellow
+                ticker = 0
+               
                 oneTurnAgo = .red
                 if tagLevelIdentifier == 1000 {
                     aISequence()
                 }
             } else if oneTurnAgo == .red {
                 thisTurn = .yellow
-                timerBool = true
                 ticker = 0
+          
+                timerBool = true
+         
                 twoTurnsAgo = .red
                 if tagLevelIdentifier == 1000 {
                     aISequence()
@@ -757,8 +818,10 @@ class VsViewController: UIViewController {
                 }
             } else if oneTurnAgo == .yellow {
                 thisTurn = .red
-                timerBool = true
                 ticker = 0
+            
+                timerBool = true
+             
                 twoTurnsAgo = .yellow
             } else {
                 thisTurn = .yellow
@@ -925,7 +988,7 @@ class VsViewController: UIViewController {
             thisTurn = .yellow
             timerBool = true
             ticker = 0
-            startTimer()
+      
             oneTurnAgo = .red
             twoTurnsAgo = .red
             if tagLevelIdentifier == 1000 {
@@ -937,7 +1000,7 @@ class VsViewController: UIViewController {
             thisTurn = .red
             timerBool = true
             ticker = 0
-            startTimer()
+       
             twoTurnsAgo = .yellow
             oneTurnAgo = .yellow
             
@@ -982,7 +1045,7 @@ class VsViewController: UIViewController {
         //back button
         
         back.frame = CGRect(x: (59/750)*screenWidth, y: (400/1334)*screenHeight, width: 633*screenWidth/750, height: 85*screenWidth/750)
-        back.setTitle("Back to Game", for: UIControlState.normal)
+        back.setTitle("Un-Pause", for: UIControlState.normal)
         back.layer.zPosition = 3
         back.titleLabel!.font = UIFont(name: "HelveticaNeue-Bold", size: fontSizeMultiplier*30)
         back.setTitleColor(UIColor(red: 215/255, green: 215/255, blue: 215/255, alpha: 1.0), for: .normal)
@@ -1016,9 +1079,6 @@ class VsViewController: UIViewController {
         
         // show list button
         
-        
-        
-        
         yellowScore.text = yellowPointsString
         yellowScore.textColor = UIColor(red: 190/255, green: 154/255, blue: 35/255, alpha: 1.0)
         yellowScore.textAlignment = NSTextAlignment.left
@@ -1033,24 +1093,6 @@ class VsViewController: UIViewController {
         redScore.frame = CGRect(x: (300/750)*screenWidth, y: (1180/1334)*screenHeight, width: (400/750)*screenWidth, height: (106/750)*screenWidth)
         redScore.font = UIFont(name: "HelveticaNeue-Bold", size: fontSizeMultiplier*55)
         
-        //        //hint dots
-        //        for i in 0...4 {
-        //            let _x = CGFloat(i)*(37/750)*screenWidth
-        //            let circlePath = UIBezierPath(arcCenter: CGPoint(x: (60/750)*screenWidth + _x,y: (1283/1334)*screenHeight), radius: CGFloat((16/750)*screenWidth), startAngle: CGFloat(0), endAngle:CGFloat(M_PI * 2), clockwise: true)
-        //
-        //            let shapeLayer = CAShapeLayer()
-        //            hintDisplay.append(shapeLayer)
-        //            shapeLayer.path = circlePath.cgPath
-        //            let hintLabel = UILabel()
-        //            hintNumberLabels.append(hintLabel)
-        //            hintLabel.text = currentScoreString + "/" + goalScoreString
-        //            hintLabel.textColor = UIColor(red: 42/255, green: 42/255, blue: 42/255, alpha: 1.0)
-        //            hintLabel.textAlignment = NSTextAlignment.center
-        //            hintLabel.font = UIFont(name: "HelveticaNeue-Bold", size: fontSizeMultiplier*10)
-        //            hintLabel.frame = CGRect(x: ((44/750) + CGFloat(i)*(37/750))*screenWidth, y: (1268/1334)*screenHeight, width: (31/750)*screenWidth, height: (31/750)*screenWidth)
-        //        }
-        
-        //tutorialAnnotation, list of sequences, label
         
         
         //Menux Button (transition in exiting game)
@@ -1096,15 +1138,6 @@ class VsViewController: UIViewController {
         sequenceRowOne.frame = CGRect(x: (80/750)*screenWidth, y: (237/1334)*screenHeight, width: (500/750)*screenWidth, height: (750/750)*screenWidth)
         sequenceRowTwo.frame = CGRect(x: (173/750)*screenWidth, y: (262/1334)*screenHeight, width: (500/750)*screenWidth, height: (750/750)*screenWidth)
         
-        
-        
-        //Hint Button
-        
-        hint.frame = CGRect(x: (33/750)*screenWidth, y: (1252/1334)*screenHeight, width: 150*screenWidth/750, height: 60*screenWidth/750)
-        hint.setTitle("Hint", for: UIControlState.normal) //hack relace taglevel with "Hint"
-        hint.titleLabel!.font = UIFont(name: "HelveticaNeue-Bold", size: fontSizeMultiplier*36)
-        hint.setTitleColor(UIColor(red: 215/255, green: 215/255, blue: 215/255, alpha: 1.0), for: .normal)
-        hint.addTarget(self, action: #selector(VsViewController.hint(_:)), for: .touchUpInside)
         //self.view.addSubview(hint)
         
         //Exit Button

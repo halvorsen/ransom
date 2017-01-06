@@ -262,7 +262,7 @@ class MenuViewController: UIViewController {
     @objc private func levels(_ sender: UIButton) {
         let hack = true
         tagLevelIdentifier = sender.tag
-        if (levelsPassed.count >= 2*tagLevelIdentifier/3 && campaignUnlocked) || hack {
+        if (levelsPassed.count >= 2*tagLevelIdentifier/3 && campaignUnlocked)  {
             seg = "game"
             self.performSegue(withIdentifier: "fromMenuToGame", sender: self)
         } else if tagLevelIdentifier == 1 {
