@@ -71,13 +71,13 @@ class IntroViewController: UIViewController {
     }
     
     private func addButtons() {
-//        
-//        //princess
-//        
-//        let princessImage = UIImage(named: "Princess.png")
-//        let princessView = UIImageView(image: princessImage)
-//        princessView.frame = CGRect(x: (490/750)*screenWidth, y: (1098/750)*screenWidth, width: 263*screenWidth/750, height: 242*screenWidth/750)
-//        self.view.addSubview(princessView)
+        
+        //princess
+        
+        let princessImage = UIImage(named: "Princess.png")
+        let princessView = UIImageView(image: princessImage)
+        princessView.frame = CGRect(x: (490/750)*screenWidth, y: (1110/750)*screenWidth, width: 263*screenWidth/750, height: 242*screenWidth/750)
+        self.view.addSubview(princessView)
         
         //campaign
         
@@ -135,7 +135,7 @@ class IntroViewController: UIViewController {
         // unlock campaign
         
         campaignIAP.frame = CGRect(x: (59/750)*screenWidth, y: (323/1334)*screenHeight, width: 633*screenWidth/750, height: 85*screenWidth/750)
-        campaignIAP.setTitle("Campaign", for: UIControlState.normal)
+        campaignIAP.setTitle("Unlock Campaign", for: UIControlState.normal)
         campaignIAP.titleLabel!.font = UIFont(name: "HelveticaNeue-Bold", size: fontSizeMultiplier*25)
         campaignIAP.setTitleColor(UIColor(red: 215/255, green: 215/255, blue: 215/255, alpha: 1.0), for: .normal)
         campaignIAP.backgroundColor = .clear
@@ -148,7 +148,7 @@ class IntroViewController: UIViewController {
         // unlock multiplayer
         
         multiplayerIAP.frame = CGRect(x: (59/750)*screenWidth, y: (461/1334)*screenHeight, width: 633*screenWidth/750, height: 85*screenWidth/750)
-        multiplayerIAP.setTitle("Multiplayer", for: UIControlState.normal)
+        multiplayerIAP.setTitle("Unlock Multiplayer", for: UIControlState.normal)
         multiplayerIAP.titleLabel!.font = UIFont(name: "HelveticaNeue-Bold", size: fontSizeMultiplier*25)
         multiplayerIAP.setTitleColor(UIColor(red: 215/255, green: 215/255, blue: 215/255, alpha: 1.0), for: .normal)
         multiplayerIAP.backgroundColor = .clear
@@ -161,7 +161,7 @@ class IntroViewController: UIViewController {
         // unlock solo
         
         soloIAP.frame = CGRect(x: (59/750)*screenWidth, y: (593/1334)*screenHeight, width: 633*screenWidth/750, height: 85*screenWidth/750)
-        soloIAP.setTitle("Solo", for: UIControlState.normal)
+        soloIAP.setTitle("Unlock Solo", for: UIControlState.normal)
         soloIAP.titleLabel!.font = UIFont(name: "HelveticaNeue-Bold", size: fontSizeMultiplier*25)
         soloIAP.setTitleColor(UIColor(red: 215/255, green: 215/255, blue: 215/255, alpha: 1.0), for: .normal)
         soloIAP.backgroundColor = .clear
@@ -175,7 +175,7 @@ class IntroViewController: UIViewController {
         // restore
         
         restore.frame = CGRect(x: (59/750)*screenWidth, y: (725/1334)*screenHeight, width: 633*screenWidth/750, height: 85*screenWidth/750)
-        restore.setTitle("Store", for: UIControlState.normal)
+        restore.setTitle("Restore Purchases", for: UIControlState.normal)
         restore.titleLabel!.font = UIFont(name: "HelveticaNeue-Bold", size: fontSizeMultiplier*25)
         restore.setTitleColor(UIColor(red: 215/255, green: 215/255, blue: 215/255, alpha: 1.0), for: .normal)
         restore.backgroundColor = .clear
@@ -193,6 +193,7 @@ class IntroViewController: UIViewController {
         playerVsPlayer.titleLabel!.font = UIFont(name: "HelveticaNeue-Bold", size: fontSizeMultiplier*25)
         playerVsPlayer.setTitleColor(UIColor(red: 215/255, green: 215/255, blue: 215/255, alpha: 1.0), for: .normal)
         playerVsPlayer.backgroundColor = .clear
+        playerVsPlayer.tag = 2000
         playerVsPlayer.layer.cornerRadius = 5
         playerVsPlayer.layer.borderWidth = 1
         playerVsPlayer.layer.borderColor = UIColor(red: 215/255, green: 215/255, blue: 215/255, alpha: 1.0).cgColor
@@ -205,6 +206,7 @@ class IntroViewController: UIViewController {
         aI.titleLabel!.font = UIFont(name: "HelveticaNeue-Bold", size: fontSizeMultiplier*25)
         aI.setTitleColor(UIColor(red: 215/255, green: 215/255, blue: 215/255, alpha: 1.0), for: .normal)
         aI.backgroundColor = .clear
+        aI.tag = 1000
         aI.layer.cornerRadius = 5
         aI.layer.borderWidth = 1
         aI.layer.borderColor = UIColor(red: 215/255, green: 215/255, blue: 215/255, alpha: 1.0).cgColor
@@ -221,7 +223,8 @@ class IntroViewController: UIViewController {
     }
     
     @objc private func campaign(_ button: UIButton) {
-        if isCampaignPurchased || !triedCampaign {
+        let hack = true
+        if isCampaignPurchased || !triedCampaign || hack {
         self.performSegue(withIdentifier: "fromIntroToMenu", sender: self)
         } else {
             campaignIAP2()
@@ -230,7 +233,8 @@ class IntroViewController: UIViewController {
         }
     }
     @objc private func multiplayer(_ button: UIButton) {
-        if isMultiplayerPurchased || !triedMultiplayer {
+        let hack = true
+        if isMultiplayerPurchased || !triedMultiplayer || hack {
         campaign.removeFromSuperview()
         solo.removeFromSuperview()
         multiplayer.removeFromSuperview()
@@ -245,7 +249,8 @@ class IntroViewController: UIViewController {
         }
     }
     @objc private func solo(_ button: UIButton) {
-        if isSoloPurchased || !triedSolo {
+        let hack = true
+        if isSoloPurchased || !triedSolo || hack {
         seg = "game"
         if isFirstTime {
         tagLevelIdentifier = 100
@@ -263,11 +268,12 @@ class IntroViewController: UIViewController {
         solo.removeFromSuperview()
         multiplayer.removeFromSuperview()
         store.removeFromSuperview()
-        view.addSubview(campaignIAP)
-        view.addSubview(soloIAP)
-        view.addSubview(multiplayerIAP)
         view.addSubview(restore)
         view.addSubview(menuX)
+        view.addSubview(multiplayerIAP)
+        view.addSubview(soloIAP)
+        view.addSubview(campaignIAP)
+        
     }
     @objc private func campaignIAP(_ button: UIButton) {
         myIAP.purchase(productId: "ransom.iap.campaign")
@@ -298,12 +304,12 @@ class IntroViewController: UIViewController {
     }
     @objc private func playerVsPlayer(_ button: UIButton) {
         seg = "vs"
-        tagLevelIdentifier = 300
+        tagLevelIdentifier = 2000
         self.performSegue(withIdentifier: "fromIntroToVs", sender: self)
     }
     @objc private func aI(_ button: UIButton) {
         seg = "vs"
-        tagLevelIdentifier = 200
+        tagLevelIdentifier = 1000
         self.performSegue(withIdentifier: "fromIntroToVs", sender: self)
     }
 

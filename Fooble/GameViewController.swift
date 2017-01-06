@@ -255,10 +255,10 @@ class GameViewController: UIViewController {
                     for i in futureIndexes {
                         
                         let futureRow = mySelection.thisRow(index: i)
-                        let lastRow = mySelection.thisRow(index: priorIndex)
+                        let lastRow = mySelection.thisRow(index: lastIndex)
                         if shapeLayers2[i].path!.contains(locationOfPan) && dotLabels[i]!.isDescendant(of: self.view) && (lastCardDisplayed != deck[i]!) {
                             
-                            if futureRow == lastRow - 1 || futureRow == lastRow + 1 {
+                            if futureRow == lastRow - 1 || futureRow == lastRow + 1 || futureRow == lastRow {
                                 
                                 
                                 switch myShuffleAndDeal.whatColorIsCard(card: deck[i]!) {
@@ -307,7 +307,7 @@ class GameViewController: UIViewController {
             }
             hand = myCalculator.reorderHand(hand: hand)
             print("hand: \(hand)")
-            additionalScoreInt = myCalculator.pointAmount(hand: myCalculator.reorderHand(hand: hand))
+            additionalScoreInt = myCalculator.pointAmount(hand: hand)
             questString = myCalculator.questString(hand: myCalculator.reorderHand(hand: hand))
             print("additional points: \(additionalScoreInt)")
             if additionalScoreInt != 0 {

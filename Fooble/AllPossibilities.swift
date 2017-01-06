@@ -15,13 +15,14 @@ struct AllPossibilities {
     var allNilIndexes = [Int]()
     let mySelection = Selection()
     let myCalculator = Calculator()
+    var handScore: Int?
     
 //    mutating func calculateNumberOfMovesLeft(deck: [Int?]) -> Int {
 //        
 //    }
     
 
-    mutating func calculateBestHandIndexes(deck: [Int?]) -> ([Int],Int?) {
+    mutating func calculateBestHandIndexes(deck: [Int?]) -> [Int] {
         var nextIndexes = [Int]()
         var twoCardHands = [[Int]]()
         var threeCardHands = [[Int]]()
@@ -41,19 +42,22 @@ struct AllPossibilities {
                         m = mySelection.linearCheckForNumberAfterLast(last: n, prior: i)
                         let futureRow = mySelection.thisRow(index: m)
                         let lastRow = mySelection.thisRow(index: n)
+                        if m < 67 && m > -1 {
                         if (lastRow == futureRow - 1 || lastRow == futureRow + 1) && deck[m] != nil {
                             
                             var o = Int()
                             o = mySelection.linearCheckForNumberAfterLast(last: m, prior: n)
                             let futureRow = mySelection.thisRow(index: o)
                             let lastRow = mySelection.thisRow(index: m)
+                            if o < 67 && o > -1 {
                             if (lastRow == futureRow - 1 || lastRow == futureRow + 1) && deck[o] != nil {
                                 
                                 var p = Int()
                                 p = mySelection.linearCheckForNumberAfterLast(last: o, prior: m)
                                 let futureRow = mySelection.thisRow(index: p)
                                 let lastRow = mySelection.thisRow(index: o)
-                                if (lastRow == futureRow - 1 || lastRow == futureRow + 1) && deck[o] != nil {
+                                if p < 67 && p > -1 {
+                                if (lastRow == futureRow - 1 || lastRow == futureRow + 1) && deck[p] != nil {
                                     let score = myCalculator.pointAmount(hand: myCalculator.reorderHand(hand: [deck[i]!,deck[m]!,deck[n]!,deck[o]!,deck[p]!]))
                                     if score > 0 {
                                         fiveCardHands.append([i,n,m,o,p])
@@ -61,9 +65,10 @@ struct AllPossibilities {
                                         points.append(score)
                                     }
                                 }
-                                
+                                }
                             }
-                            
+                            }
+                            }
                         }
                     }
                     
@@ -84,12 +89,14 @@ struct AllPossibilities {
                         m = mySelection.linearCheckForNumberAfterLast(last: n, prior: i)
                         let futureRow = mySelection.thisRow(index: m)
                         let lastRow = mySelection.thisRow(index: n)
+                        if m < 67 && m > -1 {
                         if (lastRow == futureRow - 1 || lastRow == futureRow + 1) && deck[m] != nil {
                             
                             var o = Int()
                             o = mySelection.linearCheckForNumberAfterLast(last: m, prior: n)
                             let futureRow = mySelection.thisRow(index: o)
                             let lastRow = mySelection.thisRow(index: m)
+                            if o < 67 && o > -1 {
                             if (lastRow == futureRow - 1 || lastRow == futureRow + 1) && deck[o] != nil {
                                 let score = myCalculator.pointAmount(hand: myCalculator.reorderHand(hand: [deck[i]!,deck[m]!,deck[n]!,deck[o]!]))
                                 if score > 0 {
@@ -99,10 +106,10 @@ struct AllPossibilities {
                                 }
                                 
                             }
-                            
+                            }
                         }
                     }
-                    
+                    }
                 }
                 
             }
@@ -121,6 +128,7 @@ struct AllPossibilities {
                             m = mySelection.linearCheckForNumberAfterLast(last: n, prior: i)
                             let futureRow = mySelection.thisRow(index: m)
                             let lastRow = mySelection.thisRow(index: n)
+                            if m < 67 && m > -1 {
                             if (lastRow == futureRow - 1 || lastRow == futureRow + 1) && deck[m] != nil {
                                 let score = myCalculator.pointAmount(hand: myCalculator.reorderHand(hand: [deck[i]!,deck[m]!,deck[n]!]))
                                 if score > 0 {
@@ -128,7 +136,7 @@ struct AllPossibilities {
                                     allHands.append([i,n,m])
                                     points.append(score)
                                 }
-                                
+                                }
                             }
                             
                         }
@@ -145,7 +153,7 @@ struct AllPossibilities {
                     nextIndexes = mySelection.selectableIndexesWithOneAlreadySelected(first: i)
                     for n in nextIndexes {
                         if deck[n] != nil {
-                            if deck[i] == nextIndexes[n] {
+                            if deck[i] == deck[n] {
                                 twoCardHands.append([i,n])
                                 allHands.append([i,n])
                                 points.append(50)
@@ -175,7 +183,10 @@ struct AllPossibilities {
         } else {
             lastScore = nil; allHands[0] = [0,0]
         }
-        return (allHands[highScoreIndex],lastScore)  // what if allHands are nil and I try calling allHands[0], when using this function make sure to check for a lastscore first, if no score then there are no moves left and the allHands array is outputting [0,0]
+        handScore = lastScore
+        print(allHands)
+        print(allHands[highScoreIndex])
+        return allHands[highScoreIndex]  // what if allHands are nil and I try calling allHands[0], when using this function make sure to check for a lastscore first, if no score then there are no moves left and the allHands array is outputting [0,0]
     }
 
   

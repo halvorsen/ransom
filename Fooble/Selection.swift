@@ -17,11 +17,11 @@ struct Selection {
         case 7...14: row = 2
         case 15...21: row = 3
         case 22...29: row = 4
-        case 30...38: row = 5
-        case 38...45: row = 6
-        case 46...52: row = 7
-        case 53...60: row = 8
-        case 61...67: row = 9
+        case 30...36: row = 5
+        case 37...44: row = 6
+        case 45...51: row = 7
+        case 52...59: row = 8
+        case 60...66: row = 9
         default: break
         }
         

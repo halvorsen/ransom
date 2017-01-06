@@ -30,12 +30,8 @@ class MenuViewController: UIViewController {
     var campaignUnlocked = false
     var levelsPassed = [Int]()
     let myLoadSaveCoreData = LoadSaveCoreData()
-    
-    
-    
-    
-    
-    
+    let myIAP = IAP()
+
     private func setUpLabelsWithCheckmarks() {
         var levelsAddressed = [Int]()
         resultsLevelsPassed = myLoadSaveCoreData.loadDataForLevelsPassed()
@@ -264,14 +260,18 @@ class MenuViewController: UIViewController {
     
     
     @objc private func levels(_ sender: UIButton) {
-        
+        let hack = true
         tagLevelIdentifier = sender.tag
-        if levelsPassed.count >= 2*tagLevelIdentifier/3 && campaignUnlocked {
+        if (levelsPassed.count >= 2*tagLevelIdentifier/3 && campaignUnlocked) || hack {
             seg = "game"
             self.performSegue(withIdentifier: "fromMenuToGame", sender: self)
         } else if tagLevelIdentifier == 1 {
             seg = "game"
             self.performSegue(withIdentifier: "fromMenuToGame", sender: self)
+        } else if !campaignUnlocked {
+            myIAP.purchase(productId: "ransom.iap.campaign")
+        } else {
+            sender.setTitle("locked", for: UIControlState.normal)
         }
     }
     

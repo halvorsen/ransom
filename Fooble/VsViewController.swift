@@ -11,7 +11,8 @@ import AudioToolbox
 
 class VsViewController: UIViewController {
     
-    
+    var a = [Int]()
+    var p = Int()
     var center = Int()
     var centerPoint = CGPoint()
     var panTouchLocation = CGPoint()
@@ -49,7 +50,6 @@ class VsViewController: UIViewController {
     var hintNumbersAsStrings = [String]()
     var hintNumberLabels = [UILabel]()
     var tagLevelIdentifier = Int()
-    
     let menuX = UIButton()
     let menuX2 = UIButton()
     let menuBox = UIButton()
@@ -66,6 +66,7 @@ class VsViewController: UIViewController {
     let myCalculator = Calculator()
     let myNarrative = Narrative()
     let myLoadSaveCoreData = LoadSaveCoreData()
+    var myAllPossibilities = AllPossibilities()
     var count: Int = 0
     var lastCardDisplayed = Int()
     var firstIndexDisplayed = Int()
@@ -89,6 +90,10 @@ class VsViewController: UIViewController {
     var swipeRight = UISwipeGestureRecognizer()
     var swipeDown = UISwipeGestureRecognizer()
     var pan = UIPanGestureRecognizer()
+    var imageView = UIImageView()
+    var dynamicBarCue = Timer()
+    var ticker: Float = 0.0 {didSet { print(ticker)}}
+    var percentageOfBar: CGFloat = 1.0
     
     
     override var prefersStatusBarHidden: Bool {
@@ -97,7 +102,7 @@ class VsViewController: UIViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        
+        // IF TAGLEVELIDENTIFIER = 1000 .yellow team is AI
         self.view.backgroundColor = UIColor(red: 42/255, green: 42/255, blue: 42/255, alpha: 1.0)
         
         pan = UIPanGestureRecognizer(target: self, action: #selector(GameViewController.respondToPanGesture(_:)))
@@ -155,13 +160,14 @@ class VsViewController: UIViewController {
             }
         }
         
-        swipeRight = UISwipeGestureRecognizer(target: self, action: #selector(VsViewController.respondToSwipeRight(_:)))
+        swipeRight = UISwipeGestureRecognizer(target: self, action: #selector(VsViewController.respondToSwipeRight))
         swipeRight.direction = UISwipeGestureRecognizerDirection.right
-        swipeLeft = UISwipeGestureRecognizer(target: self, action: #selector(VsViewController.respondToSwipeLeft(_:)))
+        swipeLeft = UISwipeGestureRecognizer(target: self, action: #selector(VsViewController.respondToSwipeLeft))
         swipeLeft.direction = UISwipeGestureRecognizerDirection.left
-        swipeDown = UISwipeGestureRecognizer(target: self, action: #selector(VsViewController.respondToSwipeDown(_:)))
+        swipeDown = UISwipeGestureRecognizer(target: self, action: #selector(VsViewController.respondToSwipeDown))
         swipeDown.direction = UISwipeGestureRecognizerDirection.down
     }
+    
     
     private func populateDots() {
         lastCardDisplayed = 999
@@ -195,157 +201,158 @@ class VsViewController: UIViewController {
     
     
     @objc func respondToPanGesture(_ gesture: UIPanGestureRecognizer) {
-        
-        
-        
-        if gesture.state == UIGestureRecognizerState.began {
-            hand.removeAll()
-            handIndexes.removeAll()
-            for i in 0...4 {
-                if displayLabels[i].isDescendant(of: self.view) {
-                    displayLabels[i].removeFromSuperview()
-                    displayLayers[i].removeFromSuperlayer()
-                }
-            }
-            let began = gesture.location(in: view)
-            
-            for i in 0..<67 {
-                if shapeLayers2[i].path!.contains(began) {
-                    if shapeLayers[i] != nil {
-                        
-                        switch myShuffleAndDeal.whatColorIsCard(card: deck[i]!) {
-                        case .blue: //blue
-                            displayLayers[0].strokeColor = UIColor(red: 60/255, green: 54/255, blue: 116/255, alpha: 1.0).cgColor
-                        case .green: //green
-                            displayLayers[0].strokeColor = UIColor(red: 69/255, green: 125/255, blue: 59/255, alpha: 1.0).cgColor
-                        case .yellow: //yellow
-                            displayLayers[0].strokeColor = UIColor(red: 190/255, green: 154/255, blue: 35/255, alpha: 1.0).cgColor
-                        case .red: //red
-                            displayLayers[0].strokeColor = UIColor(red: 101/255, green: 34/255, blue: 35/255, alpha: 1.0).cgColor
-                            
-                        }
-                        
-                        displayLabels[0].text = String(deck[i]!%7 + 1)
-                        lastIndex = i
-                        
-                        futureIndexes = mySelection.selectableIndexesWithOneAlreadySelected(first: i)
-                        
-                        view.layer.addSublayer(displayLayers[0])
-                        self.view.addSubview(displayLabels[0])
-                        lastCardDisplayed = deck[i]!
-                        firstIndexDisplayed = i
-                        count = 1
-                        hand.append(deck[i]!)
-                        handIndexes.append(i)
+        if thisTurn == .yellow && tagLevelIdentifier == 1000 {
+            //do nothing
+        } else {
+            if gesture.state == UIGestureRecognizerState.began {
+                hand.removeAll()
+                handIndexes.removeAll()
+                for i in 0...4 {
+                    if displayLabels[i].isDescendant(of: self.view) {
+                        displayLabels[i].removeFromSuperview()
+                        displayLayers[i].removeFromSuperlayer()
                     }
                 }
-            }
-        }
-        outerloop: if gesture.state == UIGestureRecognizerState.changed {
-            let locationOfPan = gesture.location(in: view)
-            if count > 1 {
-                if shapeLayers2[firstIndexDisplayed].path!.contains(locationOfPan){
-                    for i in 0...4 {
-                        if displayLabels[i].isDescendant(of: self.view) {
-                            displayLabels[i].removeFromSuperview()
-                            displayLayers[i].removeFromSuperlayer()
-                        }
-                    }
-                    
-                    break outerloop
-                }
-            }
-            
-            if count < 5 {
-                if self.displayLabels[0].isDescendant(of: self.view) {
-                    
-                    
-                    for i in futureIndexes {
-                        let futureRow = mySelection.thisRow(index: i)
-                        let lastRow = mySelection.thisRow(index: priorIndex)
-                        if shapeLayers2[i].path!.contains(locationOfPan) && dotLabels[i]!.isDescendant(of: self.view) && (lastCardDisplayed != deck[i]!) {
+                let began = gesture.location(in: view)
+                
+                for i in 0..<67 {
+                    if shapeLayers2[i].path!.contains(began) {
+                        if shapeLayers[i] != nil {
                             
-                            if futureRow == lastRow - 1 || futureRow == lastRow + 1 {
                             switch myShuffleAndDeal.whatColorIsCard(card: deck[i]!) {
                             case .blue: //blue
-                                displayLayers[count].strokeColor = UIColor(red: 60/255, green: 54/255, blue: 116/255, alpha: 1.0).cgColor
+                                displayLayers[0].strokeColor = UIColor(red: 60/255, green: 54/255, blue: 116/255, alpha: 1.0).cgColor
                             case .green: //green
-                                displayLayers[count].strokeColor = UIColor(red: 69/255, green: 125/255, blue: 59/255, alpha: 1.0).cgColor
+                                displayLayers[0].strokeColor = UIColor(red: 69/255, green: 125/255, blue: 59/255, alpha: 1.0).cgColor
                             case .yellow: //yellow
-                                displayLayers[count].strokeColor = UIColor(red: 190/255, green: 154/255, blue: 35/255, alpha: 1.0).cgColor
+                                displayLayers[0].strokeColor = UIColor(red: 190/255, green: 154/255, blue: 35/255, alpha: 1.0).cgColor
                             case .red: //red
-                                displayLayers[count].strokeColor = UIColor(red: 101/255, green: 34/255, blue: 35/255, alpha: 1.0).cgColor
+                                displayLayers[0].strokeColor = UIColor(red: 101/255, green: 34/255, blue: 35/255, alpha: 1.0).cgColor
+                                
                             }
                             
-                            displayLabels[count].text = String(deck[i]!%7 + 1)
-                            lastCardDisplayed = deck[i]!
-                            priorIndex = lastIndex
+                            displayLabels[0].text = String(deck[i]!%7 + 1)
                             lastIndex = i
-                            var potentialFutureIndex = Int()
-                            potentialFutureIndex = mySelection.linearCheckForNumberAfterLast(last: i, prior: priorIndex)
                             
-                            if potentialFutureIndex > -1 && potentialFutureIndex < 67 {
-                                if dotLabels[potentialFutureIndex] != nil {
-                                    if dotLabels[potentialFutureIndex]!.isDescendant(of: self.view) {
-                                        
-                                        futureIndexes.removeAll()
-                                        futureIndexes.append(potentialFutureIndex)
-                                    }
-                                }
-                            }
+                            futureIndexes = mySelection.selectableIndexesWithOneAlreadySelected(first: i)
                             
-                            view.layer.addSublayer(displayLayers[count])
-                            self.view.addSubview(displayLabels[count])
+                            view.layer.addSublayer(displayLayers[0])
+                            self.view.addSubview(displayLabels[0])
+                            lastCardDisplayed = deck[i]!
+                            firstIndexDisplayed = i
+                            count = 1
                             hand.append(deck[i]!)
                             handIndexes.append(i)
-                            count += 1
-                        }
                         }
                     }
                 }
             }
-        }
-        if gesture.state == UIGestureRecognizerState.ended {
-            
-            
-            hand = myCalculator.reorderHand(hand: hand)
-           
-            additionalScoreInt = myCalculator.pointAmount(hand: myCalculator.reorderHand(hand: hand))
- 
-            if additionalScoreInt != 0 {
-                stopTimer()
-                for i in handIndexes {
-                    dotLabels[i]!.removeFromSuperview()
-                    deck[i] = nil
-                    shapeLayers[i]!.removeFromSuperlayer()
-                    for i in 0...4 {
-                        if displayLabels[i].isDescendant(of: self.view) {
-                            displayLabels[i].removeFromSuperview()
-                            displayLayers[i].removeFromSuperlayer()
+            outerloop: if gesture.state == UIGestureRecognizerState.changed {
+                let locationOfPan = gesture.location(in: view)
+                if count > 1 {
+                    if shapeLayers2[firstIndexDisplayed].path!.contains(locationOfPan){
+                        for i in 0...4 {
+                            if displayLabels[i].isDescendant(of: self.view) {
+                                displayLabels[i].removeFromSuperview()
+                                displayLayers[i].removeFromSuperlayer()
+                            }
+                        }
+                        
+                        break outerloop
+                    }
+                }
+                
+                if count < 5 {
+                    if self.displayLabels[0].isDescendant(of: self.view) {
+                        
+                        
+                        for i in futureIndexes {
+                            let futureRow = mySelection.thisRow(index: i)
+                            let lastRow = mySelection.thisRow(index: lastIndex)
+                            if shapeLayers2[i].path!.contains(locationOfPan) && dotLabels[i]!.isDescendant(of: self.view) && (lastCardDisplayed != deck[i]!) {
+                                
+                                if futureRow == lastRow - 1 || futureRow == lastRow + 1 || futureRow == lastRow {
+                                    switch myShuffleAndDeal.whatColorIsCard(card: deck[i]!) {
+                                    case .blue: //blue
+                                        displayLayers[count].strokeColor = UIColor(red: 60/255, green: 54/255, blue: 116/255, alpha: 1.0).cgColor
+                                    case .green: //green
+                                        displayLayers[count].strokeColor = UIColor(red: 69/255, green: 125/255, blue: 59/255, alpha: 1.0).cgColor
+                                    case .yellow: //yellow
+                                        displayLayers[count].strokeColor = UIColor(red: 190/255, green: 154/255, blue: 35/255, alpha: 1.0).cgColor
+                                    case .red: //red
+                                        displayLayers[count].strokeColor = UIColor(red: 101/255, green: 34/255, blue: 35/255, alpha: 1.0).cgColor
+                                    }
+                                    
+                                    displayLabels[count].text = String(deck[i]!%7 + 1)
+                                    lastCardDisplayed = deck[i]!
+                                    priorIndex = lastIndex
+                                    lastIndex = i
+                                    var potentialFutureIndex = Int()
+                                    potentialFutureIndex = mySelection.linearCheckForNumberAfterLast(last: i, prior: priorIndex)
+                                    
+                                    if potentialFutureIndex > -1 && potentialFutureIndex < 67 {
+                                        if dotLabels[potentialFutureIndex] != nil {
+                                            if dotLabels[potentialFutureIndex]!.isDescendant(of: self.view) {
+                                                
+                                                futureIndexes.removeAll()
+                                                futureIndexes.append(potentialFutureIndex)
+                                            }
+                                        }
+                                    }
+                                    
+                                    view.layer.addSublayer(displayLayers[count])
+                                    self.view.addSubview(displayLabels[count])
+                                    hand.append(deck[i]!)
+                                    handIndexes.append(i)
+                                    count += 1
+                                }
+                            }
                         }
                     }
                 }
-                scoreFlash.text = additionalScoreString
-                scoreFlash.alpha = 0
-                self.view.addSubview(scoreFlash)
-                UIView.animate(withDuration: 0.5, animations: {
-                    self.scoreFlash.alpha = 1.0
-                })
-                _ = Timer.scheduledTimer(timeInterval: 1.5, target: self, selector: #selector(VsViewController.scoreFlashEnd), userInfo: nil, repeats: false)
-                if thisTurn == .red {
-                    redPointsInt += additionalScoreInt
-                } else {
-                    yellowPointsInt += additionalScoreInt
+            }
+            if gesture.state == UIGestureRecognizerState.ended {
+                
+                
+                hand = myCalculator.reorderHand(hand: hand)
+                
+                additionalScoreInt = myCalculator.pointAmount(hand: hand)
+                
+                if additionalScoreInt != 0 {
+                    stopTimer()
+                    for i in handIndexes {
+                        dotLabels[i]!.removeFromSuperview()
+                        deck[i] = nil
+                        shapeLayers[i]!.removeFromSuperlayer()
+                        for i in 0...4 {
+                            if displayLabels[i].isDescendant(of: self.view) {
+                                displayLabels[i].removeFromSuperview()
+                                displayLayers[i].removeFromSuperlayer()
+                            }
+                        }
+                    }
+                    scoreFlash.text = additionalScoreString
+                    scoreFlash.alpha = 0
+                    self.view.addSubview(scoreFlash)
+                    UIView.animate(withDuration: 0.5, animations: {
+                        self.scoreFlash.alpha = 1.0
+                    })
+                    _ = Timer.scheduledTimer(timeInterval: 1.5, target: self, selector: #selector(VsViewController.scoreFlashEnd), userInfo: nil, repeats: false)
+                    if thisTurn == .red {
+                        redPointsInt += additionalScoreInt
+                    } else {
+                        yellowPointsInt += additionalScoreInt
+                    }
+                    view.removeGestureRecognizer(pan as UIGestureRecognizer)
+                    
+                    
                 }
-                view.removeGestureRecognizer(pan as UIGestureRecognizer)
-                
-                
             }
         }
     }
-    var imageView = UIImageView()
+    var timerBool = true
     private func swipeChoices() {
-       
+        
         self.view.addGestureRecognizer(swipeRight)
         self.view.addGestureRecognizer(swipeLeft)
         self.view.addGestureRecognizer(swipeDown)
@@ -354,14 +361,24 @@ class VsViewController: UIViewController {
         imageView.image = image!
         imageView.frame = CGRect(x: (308/750)*screenWidth, y: (104/1334)*screenHeight, width: (133/750)*screenWidth, height: (90/750)*screenWidth)
         view.addSubview(imageView)
+           if tagLevelIdentifier == 1000 && thisTurn == .yellow {
+            self.view.removeGestureRecognizer(self.swipeRight as UIGestureRecognizer)
+            self.view.removeGestureRecognizer(self.swipeLeft as UIGestureRecognizer)
+            self.view.removeGestureRecognizer(self.swipeDown as UIGestureRecognizer)
+        }
+        
+        if timerBool == true {
+            startTimer()
+            timerBool=false
+        }
         
         
     }
     
     private func noMoreMoves() {
-            myLoadSaveCoreData.saveDemo(mode: "Multiplayer")
-            view.addSubview(backBlack)
-            view.addSubview(menuX)
+        myLoadSaveCoreData.saveDemo(mode: "Multiplayer")
+        view.addSubview(backBlack)
+        view.addSubview(menuX)
         if yellowPointsInt > redPointsInt {
             sequences.text = "Yellow Wins!"
         } else if redPointsInt > yellowPointsInt {
@@ -370,102 +387,112 @@ class VsViewController: UIViewController {
             sequences.text = "Flip a coin?"
         }
         
-            view.addSubview(sequences)
-            
-        }
+        view.addSubview(sequences)
         
-        
+    }
     
-    
-    @objc private func respondToSwipeLeft(_ gesture: UIGestureRecognizer) {
+    @objc private func respondToSwipeLeft() {
+        print("swipeLeftfunc")
         imageView.removeFromSuperview()
         dropLeft(currentDeck: deck)
         
         delay(bySeconds: 0.5) {
             self.dropRight(currentDeck: self.deck)
-            
         }
-        view.removeGestureRecognizer(swipeRight as UIGestureRecognizer)
-        view.removeGestureRecognizer(swipeLeft as UIGestureRecognizer)
-        view.removeGestureRecognizer(swipeDown as UIGestureRecognizer)
-        self.view.addGestureRecognizer(pan)
+        if self.tagLevelIdentifier == 1000 && thisTurn == .yellow {
+            self.delay(bySeconds: 1.3) {self.takeAITurn() }
+        } else {
+            self.view.removeGestureRecognizer(self.swipeRight as UIGestureRecognizer)
+            self.view.removeGestureRecognizer(self.swipeLeft as UIGestureRecognizer)
+            self.view.removeGestureRecognizer(self.swipeDown as UIGestureRecognizer)
+            self.view.addGestureRecognizer(self.pan)
+        }
         
     }
-    @objc private func respondToSwipeRight(_ gesture: UIGestureRecognizer) {
+    @objc private func respondToSwipeRight() {
+        print("swipeRightfunc")
         imageView.removeFromSuperview()
         dropRight(currentDeck: deck)
         
         delay(bySeconds: 0.5) {
             self.dropLeft(currentDeck: self.deck)
-        }
-        view.removeGestureRecognizer(swipeRight as UIGestureRecognizer)
-        view.removeGestureRecognizer(swipeLeft as UIGestureRecognizer)
-        view.removeGestureRecognizer(swipeDown as UIGestureRecognizer)
-        self.view.addGestureRecognizer(pan)
-    }
-    @objc private func respondToSwipeDown(_ gesture: UIGestureRecognizer) {
-        imageView.removeFromSuperview()
-        for i in handIndexes {
- 
-                deck[i] = extraDots[0]
-                dotLabels[i]!.text = String(deck[i]!%7 + 1)
-                dotLabels[i]!.alpha = 0.0
             
-                extraDots.remove(at:0)
-            switch myShuffleAndDeal.whatColorIsCard(card: deck[i]!) {
+        }
+        if self.tagLevelIdentifier == 1000 && thisTurn == .yellow {
+            self.delay(bySeconds: 1.3)  {self.takeAITurn() }
+        } else {
+            self.view.removeGestureRecognizer(self.swipeRight as UIGestureRecognizer)
+            self.view.removeGestureRecognizer(self.swipeLeft as UIGestureRecognizer)
+            self.view.removeGestureRecognizer(self.swipeDown as UIGestureRecognizer)
+            self.view.addGestureRecognizer(self.pan)
+            
+        }
+        
+    }
+    @objc private func respondToSwipeDown() {
+        print("swipedownfunc")
+        imageView.removeFromSuperview()
+        if tagLevelIdentifier == 1000 && oneTurnAgo == .red {
+            a = handIndexes
+        }
+        for i in 0..<a.count {
+            
+            deck[a[i]] = extraDots[0]
+            dotLabels[a[i]]!.text = String(deck[a[i]]!%7 + 1)
+            dotLabels[a[i]]!.alpha = 0.0
+            
+            extraDots.remove(at:0)
+            switch myShuffleAndDeal.whatColorIsCard(card: deck[a[i]]!) {
             case .blue: //blue
-                shapeLayers[i]!.strokeColor = UIColor(red: 60/255, green: 54/255, blue: 116/255, alpha: 0.0).cgColor
-                view.layer.addSublayer(shapeLayers[i]!)
-                UIView.animate(withDuration: 1.0, animations: {
-                    self.shapeLayers[i]!.strokeColor = UIColor(red: 60/255, green: 54/255, blue: 116/255, alpha: 1.0).cgColor
-                })
+                shapeLayers[a[i]]!.strokeColor = UIColor(red: 60/255, green: 54/255, blue: 116/255, alpha: 1.0).cgColor
+                delay(bySeconds: 1.0, closure: {self.view.layer.addSublayer(self.shapeLayers[self.a[i]]!)})
+                
                 
             case .green: //green
-                shapeLayers[i]!.strokeColor = UIColor(red: 69/255, green: 125/255, blue: 59/255, alpha: 0.0).cgColor
-                view.layer.addSublayer(shapeLayers[i]!)
-                UIView.animate(withDuration: 1.0, animations: {
-                    self.shapeLayers[i]!.strokeColor = UIColor(red: 69/255, green: 125/255, blue: 59/255, alpha: 1.0).cgColor
-                })
+                shapeLayers[a[i]]!.strokeColor = UIColor(red: 69/255, green: 125/255, blue: 59/255, alpha: 1.0).cgColor
+                delay(bySeconds: 1.0, closure: {self.view.layer.addSublayer(self.shapeLayers[self.a[i]]!)})
+                
                 
             case .yellow: //yellow
-                shapeLayers[i]!.strokeColor = UIColor(red: 190/255, green: 154/255, blue: 35/255, alpha: 0.0).cgColor
-                view.layer.addSublayer(shapeLayers[i]!)
-                UIView.animate(withDuration: 1.0, animations: {
-                    self.shapeLayers[i]!.strokeColor = UIColor(red: 190/255, green: 154/255, blue: 35/255, alpha: 1.0).cgColor
-                })
+                shapeLayers[a[i]]!.strokeColor = UIColor(red: 190/255, green: 154/255, blue: 35/255, alpha: 1.0).cgColor
+                delay(bySeconds: 1.0, closure: {self.view.layer.addSublayer(self.shapeLayers[self.a[i]]!)})
+                
                 
             case .red: //red
-                shapeLayers[i]!.strokeColor = UIColor(red: 101/255, green: 34/255, blue: 35/255, alpha: 0.0).cgColor
-                view.layer.addSublayer(shapeLayers[i]!)
-                UIView.animate(withDuration: 1.0, animations: {
-                    self.shapeLayers[i]!.strokeColor = UIColor(red: 101/255, green: 34/255, blue: 35/255, alpha: 1.0).cgColor
-                })
+                shapeLayers[a[i]]!.strokeColor = UIColor(red: 101/255, green: 34/255, blue: 35/255, alpha: 1.0).cgColor
+                delay(bySeconds: 1.0, closure: {self.view.layer.addSublayer(self.shapeLayers[self.a[i]]!)})
+                
                 
             }
-            view.addSubview(dotLabels[i]!)
+            view.addSubview(dotLabels[a[i]]!)
             
-  
+            
             
             UIView.animate(withDuration: 1.0, animations: {
-                self.dotLabels[i]!.alpha = 1.0
+                self.dotLabels[self.a[i]]!.alpha = 1.0
+                
             })
         }
         
-        
-        
-        view.removeGestureRecognizer(swipeRight as UIGestureRecognizer)
-        view.removeGestureRecognizer(swipeLeft as UIGestureRecognizer)
-        view.removeGestureRecognizer(swipeDown as UIGestureRecognizer)
-        self.view.addGestureRecognizer(pan)
+        if tagLevelIdentifier == 1000 && thisTurn == .yellow {
+            delay(bySeconds: 1.0) {self.takeAITurn()}
+        } else {
+            
+            view.removeGestureRecognizer(swipeRight as UIGestureRecognizer)
+            view.removeGestureRecognizer(swipeLeft as UIGestureRecognizer)
+            view.removeGestureRecognizer(swipeDown as UIGestureRecognizer)
+            self.view.addGestureRecognizer(pan)
+        }
     }
-
+    
     private func dropLeft(currentDeck: [Int?]) {
+        print("dropleftfunc")
         while isDropInProgress {
-      
+            
         }
         isDropInProgress = true
         delay(bySeconds: 0.2) { while self.trackerSum != self.trackerSumPrior || self.bool {
-        
+            
             self.trackerSumPrior = self.trackerSum
             //
             for i in self.iReverse {
@@ -512,11 +539,14 @@ class VsViewController: UIViewController {
         isDropInProgress = false
         bool = true
         
+        
+        
     }
     
     private func dropRight(currentDeck: [Int?]) {
+        print("droprightfunc")
         while isDropInProgress {
-           
+            
         }
         isDropInProgress = true
         
@@ -579,7 +609,109 @@ class VsViewController: UIViewController {
         case start
     }
     
+    private func aISwipe() {
+        print("aiswipefunc")
+        let swipeNumber = Int(arc4random_uniform(3))
+        switch swipeNumber {
+        case 0: self.respondToSwipeDown()
+        case 1: self.respondToSwipeLeft()
+        default: self.respondToSwipeRight()
+        }
+    }
+    
+    private func aISequence() {
+        print("aisequencefunc")
+        
+        
+        view.removeGestureRecognizer(pan as UIGestureRecognizer)
+        view.removeGestureRecognizer(swipeRight as UIGestureRecognizer)
+        view.removeGestureRecognizer(swipeLeft as UIGestureRecognizer)
+        view.removeGestureRecognizer(swipeDown as UIGestureRecognizer)
+        
+        delay(bySeconds: 1.5) {self.aISwipe()}
+    }
+    
+    private func aITurnEnd() {
+        print("aiturnendfunc")
+        self.view.addGestureRecognizer(self.swipeRight)
+        self.view.addGestureRecognizer(self.swipeLeft)
+        self.view.addGestureRecognizer(self.swipeDown)
+    }
+    
+    
+    
+
+    private func takeAITurn() {
+        print("takeAITurnFunc")
+        
+        
+        
+        a = myAllPossibilities.calculateBestHandIndexes(deck: deck)
+        if myAllPossibilities.handScore != nil {
+            p = myAllPossibilities.handScore!
+        }
+        if p != 0 {
+            hand.removeAll()
+            for i in a {
+                hand.append(deck[i]!)
+            }
+        } else {
+            //no more moves
+        }
+        
+        for i in 0..<a.count {
+            switch myShuffleAndDeal.whatColorIsCard(card: deck[a[i]]!) {
+            case .blue: //blue
+                displayLayers[i].strokeColor = UIColor(red: 60/255, green: 54/255, blue: 116/255, alpha: 1.0).cgColor
+            case .green: //green
+                displayLayers[i].strokeColor = UIColor(red: 69/255, green: 125/255, blue: 59/255, alpha: 1.0).cgColor
+            case .yellow: //yellow
+                displayLayers[i].strokeColor = UIColor(red: 190/255, green: 154/255, blue: 35/255, alpha: 1.0).cgColor
+            case .red: //red
+                displayLayers[i].strokeColor = UIColor(red: 101/255, green: 34/255, blue: 35/255, alpha: 1.0).cgColor
+            }
+            
+            displayLabels[i].text = String(deck[a[i]]!%7 + 1)
+            view.layer.addSublayer(displayLayers[i])
+            self.view.addSubview(displayLabels[i])
+            
+        }
+        additionalScoreInt = p
+        
+        for i in a {
+            dotLabels[i]!.removeFromSuperview()
+          
+            deck[i] = nil
+            shapeLayers[i]!.removeFromSuperlayer()
+        }
+        
+        delay(bySeconds: 2.0) {
+        for i in 0...4 {
+            if self.displayLabels[i].isDescendant(of: self.view) {
+                self.displayLabels[i].removeFromSuperview()
+                self.displayLayers[i].removeFromSuperlayer()
+            }
+        }
+        
+        
+        self.scoreFlash.text = self.additionalScoreString
+        self.scoreFlash.alpha = 0
+        self.view.addSubview(self.scoreFlash)
+        UIView.animate(withDuration: 0.5, animations: {
+            self.scoreFlash.alpha = 1.0
+        })
+        _ = Timer.scheduledTimer(timeInterval: 1.5, target: self, selector: #selector(VsViewController.scoreFlashEndAI), userInfo: nil, repeats: false)
+        if self.thisTurn == .red {
+            self.redPointsInt += self.additionalScoreInt
+        } else {
+            self.yellowPointsInt += self.additionalScoreInt
+        }
+        }
+    }
+    
+    
     @objc private func scoreFlashEnd() {
+        print("scoreFlashEndFunc")
         UIView.animate(withDuration: 0.5, animations: {
             self.scoreFlash.alpha = 0.0
         })
@@ -594,9 +726,17 @@ class VsViewController: UIViewController {
             if oneTurnAgo == .start {
                 thisTurn = .yellow
                 oneTurnAgo = .red
+                if tagLevelIdentifier == 1000 {
+                    aISequence()
+                }
             } else if oneTurnAgo == .red {
                 thisTurn = .yellow
+                timerBool = true
+                ticker = 0
                 twoTurnsAgo = .red
+                if tagLevelIdentifier == 1000 {
+                    aISequence()
+                }
             } else {
                 thisTurn = .red
                 twoTurnsAgo = .yellow
@@ -609,12 +749,20 @@ class VsViewController: UIViewController {
                 thisTurn = .yellow
                 twoTurnsAgo = .red
                 oneTurnAgo = .yellow
+                if tagLevelIdentifier == 1000 {
+                    aISequence()
+                }
             } else if oneTurnAgo == .yellow {
                 thisTurn = .red
+                timerBool = true
+                ticker = 0
                 twoTurnsAgo = .yellow
             } else {
                 thisTurn = .yellow
                 twoTurnsAgo = .red
+                if tagLevelIdentifier == 1000 {
+                    aISequence()
+                }
             }
             
             oneTurnAgo = .yellow
@@ -633,7 +781,96 @@ class VsViewController: UIViewController {
             redScore.frame = CGRect(x: (565/750)*screenWidth, y: (1230/1334)*screenHeight, width: (150/750)*screenWidth, height: (60/750)*screenWidth)
             redScore.font = UIFont(name: "HelveticaNeue-Bold", size: fontSizeMultiplier*20)
         }
-        swipeChoices()
+        if thisTurn == .yellow && tagLevelIdentifier == 1000 {
+         //nothing
+        } else {
+            swipeChoices()
+        }
+    }
+    
+    @objc private func scoreFlashEndAI() {
+        print("scoreFlashEndAIFunc")
+        UIView.animate(withDuration: 0.5, animations: {
+            self.scoreFlash.alpha = 0.0
+        })
+        // scoreFlash.removeFromSuperview()
+        if thisTurn == .red {
+            redScore.text = redPointsString
+        } else {
+            yellowScore.text = yellowPointsString
+        }
+        switch thisTurn {
+        case .red:
+            if oneTurnAgo == .start {
+                thisTurn = .yellow
+                oneTurnAgo = .red
+                if tagLevelIdentifier == 1000 {
+                    aISequence()
+                }
+            } else if oneTurnAgo == .red {
+                thisTurn = .yellow
+                timerBool = true
+                ticker = 0
+                twoTurnsAgo = .red
+                if tagLevelIdentifier == 1000 {
+                    aISequence()
+                }
+            } else {
+                thisTurn = .red
+                twoTurnsAgo = .yellow
+            }
+            
+            oneTurnAgo = .red
+            
+        case .yellow:
+            if twoTurnsAgo == .start {
+                thisTurn = .yellow
+                twoTurnsAgo = .red
+                oneTurnAgo = .yellow
+                if tagLevelIdentifier == 1000 {
+                    aISwipe()
+                }
+            } else if oneTurnAgo == .yellow {
+                thisTurn = .red
+                timerBool = true
+                ticker = 0
+                twoTurnsAgo = .yellow
+                if tagLevelIdentifier == 1000 {
+                    aITurnEnd()
+                }
+            } else {
+                thisTurn = .yellow
+                twoTurnsAgo = .red
+                if tagLevelIdentifier == 1000 {
+                    aISwipe()
+                }
+            }
+            
+            oneTurnAgo = .yellow
+            
+        case .start: break
+        }
+        
+        if thisTurn == .red {
+            redScore.frame = CGRect(x: (300/750)*screenWidth, y: (1180/1334)*screenHeight, width: (400/750)*screenWidth, height: (106/750)*screenWidth)
+            redScore.font = UIFont(name: "HelveticaNeue-Bold", size: fontSizeMultiplier*55)
+            yellowScore.frame = CGRect(x: (49/750)*screenWidth, y: (1230/1334)*screenHeight, width: (150/750)*screenWidth, height: (60/750)*screenWidth)
+            yellowScore.font = UIFont(name: "HelveticaNeue-Bold", size: fontSizeMultiplier*20)
+        } else {
+            yellowScore.frame = CGRect(x: (54/750)*screenWidth, y: (1180/1334)*screenHeight, width: (400/750)*screenWidth, height: (106/750)*screenWidth)
+            yellowScore.font = UIFont(name: "HelveticaNeue-Bold", size: fontSizeMultiplier*55)
+            redScore.frame = CGRect(x: (565/750)*screenWidth, y: (1230/1334)*screenHeight, width: (150/750)*screenWidth, height: (60/750)*screenWidth)
+            redScore.font = UIFont(name: "HelveticaNeue-Bold", size: fontSizeMultiplier*20)
+        }
+        
+        if thisTurn == .yellow && tagLevelIdentifier == 1000 {
+            //nothing
+        } else {
+            swipeChoices()
+        }
+        
+        
+        
     }
     
     
@@ -643,9 +880,7 @@ class VsViewController: UIViewController {
         dynamicBarCue = Timer.scheduledTimer(timeInterval: 0.1, target: self, selector: #selector(VsViewController.updateBar), userInfo: nil, repeats: true)
     }
     
-    var dynamicBarCue = Timer()
-    var ticker: Float = 0.0
-    var percentageOfBar: CGFloat = 1.0
+    
     
     func pauseTimer() {
         dynamicBarCue.invalidate()
@@ -685,14 +920,19 @@ class VsViewController: UIViewController {
         case .red:
             
             thisTurn = .yellow
+            timerBool = true
             ticker = 0
             startTimer()
             oneTurnAgo = .red
             twoTurnsAgo = .red
+            if tagLevelIdentifier == 1000 {
+                aISequence()
+            }
             
         case .yellow:
             
             thisTurn = .red
+            timerBool = true
             ticker = 0
             startTimer()
             twoTurnsAgo = .yellow
@@ -724,8 +964,9 @@ class VsViewController: UIViewController {
         
         // black background
         
-        backBlack.backgroundColor = UIColor(red: 42/255, green: 42/255, blue: 42/255, alpha: 0.9)
+        backBlack.backgroundColor = UIColor(red: 42/255, green: 42/255, blue: 42/255, alpha: 1.0)
         backBlack.frame = CGRect(x: 0, y: 0, width: screenWidth, height: screenHeight)
+        backBlack.layer.zPosition = 2
         
         //scoreFlash label
         
@@ -737,8 +978,9 @@ class VsViewController: UIViewController {
         
         //back button
         
-        back.frame = CGRect(x: (59/750)*screenWidth, y: (594/1334)*screenHeight, width: 633*screenWidth/750, height: 85*screenWidth/750)
-        back.setTitle("Game", for: UIControlState.normal)
+        back.frame = CGRect(x: (59/750)*screenWidth, y: (400/1334)*screenHeight, width: 633*screenWidth/750, height: 85*screenWidth/750)
+        back.setTitle("Back to Game", for: UIControlState.normal)
+        back.layer.zPosition = 3
         back.titleLabel!.font = UIFont(name: "HelveticaNeue-Bold", size: fontSizeMultiplier*30)
         back.setTitleColor(UIColor(red: 215/255, green: 215/255, blue: 215/255, alpha: 1.0), for: .normal)
         back.backgroundColor = .clear
@@ -820,6 +1062,7 @@ class VsViewController: UIViewController {
         
         menuX2.frame = CGRect(x: (25/750)*screenWidth, y: (25/750)*screenWidth, width: 50*screenWidth/750, height: 50*screenWidth/750)
         menuX2.setTitle("X", for: UIControlState.normal)
+        menuX2.layer.zPosition = 4
         menuX2.titleLabel!.font = UIFont(name: "HelveticaNeue-Bold", size: fontSizeMultiplier*30)
         menuX2.setTitleColor(UIColor(red: 215/255, green: 215/255, blue: 215/255, alpha: 1.0), for: .normal)
         menuX2.addTarget(self, action: #selector(VsViewController.menuX2(_:)), for: .touchUpInside)
@@ -960,6 +1203,7 @@ class VsViewController: UIViewController {
             }
             
             let dotLabel = UILabel()
+            dotLabel.layer.zPosition = 1
             dotLabels.append(dotLabel)
             dotLabel.textColor = UIColor(red: 255/255, green: 255/255, blue: 255/255, alpha: 1.0)
             dotLabel.textAlignment = NSTextAlignment.center
@@ -997,7 +1241,7 @@ class VsViewController: UIViewController {
             shapeLayer.lineWidth = 4.0*screenWidth/750
             
         }
-
+        
     }
     
     @objc private func exit(_ button: UIButton) {
@@ -1013,8 +1257,7 @@ class VsViewController: UIViewController {
         
         view.addSubview(backBlack)
         view.bringSubview(toFront: backBlack)
-        
-        view.addSubview(sequence)
+        stopTimer()
         view.addSubview(back)
         view.addSubview(menuX2)
         
@@ -1030,13 +1273,14 @@ class VsViewController: UIViewController {
         
     }
     
-
+    
     @objc private func back(_ button: UIButton) {
         self.backBlack.removeFromSuperview()
         
         self.sequence.removeFromSuperview()
         self.back.removeFromSuperview()
         self.menuX2.removeFromSuperview()
+        startTimer()
         
     }
     
@@ -1069,5 +1313,5 @@ class VsViewController: UIViewController {
             }
         }
     }
-
+    
 }
