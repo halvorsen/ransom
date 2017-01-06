@@ -94,6 +94,8 @@ class VsViewController: UIViewController {
     var dynamicBarCue = Timer()
     var ticker: Float = 0.0 {didSet { print(ticker)}}
     var percentageOfBar: CGFloat = 1.0
+    var shuffled = [Int]()
+    var allNumbers = [Int]()
     
     
     override var prefersStatusBarHidden: Bool {
@@ -119,12 +121,7 @@ class VsViewController: UIViewController {
         view.addSubview(redScore)
         view.addSubview(yellowScore)
         
-    }
-    
-    override func viewDidAppear(_ animated: Bool) {
-        
-        var shuffled = [Int]()
-        var allNumbers = [Int]()
+
         for i in 0..<84 {
             allNumbers.append(i)
         }
@@ -140,6 +137,12 @@ class VsViewController: UIViewController {
         lastCardDisplayed = 999
         populateDots()
         view.addSubview(menuX)
+        
+    }
+    
+    override func viewDidAppear(_ animated: Bool) {
+        
+
         startTimer()
         
         for _ in 0..<allNumbers.count {

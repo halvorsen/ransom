@@ -112,39 +112,32 @@ class GameViewController: UIViewController {
         
         addButtons()
         
+        var shuffled = [Int]()
+        var allNumbers = [Int]()
+        for i in 0..<84 {
+            allNumbers.append(i)
+        }
+        for _ in 0..<67 {
+            let randomNumber = Int(arc4random_uniform(UInt32(allNumbers.count)))
+            if let index = allNumbers.index(of: allNumbers[randomNumber]) {
+                shuffled.append(allNumbers[randomNumber])
+                allNumbers.remove(at:index)
+            }
+        }
+        deck = shuffled
+        lastCardDisplayed = 999
+        populateDots()
+        
+        
+        view.addSubview(menuX)
+        
     }
     
     override func viewDidAppear(_ animated: Bool) {
-        switch tagLevelIdentifier {
-        case 100, 101:
-            var shuffled = [Int]()
-            var allNumbers = [Int]()
-            for i in 0..<84 {
-                allNumbers.append(i)
-            }
-            for _ in 0..<67 {
-                let randomNumber = Int(arc4random_uniform(UInt32(allNumbers.count)))
-                if let index = allNumbers.index(of: allNumbers[randomNumber]) {
-                    shuffled.append(allNumbers[randomNumber])
-                    allNumbers.remove(at:index)
-                }
-            }
-            deck = shuffled
-            lastCardDisplayed = 999
-            populateDots()
-        case 200:
-            break
-        case 300:
-            break
-        case 0...99:
-            deck = myShuffleAndDeal.levelDeals[tagLevelIdentifier-1]
-            populateDots()
-        default: break
-            
-        }
-        view.addSubview(menuX)
+        
+
     }
-    
+
     private func populateDots() {
         lastCardDisplayed = 999
         for i in 0..<67 {
