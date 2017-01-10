@@ -56,6 +56,9 @@ class IntroViewController: UIViewController {
         addButtons()
 
     }
+    override func viewDidAppear(_ animated: Bool) {
+        
+    }
 
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
         
@@ -204,7 +207,7 @@ class IntroViewController: UIViewController {
         //aI
         
         aI.frame = CGRect(x: (59/750)*screenWidth, y: (461/1334)*screenHeight, width: 633*screenWidth/750, height: 85*screenWidth/750)
-        aI.setTitle("AI", for: UIControlState.normal)
+        aI.setTitle("Vs iPhone", for: UIControlState.normal)
         aI.titleLabel!.font = UIFont(name: "HelveticaNeue-Bold", size: fontSizeMultiplier*25)
         aI.setTitleColor(UIColor(red: 215/255, green: 215/255, blue: 215/255, alpha: 1.0), for: .normal)
         aI.backgroundColor = .clear
@@ -225,7 +228,7 @@ class IntroViewController: UIViewController {
     }
     
     @objc private func campaign(_ button: UIButton) {
-        let hack = true
+       // let hack = true
         if isCampaignPurchased || !triedCampaign {
         self.performSegue(withIdentifier: "fromIntroToMenu", sender: self)
         } else {
@@ -235,7 +238,7 @@ class IntroViewController: UIViewController {
         }
     }
     @objc private func multiplayer(_ button: UIButton) {
-        let hack = true
+       // let hack = true
         if isMultiplayerPurchased || !triedMultiplayer {
         campaign.removeFromSuperview()
         solo.removeFromSuperview()
@@ -251,7 +254,7 @@ class IntroViewController: UIViewController {
         }
     }
     @objc private func solo(_ button: UIButton) {
-        let hack = true
+    //    let hack = true
         if isSoloPurchased || !triedSolo {
             if !triedSolo {
                 tagLevelIdentifier = 100
@@ -278,22 +281,22 @@ class IntroViewController: UIViewController {
         
     }
     @objc private func campaignIAP(_ button: UIButton) {
-        myIAP.purchase(productId: "ransom.iap.campaign")
+        isCampaignPurchased = myIAP.purchase(productId: "ransom.iap.campaign")
     }
     @objc private func soloIAP(_ button: UIButton) {
-        myIAP.purchase(productId: "ransom.iap.solo")
+        isSoloPurchased = myIAP.purchase(productId: "ransom.iap.solo")
     }
     @objc private func multiplayerIAP(_ button: UIButton) {
-        myIAP.purchase(productId: "ransom.iap.multiplayer")
+        isMultiplayerPurchased = myIAP.purchase(productId: "ransom.iap.multiplayer")
     }
     private func campaignIAP2() {
-        myIAP.purchase(productId: "ransom.iap.campaign")
+       isCampaignPurchased = myIAP.purchase(productId: "ransom.iap.campaign")
     }
     private func soloIAP2() {
-        myIAP.purchase(productId: "ransom.iap.solo")
+       isSoloPurchased = myIAP.purchase(productId: "ransom.iap.solo")
     }
     private func multiplayerIAP2() {
-        myIAP.purchase(productId: "ransom.iap.multiplayer")
+       isMultiplayerPurchased = myIAP.purchase(productId: "ransom.iap.multiplayer")
     }
     
     
@@ -319,12 +322,14 @@ class IntroViewController: UIViewController {
                             for r in results.restoredProductIds {
                                 switch r {
                                 case "ransom.iap.campaign":
-                                    self.myIAP.savePurchase(purchase: "campaign")
+                                    self.myLoadSaveCoreData.savePurchase(purchase: "campaign")
+                                    self.isCampaignPurchased = true
                                 case "ransom.iap.multiplayer":
-                                    self.myIAP.savePurchase(purchase: "multiplayer")
-                                    
+                                    self.myLoadSaveCoreData.savePurchase(purchase: "multiplayer")
+                                    self.isMultiplayerPurchased = true
                                 case "ransom.iap.solo":
-                                    self.myIAP.savePurchase(purchase: "solo")
+                                    self.myLoadSaveCoreData.savePurchase(purchase: "solo")
+                                    self.isSoloPurchased = true
                                 default:
                                     break
                                     

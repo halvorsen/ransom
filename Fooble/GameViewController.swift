@@ -7,10 +7,11 @@
 //
 
 import UIKit
-import AudioToolbox
+import GCHelper
+
 
 class GameViewController: UIViewController {
-    
+    var seg = "nothing"
     var center = Int()
     var centerPoint = CGPoint()
     var passedLevel = Bool()
@@ -32,6 +33,7 @@ class GameViewController: UIViewController {
     let score = UILabel()
     let hint = UIButton()
     let exit = UIButton()
+    let leaderboard = UIButton()
     let scoreFlash = UILabel()
     var displayLayers = [CAShapeLayer]()
     var shapeLayers = [CAShapeLayer?]()
@@ -43,6 +45,7 @@ class GameViewController: UIViewController {
     let exitSequences = UIButton()
     let showList = UIButton()
     let yellowScore = UILabel()
+    let gameCenter = UIButton()
     let redScore = UILabel()
     var hintDisplay = [CAShapeLayer]()
     var hintNumbersAsStrings = [String]()
@@ -71,6 +74,7 @@ class GameViewController: UIViewController {
     let myNarrative = Narrative()
     let myLoadSaveCoreData = LoadSaveCoreData()
     let myGameCenter = GameCenter()
+    var myAllPossibilities = AllPossibilities()
     var count: Int = 0
     var lastCardDisplayed = Int()
     var firstIndexDisplayed = Int()
@@ -92,6 +96,7 @@ class GameViewController: UIViewController {
     var imageViewGlobal = UIImageView()
     var shuffled = [Int]()
     var allNumbers = [Int]()
+    var pan = UIPanGestureRecognizer()
     
     override var prefersStatusBarHidden: Bool {
         return true
@@ -102,7 +107,7 @@ class GameViewController: UIViewController {
         
         self.view.backgroundColor = UIColor(red: 42/255, green: 42/255, blue: 42/255, alpha: 1.0)
         
-        let pan = UIPanGestureRecognizer(target: self, action: #selector(GameViewController.respondToPanGesture(_:)))
+        pan = UIPanGestureRecognizer(target: self, action: #selector(GameViewController.respondToPanGesture(_:)))
         self.view.addGestureRecognizer(pan)
         currentScoreInt = 0
         goalScoreInt = 20000
@@ -114,7 +119,7 @@ class GameViewController: UIViewController {
         
         addButtons()
         
-
+        
         for i in 0..<84 {
             allNumbers.append(i)
         }
@@ -135,13 +140,19 @@ class GameViewController: UIViewController {
     }
     
     override func viewDidAppear(_ animated: Bool) {
+        print("tagLevelIdentifier: \(tagLevelIdentifier)")
+        if tagLevelIdentifier > 99 {
+            GCHelper.sharedInstance.authenticateLocalUser()
+        }
         
-
     }
-
+    
     private func populateDots() {
+        
         lastCardDisplayed = 999
         for i in 0..<67 {
+            
+            
             
             switch myShuffleAndDeal.whatColorIsCard(card: deck[i]!) {
             case .blue: //blue
@@ -198,7 +209,7 @@ class GameViewController: UIViewController {
             
             for i in 0..<67 {
                 if shapeLayers2[i].path!.contains(began) {
-                    if shapeLayers[i] != nil {
+                    if shapeLayers[i] != nil && deck[i] != nil { //new
                         
                         switch myShuffleAndDeal.whatColorIsCard(card: deck[i]!) {
                         case .blue: //blue
@@ -236,6 +247,10 @@ class GameViewController: UIViewController {
                         if displayLabels[i].isDescendant(of: self.view) {
                             displayLabels[i].removeFromSuperview()
                             displayLayers[i].removeFromSuperlayer()
+                            handIndexes.removeAll()
+                            hand.removeAll() //new
+                            futureIndexes.removeAll()
+                            count = 0
                         }
                     }
                     
@@ -243,7 +258,7 @@ class GameViewController: UIViewController {
                 }
             }
             
-            if count < 5 {
+            if count < 5 && count > 0 { //new
                 if self.displayLabels[0].isDescendant(of: self.view) {
                     
                     
@@ -308,28 +323,31 @@ class GameViewController: UIViewController {
         }
         if gesture.state == UIGestureRecognizerState.ended {
             
-            if hand.count == 5 {
-                _highestHand = hand
-            }
+ 
             hand = myCalculator.reorderHand(hand: hand)
-            print("hand: \(hand)")
+        
             additionalScoreInt = myCalculator.pointAmount(hand: hand)
             questString = myCalculator.questString(hand: myCalculator.reorderHand(hand: hand))
-            print("additional points: \(additionalScoreInt)")
+            
             if additionalScoreInt != 0 {
+                view.removeGestureRecognizer(pan as UIGestureRecognizer)
+               
                 for i in handIndexes {
                     dotLabels[i]!.removeFromSuperview()
                     deck[i] = nil
                     shapeLayers[i]!.removeFromSuperlayer()
-                    for i in 0...4 {
-                        if displayLabels[i].isDescendant(of: self.view) {
-                            displayLabels[i].removeFromSuperview()
-                            displayLayers[i].removeFromSuperlayer()
-                        }
-                    }
-                    
-                    
+                    shapeLayers[i] = nil
                 }
+                
+                for i in 0...4 {
+                    if displayLabels[i].isDescendant(of: self.view) {
+                        displayLabels[i].removeFromSuperview()
+                        displayLayers[i].removeFromSuperlayer()
+                    }
+                }
+                
+                
+                
                 if tagLevelIdentifier > 99 {
                     scoreFlash.text = additionalScoreString
                 } else {
@@ -387,12 +405,18 @@ class GameViewController: UIViewController {
                             
                             self.dotLabels[i+7] = self.dotLabels[i]!
                             self.dotLabels[i] = nil
-                            //                        UIView.animate(withDuration: 0.5, animations: {
+                            
+                            
+                            CATransaction.begin()
+                            CATransaction.setAnimationDuration(0.18)
                             self.shapeLayers[i]!.frame.origin.x -= self.dotSize
-                            //                        })
-                            //                        UIView.animate(withDuration: 0.5, animations: {
+                            CATransaction.commit()
+                            
+                            CATransaction.begin()
+                            CATransaction.setAnimationDuration(0.18)
                             self.shapeLayers[i]!.frame.origin.y += 2*self.dotSize
-                            //                        })
+                            CATransaction.commit()
+                            
                             
                             self.shapeLayers[i+7] = self.shapeLayers[i]!
                             self.shapeLayers[i] = nil
@@ -413,7 +437,15 @@ class GameViewController: UIViewController {
         }
         isDropInProgress = false
         bool = true
+        self.view.addGestureRecognizer(pan)
+        delay(bySeconds: 0.6) {
+        if self.dotLabels[30] == nil && self.dotLabels[31] == nil {
+            let _ = self.myAllPossibilities.calculateBestHandIndexes(deck: self.deck)}
         
+        if !self.myAllPossibilities.stopEverything {
+            self.noMoreMoves()
+        }
+        }
     }
     
     private func dropRight(currentDeck: [Int?]) {
@@ -444,13 +476,15 @@ class GameViewController: UIViewController {
                             
                             self.dotLabels[i+8] = self.dotLabels[i]!
                             self.dotLabels[i] = nil
-                            //                        UIView.animate(withDuration: 0.5, animations: {
+                            CATransaction.begin()
+                            CATransaction.setAnimationDuration(0.18)
                             self.shapeLayers[i]!.frame.origin.x += self.dotSize
-                            //                        })
+                            CATransaction.commit()
                             
-                            //                        UIView.animate(withDuration: 0.5, animations: {
+                            CATransaction.begin()
+                            CATransaction.setAnimationDuration(0.18)
                             self.shapeLayers[i]!.frame.origin.y += 2*self.dotSize
-                            //                        })
+                            CATransaction.commit()
                             
                             self.shapeLayers[i+8] = self.shapeLayers[i]!
                             self.shapeLayers[i] = nil
@@ -484,14 +518,15 @@ class GameViewController: UIViewController {
         // scoreFlash.removeFromSuperview()
         score.text = currentScoreString
         if questButtons.count > 0 {
+         
             var counter = 0
             outerloop: for i in questButtons {
-                
+     
                 if questString == i.title(for: .normal) {
+                   
                     self.questButtons[counter].removeFromSuperview()
-                    AudioServicesPlayAlertSound(SystemSoundID(kSystemSoundID_Vibrate))
                     questButtons.remove(at: counter)
-                    print("questbuttons: \(questButtons)")
+                 
                     break outerloop
                 }
                 counter += 1
@@ -502,21 +537,53 @@ class GameViewController: UIViewController {
                 gameWinSequence()
             }
         }
+        
+        
+        
     }
     
     private func noMoreMoves() {
         if tagLevelIdentifier < 100 {
             view.addSubview(backBlack)
+            
+            sequences.text = "No More Moves"
+            sequences.layer.zPosition = 5
+            view.addSubview(sequences)
+            menuX.removeFromSuperview()
+            menuX2.layer.zPosition = 5
+            view.addSubview(menuX2)
+            restart.layer.zPosition = 5
+            
             view.addSubview(restart)
             
+            
         } else {
+            myGameCenter.addDataToGameCenter(score: currentScoreInt)
             myLoadSaveCoreData.saveScore(score: currentScoreInt)
             myLoadSaveCoreData.saveDemo(mode: "Solo")
+            sequences.frame = CGRect(x: 0, y: (400/1334)*screenHeight, width: screenWidth, height: (110/750)*screenWidth)
             view.addSubview(backBlack)
+            menuX2.layer.zPosition = 5
+            view.addSubview(menuX2)
+            restart.frame.origin.y = (1200/1334)*screenHeight
+            restart.layer.zPosition = 5
             view.addSubview(restart)
-            view.addSubview(menuX)
-            sequences.text = "Score: " + currentScoreString
+            sequences.layer.zPosition = 5
+            sequences.text = "Score: " + currentScoreString + "!"
             view.addSubview(sequences)
+            self.view.addSubview(gameCenter)
+            if tagLevelIdentifier == 100 {
+            let imagePrompt = UIImage(named: "gamecenter.png")
+            let imageViewPrompt = UIImageView(image: imagePrompt)
+            imageViewPrompt.frame = CGRect(x: 0, y: (194/1334)*screenHeight, width: screenWidth, height: (126/750)*screenWidth)
+            view.addSubview(imageViewPrompt)
+            }
+            view.addSubview(imageView)
+                
+            imageViewGlobal = imageView
+            
+            
+            
             
         }
         
@@ -524,7 +591,7 @@ class GameViewController: UIViewController {
     }
     
     private func gameWinSequence() {
-        
+        menuX.removeFromSuperview()
         view.addSubview(backBlack)
         view.bringSubview(toFront: backBlack)
         view.addSubview(menuBox)
@@ -535,21 +602,31 @@ class GameViewController: UIViewController {
         if tagLevelIdentifier == 1 {
             myLoadSaveCoreData.saveDemo(mode: "Campaign")
         }
-        let array = [1,9,17,25,33,41,43]
+        let array = [1,4,9,17,25,33,37,40,41,42,43]
         if array.contains(tagLevelIdentifier) {
             let image = UIImage(named: "Icon.png")
             let imageView = UIImageView(image: image)
-            imageView.frame = CGRect(x: 0.28*screenWidth, y: (100/1334)*screenHeight, width: 0.93*screenWidth/2, height: 0.6205*screenWidth)
+            imageView.frame = CGRect(x: 0.28*screenWidth, y: (300/1334)*screenHeight, width: 0.93*screenWidth/2, height: 0.6205*screenWidth)
             view.addSubview(imageView)
             imageViewGlobal = imageView
+            finishMessage.frame.origin.y += (200/1334)*screenHeight
             
         } else {
+            finishMessage.font = UIFont(name: "HelveticaNeue-Bold", size: fontSizeMultiplier*35)
             finishMessage.frame.origin.y -= screenHeight/4
         }
         
     }
     
     func addButtons() {
+        
+        //game center
+        
+        
+        gameCenter.frame = CGRect(x: (343/750)*screenWidth, y: (320/1332)*screenHeight, width: 64*screenWidth/750, height: 64*screenWidth/750)
+        gameCenter.setImage(UIImage(named: "gc.png"), for: .normal)
+        gameCenter.addTarget(self, action: #selector(GameViewController.showGameCenterVC(_:)), for: .touchUpInside)
+        
         
         // black background
         
@@ -571,7 +648,7 @@ class GameViewController: UIViewController {
         //back button
         
         back.frame = CGRect(x: (59/750)*screenWidth, y: (594/1334)*screenHeight, width: 633*screenWidth/750, height: 85*screenWidth/750)
-        back.setTitle("Game", for: UIControlState.normal)
+        back.setTitle("Resume Game", for: UIControlState.normal)
         back.titleLabel!.font = UIFont(name: "HelveticaNeue-Bold", size: fontSizeMultiplier*30)
         back.setTitleColor(UIColor(red: 215/255, green: 215/255, blue: 215/255, alpha: 1.0), for: .normal)
         back.backgroundColor = .clear
@@ -579,6 +656,17 @@ class GameViewController: UIViewController {
         back.layer.borderWidth = 1
         back.layer.borderColor = UIColor(red: 215/255, green: 215/255, blue: 215/255, alpha: 1.0).cgColor
         back.addTarget(self, action: #selector(GameViewController.back(_:)), for: .touchUpInside)
+        //leaderboard button
+        
+        leaderboard.frame = CGRect(x: (59/750)*screenWidth, y: (726/1334)*screenHeight, width: 633*screenWidth/750, height: 85*screenWidth/750)
+        leaderboard.setTitle("Game Center", for: UIControlState.normal)
+        leaderboard.titleLabel!.font = UIFont(name: "HelveticaNeue-Bold", size: fontSizeMultiplier*30)
+        leaderboard.setTitleColor(UIColor(red: 215/255, green: 215/255, blue: 215/255, alpha: 1.0), for: .normal)
+        leaderboard.backgroundColor = .clear
+        leaderboard.layer.cornerRadius = 5
+        leaderboard.layer.borderWidth = 1
+        leaderboard.layer.borderColor = UIColor(red: 215/255, green: 215/255, blue: 215/255, alpha: 1.0).cgColor
+        leaderboard.addTarget(self, action: #selector(GameViewController.showGameCenterVC(_:)), for: .touchUpInside)
         
         //restart button
         
@@ -706,7 +794,7 @@ class GameViewController: UIViewController {
         
         // finish Messages
         if tagLevelIdentifier < 100 {
-            finishMessage.text = myNarrative.finishMessages[tagLevelIdentifier]
+            finishMessage.text = myNarrative.finishMessages[tagLevelIdentifier-1]
         }
         finishMessage.textColor = UIColor(red: 215/255, green: 215/255, blue: 215/255, alpha: 1.0)
         finishMessage.textAlignment = NSTextAlignment.center
@@ -972,23 +1060,41 @@ class GameViewController: UIViewController {
         view.addSubview(backBlack)
         view.bringSubview(toFront: backBlack)
         view.addSubview(restart)
-        if tagLevelIdentifier < 99 {view.addSubview(sequence); back.frame.origin.y = (460/1334)*screenHeight
+        if tagLevelIdentifier < 99 { back.frame.origin.y = (460/1334)*screenHeight
+            
         } else {
             view.addSubview(sequence)
+            view.addSubview(leaderboard)
         }
         view.addSubview(back)
         view.addSubview(menuX2)
         
+        
+    }
+    
+    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
+        
+        //        if seg == "Menu" {
+        //
+        //            let gameView: MenuViewController = segue.destination as! MenuViewController
+        //
+        //            gameView.tagLevelIdentifier = tagLevelIdentifier
+        //
+        //        } else {
+        //
+        //        }
     }
     @objc private func menuX2(_ button: UIButton) {
         if tagLevelIdentifier > 99 {
             self.performSegue(withIdentifier: "fromGameToIntro", sender: self)
         } else {
+            seg = "Menu"
             self.performSegue(withIdentifier: "fromGameToMenu", sender: self)
         }
     }
     
     @objc private func menuBox(_ button: UIButton) {
+        seg = "Menu"
         self.performSegue(withIdentifier: "fromGameToMenu", sender: self)
     }
     @objc private func okay(_ button: UIButton) {
@@ -1070,10 +1176,15 @@ class GameViewController: UIViewController {
         
     }
     @objc private func restart(_ button: UIButton) {
+        questButtons.removeAll()
+        shapeLayers.removeAll()
+        shapeLayers2.removeAll()
         for view in self.view.subviews {
             view.removeFromSuperview()
         }
-        shapeLayers.removeAll()
+        self.view.layer.sublayers?.forEach { $0.removeFromSuperlayer() }
+        myAllPossibilities.stopEverything = true
+        
         view.addSubview(menuX)
         currentScoreInt = 0
         goalScoreInt = 20000
@@ -1098,10 +1209,10 @@ class GameViewController: UIViewController {
         }
         deck = shuffled
         lastCardDisplayed = 999
-   
         
-                   populateDots()
-                view.addSubview(menuX)
+        
+        populateDots()
+        view.addSubview(menuX)
     }
     private func displayTutorial() {
         
@@ -1118,6 +1229,10 @@ class GameViewController: UIViewController {
         // ADD SEQUENCE BOXES
         view.addSubview(tutorialAnnotation3)
         // view.addSubview(okay)
+    }
+    
+    @objc private func showGameCenterVC(_ sender: UIButton) {
+        GCHelper.sharedInstance.showGameCenter(self, viewState: .leaderboards)
     }
     
     @objc private func sequence(_ button: UIButton) {
@@ -1160,4 +1275,5 @@ class GameViewController: UIViewController {
         
         view.addSubview(imageView)
     }
+    
 }

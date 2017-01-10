@@ -71,7 +71,7 @@ class Calculator: ShuffleAndDeal {
         }
         
         if hand.count == 5 {
-          
+            
             
             var b = false
             var c = false
@@ -83,29 +83,29 @@ class Calculator: ShuffleAndDeal {
             if whatColorIsCard(card: hand[2]) == whatColorIsCard(card: hand[3]) && whatColorIsCard(card: hand[3]) == whatColorIsCard(card: hand[4]) && b {
                 
                 if numbers[4] - 1 == numbers[3] && numbers[3] - 1 == numbers[2] {
-                   
+                    
                     if numbers[2] - 1 == numbers[1] && numbers[1] - 1 == numbers[0] {
-                       
+                        
                         quest = "5 Str. Flush"
                     } else {
-                    
+                        
                         quest = "5 Flush"
                     }
                 } else {
-              
+                    
                     quest = "5 Flush"
                 }
             } else if c && numbers[2] - 1 == numbers[1] && numbers[1] - 1 == numbers[0] {
-             
-                quest = "5 Sraight"
+                
+                quest = "5 Straight"
             } else if d && numbers[2] == numbers[1] && numbers[1] == numbers[0] {
-         
+                
                 quest = "5 Kind"
             } else if numbers[4] == numbers[3] && numbers[1] == numbers[0] {
-          
-            
+                
+                
                 if numbers[2] == numbers[3] || numbers[2] == numbers[1] {
-              
+                    
                     quest = "5 Full House"
                 }
                 
@@ -124,7 +124,7 @@ class Calculator: ShuffleAndDeal {
             numbers.append(i%7)
         }
         numbers = numbers.sorted { $0 < $1 }
-  
+        
         if hand.count == 0 || hand.count == 1 {
             points = 0
         }
@@ -137,6 +137,9 @@ class Calculator: ShuffleAndDeal {
             if whatColorIsCard(card: hand[0]) == whatColorIsCard(card: hand[1]) && whatColorIsCard(card: hand[0]) == whatColorIsCard(card: hand[2]) {
                 if numbers[2] - 1 == numbers[1] && numbers[1] - 1 == numbers[0] {
                     points = 750
+                } else if numbers[2] == numbers[1] && numbers[2] == numbers[0] {
+                    points = 500
+                    
                 } else {
                     points = 100
                 }
@@ -156,7 +159,7 @@ class Calculator: ShuffleAndDeal {
         }
         
         if hand.count == 5 {
-       
+            
             var b = false
             var c = false
             var d = false
@@ -167,29 +170,29 @@ class Calculator: ShuffleAndDeal {
             if whatColorIsCard(card: hand[2]) == whatColorIsCard(card: hand[3]) && whatColorIsCard(card: hand[3]) == whatColorIsCard(card: hand[4]) && b {
                 
                 if numbers[4] - 1 == numbers[3] && numbers[3] - 1 == numbers[2] {
-                   
+                    
                     if numbers[2] - 1 == numbers[1] && numbers[1] - 1 == numbers[0] {
-                       
+                        
                         points = 20000
                     } else {
-                 
+                        
                         points = 2500
                     }
                 } else {
-            
+                    
                     points = 2500
                 }
             } else if c && numbers[2] - 1 == numbers[1] && numbers[1] - 1 == numbers[0] {
-      
+                
                 points = 1500
             } else if d && numbers[2] == numbers[1] && numbers[1] == numbers[0] {
-          
+                
                 points = 10000
             } else if numbers[4] == numbers[3] && numbers[1] == numbers[0] {
-
-
+                
+                
                 if numbers[2] == numbers[3] || numbers[2] == numbers[1] {
-
+                    
                     points = 3500
                 }
                 

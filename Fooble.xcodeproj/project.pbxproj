@@ -11,6 +11,7 @@
 		061F8FB51E16B46B00970955 /* ShuffleAndDeal.swift in Sources */ = {isa = PBXBuildFile; fileRef = 061F8FB41E16B46B00970955 /* ShuffleAndDeal.swift */; };
 		061F8FB71E17F27C00970955 /* Selection.swift in Sources */ = {isa = PBXBuildFile; fileRef = 061F8FB61E17F27C00970955 /* Selection.swift */; };
 		061F8FB91E184E0200970955 /* Calculator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 061F8FB81E184E0200970955 /* Calculator.swift */; };
+		0649DA841E21828F0097247D /* GameKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 0649DA831E21828F0097247D /* GameKit.framework */; };
 		068866501E0DB76C005B2577 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0688664F1E0DB76C005B2577 /* AppDelegate.swift */; };
 		068866521E0DB76C005B2577 /* MenuViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 068866511E0DB76C005B2577 /* MenuViewController.swift */; };
 		068866551E0DB76C005B2577 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 068866531E0DB76C005B2577 /* Main.storyboard */; };
@@ -32,6 +33,7 @@
 		061F8FB41E16B46B00970955 /* ShuffleAndDeal.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ShuffleAndDeal.swift; sourceTree = "<group>"; };
 		061F8FB61E17F27C00970955 /* Selection.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Selection.swift; sourceTree = "<group>"; };
 		061F8FB81E184E0200970955 /* Calculator.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Calculator.swift; sourceTree = "<group>"; };
+		0649DA831E21828F0097247D /* GameKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = GameKit.framework; path = System/Library/Frameworks/GameKit.framework; sourceTree = SDKROOT; };
 		0688664C1E0DB76C005B2577 /* Fooble.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Fooble.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		0688664F1E0DB76C005B2577 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		068866511E0DB76C005B2577 /* MenuViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MenuViewController.swift; sourceTree = "<group>"; };
@@ -58,6 +60,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				3A2972A09CB08FD7737D3A1C /* Pods_Fooble.framework in Frameworks */,
+				0649DA841E21828F0097247D /* GameKit.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -119,6 +122,7 @@
 		AD7AA635826BF7BF215A0DE7 /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				0649DA831E21828F0097247D /* GameKit.framework */,
 				164F7FE665D9EB981DE315CE /* Pods_Fooble.framework */,
 			);
 			name = Frameworks;
@@ -154,13 +158,18 @@
 			isa = PBXProject;
 			attributes = {
 				LastSwiftUpdateCheck = 0800;
-				LastUpgradeCheck = 0800;
+				LastUpgradeCheck = 0820;
 				ORGANIZATIONNAME = "Aaron Halvorsen";
 				TargetAttributes = {
 					0688664B1E0DB76C005B2577 = {
 						CreatedOnToolsVersion = 8.0;
 						DevelopmentTeam = PFDY3PS57G;
 						ProvisioningStyle = Automatic;
+						SystemCapabilities = {
+							com.apple.GameCenter = {
+								enabled = 1;
+							};
+						};
 					};
 				};
 			};
@@ -305,6 +314,7 @@
 				CLANG_WARN_INFINITE_RECURSION = YES;
 				CLANG_WARN_INT_CONVERSION = YES;
 				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_SUSPICIOUS_MOVE = YES;
 				CLANG_WARN_SUSPICIOUS_MOVES = YES;
 				CLANG_WARN_UNREACHABLE_CODE = YES;
 				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
@@ -355,6 +365,7 @@
 				CLANG_WARN_INFINITE_RECURSION = YES;
 				CLANG_WARN_INT_CONVERSION = YES;
 				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_SUSPICIOUS_MOVE = YES;
 				CLANG_WARN_SUSPICIOUS_MOVES = YES;
 				CLANG_WARN_UNREACHABLE_CODE = YES;
 				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
@@ -384,6 +395,7 @@
 			isa = XCBuildConfiguration;
 			baseConfigurationReference = 2B83308E59A05CF00C5C3204 /* Pods-Fooble.debug.xcconfig */;
 			buildSettings = {
+				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_LAUNCHIMAGE_NAME = LaunchImage;
 				DEVELOPMENT_TEAM = PFDY3PS57G;
@@ -400,6 +412,7 @@
 			isa = XCBuildConfiguration;
 			baseConfigurationReference = CA73960F58164E136E91A055 /* Pods-Fooble.release.xcconfig */;
 			buildSettings = {
+				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_LAUNCHIMAGE_NAME = LaunchImage;
 				DEVELOPMENT_TEAM = PFDY3PS57G;

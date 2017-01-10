@@ -106,7 +106,7 @@ class LoadSaveCoreData {
 
         if (resultsCampaignBool.count > 0)  {campaignBool = true}
         if (resultsMultiplayerBool.count > 1)  {multiplayerBool = true}
-        if (resultsSoloBool.count > 2)  {soloBool = true}
+        if (resultsSoloBool.count > 0)  {soloBool = true}
 
         return [campaignBool,multiplayerBool,soloBool]
         

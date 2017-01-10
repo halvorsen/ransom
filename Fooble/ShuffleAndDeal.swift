@@ -125,7 +125,7 @@ class ShuffleAndDeal {
         ["3 Flush","3 Flush","3 Flush","3 Flush","3 Flush","3 Flush","3 Flush","3 Flush","3 Flush"], //11
         ["Pair","Pair","3 Kind","3 Kind","3 Str. Flush","3 Straight","3 Flush","3 Flush","3 Flush"], //12
         ["3 Str. Flush","3 Str. Flush","3 Str. Flush"], //13
-        ["5 Straight","5 Straight","5 Straight"], //14
+        ["5 Straight","5 Straight","5 Full House"], //14
         ["Pair","3 Straight","3 Flush","3 Kind","4 Kind","5 Kind"], //15
         ["Pair","Pair","Pair","Pair","Pair","Pair","Pair","Pair","Pair"], //16
         ["3 Kind","3 Kind","3 Kind","3 Kind","3 Kind","3 Kind"], //17
@@ -133,9 +133,9 @@ class ShuffleAndDeal {
         ["5 Flush","5 Flush","5 Flush"], //19
         ["3 Flush","4 Kind","5 Str. Flush"], //20
         ["5 Full House","3 Str. Flush", "3 Str. Flush"], //21
-        ["5 Str. Flush"], //22
+        ["5 Str. Flush","5 Full House"], //22
         ["3 Str. Flush","3 Str. Flush","3 Str. Flush"], //23
-        ["5 Straight","5 Straight","5 Straight"], //24
+        ["5 Straight","5 Straight","5 Full House"], //24
         ["Pair","3 Straight","3 Flush","3 Kind","4 Kind","5 Kind"], //25
         ["5 Full House","5 Kind","5 Straight"], //26
         ["5 Full House","5 Full House","5 Full House"], //27
@@ -143,9 +143,9 @@ class ShuffleAndDeal {
         ["5 Flush","5 Flush","5 Flush"], //29
         ["4 Kind","4 Kind","4 Kind"], //30
         ["5 Full House","3 Str. Flush", "3 Str. Flush"], //31
-        ["5 Str. Flush"], //32
+        ["5 Str. Flush", "4 Kind"], //32
         ["3 Str. Flush","3 Str. Flush","3 Str. Flush"], //33
-        ["5 Straight","5 Straight","5 Straight"], //34
+        ["5 Straight","5 Kind","5 Straight"], //34
         ["Pair","3 Straight","3 Flush","3 Kind","4 Kind","5 Kind"], //35
         ["5 Full House","5 Kind","5 Straight"], //36
         ["5 Full House","5 Full House","5 Full House"], //37
