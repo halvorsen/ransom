@@ -1173,6 +1173,7 @@ class GameViewController: UIViewController {
         self.sequence.removeFromSuperview()
         self.back.removeFromSuperview()
         self.menuX2.removeFromSuperview()
+        self.leaderboard.removeFromSuperview()
         
     }
     @objc private func restart(_ button: UIButton) {
@@ -1245,6 +1246,7 @@ class GameViewController: UIViewController {
         view.addSubview(sequenceRowOne)
         view.addSubview(sequenceRowTwo)
         view.addSubview(exit)
+        self.leaderboard.removeFromSuperview()
     }
     
     public func delay(bySeconds seconds: Double, dispatchLevel: DispatchLevel = .main, closure: @escaping () -> Void) {
