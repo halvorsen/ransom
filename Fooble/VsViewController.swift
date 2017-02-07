@@ -103,6 +103,7 @@ class VsViewController: UIViewController {
     var allNumbers = [Int]()
     var test = false
     var timerRanOutOn: Team = .red
+    let myColor = PersonalColor()
     
     override var prefersStatusBarHidden: Bool {
         return true
@@ -111,7 +112,7 @@ class VsViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         // IF TAGLEVELIDENTIFIER = 1000 .yellow team is AI
-        self.view.backgroundColor = UIColor(red: 42/255, green: 42/255, blue: 42/255, alpha: 1.0)
+        self.view.backgroundColor = myColor.background
         
         pan = UIPanGestureRecognizer(target: self, action: #selector(GameViewController.respondToPanGesture(_:)))
         self.view.addGestureRecognizer(pan)
@@ -176,24 +177,23 @@ class VsViewController: UIViewController {
         swipeDown = UISwipeGestureRecognizer(target: self, action: #selector(VsViewController.respondToSwipeDown))
         swipeDown.direction = UISwipeGestureRecognizerDirection.down
     }
-    
+
     
     private func populateDots() {
         lastCardDisplayed = 999
         for i in 0..<67 {
-            
             switch myShuffleAndDeal.whatColorIsCard(card: deck[i]!) {
-            case .blue: //blue
-                shapeLayers[i]!.strokeColor = UIColor(red: 60/255, green: 54/255, blue: 116/255, alpha: 1.0).cgColor
+            case .custom1:
+                shapeLayers[i]!.strokeColor = myColor.pink.cgColor
                 
-            case .green: //green
-                shapeLayers[i]!.strokeColor = UIColor(red: 69/255, green: 125/255, blue: 59/255, alpha: 1.0).cgColor
+            case .custom2:
+                shapeLayers[i]!.strokeColor = myColor.yellow.cgColor
                 
-            case .yellow: //yellow
-                shapeLayers[i]!.strokeColor = UIColor(red: 190/255, green: 154/255, blue: 35/255, alpha: 1.0).cgColor
+            case .custom3:
+                shapeLayers[i]!.strokeColor = myColor.blue.cgColor
                 
-            case .red: //red
-                shapeLayers[i]!.strokeColor = UIColor(red: 101/255, green: 34/255, blue: 35/255, alpha: 1.0).cgColor
+            case .custom4:
+                shapeLayers[i]!.strokeColor = myColor.white.cgColor
                 
             }
             let linewidth = 2.0*screenWidth/750
@@ -230,14 +230,14 @@ class VsViewController: UIViewController {
                         if shapeLayers[i] != nil && deck[i] != nil { //new
                             
                             switch myShuffleAndDeal.whatColorIsCard(card: deck[i]!) {
-                            case .blue: //blue
-                                displayLayers[0].strokeColor = UIColor(red: 60/255, green: 54/255, blue: 116/255, alpha: 1.0).cgColor
-                            case .green: //green
-                                displayLayers[0].strokeColor = UIColor(red: 69/255, green: 125/255, blue: 59/255, alpha: 1.0).cgColor
-                            case .yellow: //yellow
-                                displayLayers[0].strokeColor = UIColor(red: 190/255, green: 154/255, blue: 35/255, alpha: 1.0).cgColor
-                            case .red: //red
-                                displayLayers[0].strokeColor = UIColor(red: 101/255, green: 34/255, blue: 35/255, alpha: 1.0).cgColor
+                            case .custom1:
+                                displayLayers[0].strokeColor = myColor.pink.cgColor
+                            case .custom2:
+                                displayLayers[0].strokeColor = myColor.yellow.cgColor
+                            case .custom3:
+                                displayLayers[0].strokeColor = myColor.blue.cgColor
+                            case .custom4:
+                                displayLayers[0].strokeColor = myColor.white.cgColor
                                 
                             }
                             
@@ -298,15 +298,15 @@ class VsViewController: UIViewController {
                             if shapeLayers2[i].path!.contains(locationOfPan) && dotLabels[i]!.isDescendant(of: self.view) && (lastCardDisplayed != deck[i]!) {
                                 
                                 if futureRow == lastRow - 1 || futureRow == lastRow + 1 || futureRow == lastRow {
-                                    switch myShuffleAndDeal.whatColorIsCard(card: deck[i]!) { //put dots on display
-                                    case .blue: //blue
-                                        displayLayers[count].strokeColor = UIColor(red: 60/255, green: 54/255, blue: 116/255, alpha: 1.0).cgColor
-                                    case .green: //green
-                                        displayLayers[count].strokeColor = UIColor(red: 69/255, green: 125/255, blue: 59/255, alpha: 1.0).cgColor
-                                    case .yellow: //yellow
-                                        displayLayers[count].strokeColor = UIColor(red: 190/255, green: 154/255, blue: 35/255, alpha: 1.0).cgColor
-                                    case .red: //red
-                                        displayLayers[count].strokeColor = UIColor(red: 101/255, green: 34/255, blue: 35/255, alpha: 1.0).cgColor
+                                    switch myShuffleAndDeal.whatColorIsCard(card: deck[i]!) {
+                                    case .custom1:
+                                        displayLayers[count].strokeColor = myColor.pink.cgColor
+                                    case .custom2:
+                                        displayLayers[count].strokeColor = myColor.yellow.cgColor
+                                    case .custom3:
+                                        displayLayers[count].strokeColor = myColor.blue.cgColor
+                                    case .custom4:
+                                        displayLayers[count].strokeColor = myColor.white.cgColor
                                     }
                                     
                                     displayLabels[count].text = String(deck[i]!%7 + 1)
@@ -507,23 +507,23 @@ class VsViewController: UIViewController {
             
             extraDots.remove(at:0)
             switch myShuffleAndDeal.whatColorIsCard(card: deck[a[i]]!) {
-            case .blue: //blue
-                shapeLayers[a[i]]!.strokeColor = UIColor(red: 60/255, green: 54/255, blue: 116/255, alpha: 1.0).cgColor
+            case .custom1:
+                shapeLayers[a[i]]!.strokeColor = myColor.pink.cgColor
                 delay(bySeconds: 1.0, closure: {self.view.layer.addSublayer(self.shapeLayers[self.a[i]]!)})
                 
                 
-            case .green: //green
-                shapeLayers[a[i]]!.strokeColor = UIColor(red: 69/255, green: 125/255, blue: 59/255, alpha: 1.0).cgColor
+            case .custom2:
+                shapeLayers[a[i]]!.strokeColor =  myColor.yellow.cgColor
                 delay(bySeconds: 1.0, closure: {self.view.layer.addSublayer(self.shapeLayers[self.a[i]]!)})
                 
                 
-            case .yellow: //yellow
-                shapeLayers[a[i]]!.strokeColor = UIColor(red: 190/255, green: 154/255, blue: 35/255, alpha: 1.0).cgColor
+            case .custom3:
+                shapeLayers[a[i]]!.strokeColor =  myColor.blue.cgColor
                 delay(bySeconds: 1.0, closure: {self.view.layer.addSublayer(self.shapeLayers[self.a[i]]!)})
                 
                 
-            case .red: //red
-                shapeLayers[a[i]]!.strokeColor = UIColor(red: 101/255, green: 34/255, blue: 35/255, alpha: 1.0).cgColor
+            case .custom4:
+                shapeLayers[a[i]]!.strokeColor = myColor.white.cgColor
                 delay(bySeconds: 1.0, closure: {self.view.layer.addSublayer(self.shapeLayers[self.a[i]]!)})
                 
                 
@@ -737,16 +737,19 @@ class VsViewController: UIViewController {
             
             for i in 0..<a.count {
                 switch myShuffleAndDeal.whatColorIsCard(card: deck[a[i]]!) {
-                case .blue: //blue
-                    displayLayers[i].strokeColor = UIColor(red: 60/255, green: 54/255, blue: 116/255, alpha: 1.0).cgColor
-                case .green: //green
-                    displayLayers[i].strokeColor = UIColor(red: 69/255, green: 125/255, blue: 59/255, alpha: 1.0).cgColor
-                case .yellow: //yellow
-                    displayLayers[i].strokeColor = UIColor(red: 190/255, green: 154/255, blue: 35/255, alpha: 1.0).cgColor
-                case .red: //red
-                    displayLayers[i].strokeColor = UIColor(red: 101/255, green: 34/255, blue: 35/255, alpha: 1.0).cgColor
-                }
-                
+                    case .custom1:
+                    shapeLayers[i]!.strokeColor = myColor.pink.cgColor
+                    
+                    case .custom2:
+                    shapeLayers[i]!.strokeColor = myColor.yellow.cgColor
+                    
+                    case .custom3:
+                    shapeLayers[i]!.strokeColor = myColor.blue.cgColor
+                    
+                    case .custom4:
+                    shapeLayers[i]!.strokeColor = myColor.white.cgColor
+                    
+                    }
                 displayLabels[i].text = String(deck[a[i]]!%7 + 1)
                 view.layer.addSublayer(displayLayers[i])
                 self.view.addSubview(displayLabels[i])
@@ -998,7 +1001,7 @@ class VsViewController: UIViewController {
         if ticker == 700 {
             timerRanOutOn = thisTurn
             bar.frame = CGRect(x: (CGFloat(1)-percentageOfBar)*(screenWidth/2), y: (1319/1334)*screenHeight, width: screenWidth*percentageOfBar, height: (15/1334)*screenHeight)
-            bar.backgroundColor = UIColor(red: 69/255, green: 125/255, blue: 59/255, alpha: 1.0)
+            bar.backgroundColor = myColor.background
             view.addSubview(bar)
         }
         if ticker == 1000 {
@@ -1078,131 +1081,70 @@ class VsViewController: UIViewController {
             }
         }
     }
-    
+    func addButton(name: UIButton, x: CGFloat, y: CGFloat, width: CGFloat, height: CGFloat, title: String, font: String, fontSize: CGFloat, titleColor: UIColor, bgColor: UIColor, cornerRad: CGFloat, boarderW: CGFloat, boarderColor: UIColor, act:
+        Selector, addSubview: Bool) {
+        name.frame = CGRect(x: (x/750)*screenWidth, y: (y/1334)*screenHeight, width: width*screenWidth/750, height: height*screenWidth/750)
+        name.setTitle(title, for: UIControlState.normal)
+        name.titleLabel!.font = UIFont(name: font, size: fontSizeMultiplier*fontSize)
+        name.setTitleColor(titleColor, for: .normal)
+        name.backgroundColor = bgColor
+        name.layer.cornerRadius = cornerRad
+        name.layer.borderWidth = boarderW
+        name.layer.borderColor = boarderColor.cgColor
+        name.addTarget(self, action: act, for: .touchUpInside)
+        if addSubview {
+            view.addSubview(name)
+        }
+    }
+    func addLabel(name: UILabel, text: String, textColor: UIColor, textAlignment: NSTextAlignment, fontName: String, fontSize: CGFloat, x: CGFloat, y: CGFloat, width: CGFloat, height: CGFloat, lines: Int) {
+        
+        name.text = text
+        name.textColor = textColor
+        name.textAlignment = textAlignment
+        name.font = UIFont(name: fontName, size: fontSizeMultiplier*fontSize)
+        name.frame = CGRect(x: (x/750)*screenWidth, y: (y/1334)*screenHeight, width: (width/750)*screenWidth, height: (height/750)*screenWidth)
+        name.numberOfLines = lines
+        
+    }
     func addButtons() {
         
         // black background
-        
-        backBlack.backgroundColor = UIColor(red: 42/255, green: 42/255, blue: 42/255, alpha: 1.0)
+        backBlack.backgroundColor = myColor.background
         backBlack.frame = CGRect(x: 0, y: 0, width: screenWidth, height: screenHeight)
-        backBlack.layer.zPosition = 2
         
         //scoreFlash label
-        
-        scoreFlash.text = additionalScoreString
-        scoreFlash.textColor = UIColor(red: 255/255, green: 255/255, blue: 255/255, alpha: 1.0)
-        scoreFlash.textAlignment = NSTextAlignment.center
-        scoreFlash.font = UIFont(name: "HelveticaNeue-Bold", size: fontSizeMultiplier*70)
-        scoreFlash.frame = CGRect(x: 0, y: (88/1334)*screenHeight, width: screenWidth, height: (110/750)*screenWidth)
+        addLabel(name: scoreFlash, text: additionalScoreString, textColor: myColor.offWhite, textAlignment: .center, fontName: "HelveticaNeue-Bold", fontSize: 70, x: 0, y: 88, width: 750, height: 110, lines: 0)
+        if tagLevelIdentifier > 99 {
+            scoreFlash.font = UIFont(name: "HelveticaNeue-Bold", size: fontSizeMultiplier*70)
+        } else {
+            scoreFlash.font = UIFont(name: "HelveticaNeue-Bold", size: fontSizeMultiplier*50)
+        }
         
         //back button
-        
-        back.frame = CGRect(x: (59/750)*screenWidth, y: (400/1334)*screenHeight, width: 633*screenWidth/750, height: 85*screenWidth/750)
-        back.setTitle("Un-Pause", for: UIControlState.normal)
-        back.layer.zPosition = 3
-        back.titleLabel!.font = UIFont(name: "HelveticaNeue-Bold", size: fontSizeMultiplier*30)
-        back.setTitleColor(UIColor(red: 215/255, green: 215/255, blue: 215/255, alpha: 1.0), for: .normal)
-        back.backgroundColor = .clear
-        back.layer.cornerRadius = 5
-        back.layer.borderWidth = 1
-        back.layer.borderColor = UIColor(red: 215/255, green: 215/255, blue: 215/255, alpha: 1.0).cgColor
-        back.addTarget(self, action: #selector(VsViewController.back(_:)), for: .touchUpInside)
+        addButton(name: back, x: 59, y: 594, width: 633, height: 85, title: "Resume Game", font: "HelveticaNeue-Bold", fontSize: 30, titleColor: myColor.offWhite, bgColor: .clear, cornerRad: 5, boarderW: 1, boarderColor: myColor.offWhite, act: #selector(VsViewController.back(_:)), addSubview: false)
+
         
         
         
         //sequencebutton
-        
-        sequence.frame = CGRect(x: (59/750)*screenWidth, y: (460/1334)*screenHeight, width: 633*screenWidth/750, height: 85*screenWidth/750)
-        sequence.setTitle("Sequences", for: UIControlState.normal)
-        sequence.titleLabel!.font = UIFont(name: "HelveticaNeue-Bold", size: fontSizeMultiplier*30)
-        sequence.setTitleColor(UIColor(red: 215/255, green: 215/255, blue: 215/255, alpha: 1.0), for: .normal)
-        sequence.backgroundColor = .clear
-        sequence.layer.cornerRadius = 5
-        sequence.layer.borderWidth = 1
-        sequence.layer.borderColor = UIColor(red: 215/255, green: 215/255, blue: 215/255, alpha: 1.0).cgColor
-        sequence.addTarget(self, action: #selector(VsViewController.sequence(_:)), for: .touchUpInside)
-        
+        addButton(name: sequence, x: 59, y: 460, width: 633, height: 85, title: "Sequences", font: "HelveticaNeue-Bold", fontSize: 30, titleColor: myColor.offWhite, bgColor: .clear, cornerRad: 5, boarderW: 1, boarderColor: myColor.offWhite, act: #selector(VsViewController.sequence(_:)), addSubview: false)
         //sequence label
-        
-        sequences.text = "Sequences"
-        sequences.textColor = UIColor(red: 215/255, green: 215/255, blue: 215/255, alpha: 1.0)
-        sequences.textAlignment = NSTextAlignment.center
-        sequences.font = UIFont(name: "HelveticaNeue-Bold", size: fontSizeMultiplier*50)
-        sequences.frame = CGRect(x: 0, y: (100/1334)*screenHeight, width: screenWidth, height: (110/750)*screenWidth)
-        
-        // show list button
-        
-        yellowScore.text = yellowPointsString
-        yellowScore.textColor = UIColor(red: 190/255, green: 154/255, blue: 35/255, alpha: 1.0)
-        yellowScore.textAlignment = NSTextAlignment.left
-        yellowScore.font = UIFont(name: "HelveticaNeue-Bold", size: fontSizeMultiplier*25)
-        yellowScore.frame = CGRect(x: (49/750)*screenWidth, y: (1230/1334)*screenHeight, width: (150/750)*screenWidth, height: (60/750)*screenWidth)
-        
+        addLabel(name: sequences, text: "Sequences", textColor: myColor.offWhite, textAlignment: .center, fontName: "HelveticaNeue-Bold", fontSize: 50, x: 0, y: 100, width: 750, height: 110, lines: 0)
+
+        addLabel(name: yellowScore, text: currentScoreString, textColor: UIColor(red: 190/255, green: 154/255, blue: 35/255, alpha: 1.0), textAlignment: .left, fontName: "HelveticaNeue-Bold", fontSize: 55, x: 300, y: 1180, width: 400, height: 106, lines: 0)
         // red score label
-        
-        redScore.text = redPointsString
-        redScore.textColor = UIColor(red: 101/255, green: 34/255, blue: 35/255, alpha: 1.0)
-        redScore.textAlignment = NSTextAlignment.right
-        redScore.frame = CGRect(x: (300/750)*screenWidth, y: (1180/1334)*screenHeight, width: (400/750)*screenWidth, height: (106/750)*screenWidth)
-        redScore.font = UIFont(name: "HelveticaNeue-Bold", size: fontSizeMultiplier*55)
-        
-        
-        
+        addLabel(name: redScore, text: currentScoreString, textColor: myColor.red, textAlignment: .right, fontName: "HelveticaNeue-Bold", fontSize: 36, x: 450, y: 1231, width: 250, height: 46, lines: 0)
+
         //Menux Button (transition in exiting game)
-        
-        menuX.frame = CGRect(x: (25/750)*screenWidth, y: (25/750)*screenWidth, width: 50*screenWidth/750, height: 50*screenWidth/750)
-        menuX.setTitle("X", for: UIControlState.normal)
-        menuX.titleLabel!.font = UIFont(name: "HelveticaNeue-Bold", size: fontSizeMultiplier*30)
-        menuX.setTitleColor(UIColor(red: 215/255, green: 215/255, blue: 215/255, alpha: 1.0), for: .normal)
-        menuX.addTarget(self, action: #selector(VsViewController.menuX(_:)), for: .touchUpInside)
-        
+        addButton(name: menuX, x: 25, y: 25, width: 50, height: 50, title: "X", font: "HelveticaNeue-Bold", fontSize: 30, titleColor: myColor.offWhite, bgColor: .clear, cornerRad: 0, boarderW: 0, boarderColor: .clear, act: #selector(VsViewController.menuX(_:)), addSubview: false)
         //Menux2 Button (transition in exiting game)
-        
-        menuX2.frame = CGRect(x: (25/750)*screenWidth, y: (25/750)*screenWidth, width: 50*screenWidth/750, height: 50*screenWidth/750)
-        menuX2.setTitle("X", for: UIControlState.normal)
-        menuX2.layer.zPosition = 4
-        menuX2.titleLabel!.font = UIFont(name: "HelveticaNeue-Bold", size: fontSizeMultiplier*30)
-        menuX2.setTitleColor(UIColor(red: 215/255, green: 215/255, blue: 215/255, alpha: 1.0), for: .normal)
-        menuX2.addTarget(self, action: #selector(VsViewController.menuX2(_:)), for: .touchUpInside)
-        
-        
-        
+        addButton(name: menuX2, x: 25, y: 25, width: 50, height: 50, title: "X", font: "HelveticaNeue-Bold", fontSize: 30, titleColor: myColor.offWhite, bgColor: .clear, cornerRad: 0, boarderW: 0, boarderColor: .clear, act: #selector(VsViewController.menuX2(_:)), addSubview: false)
         //sequence row two label
-        
-        sequenceRowTwo.text = "50\n100\n150\n500\n750\n1500\n2500\n3500\n5,000\n10,000\n20,000\n"
-        
-        sequenceRowTwo.textColor = UIColor(red: 215/255, green: 215/255, blue: 215/255, alpha: 1.0)
-        sequenceRowTwo.textAlignment = NSTextAlignment.right
-        sequenceRowTwo.font = UIFont(name: "HelveticaNeue-Bold", size: fontSizeMultiplier*20)
-        
-        sequenceRowTwo.lineBreakMode = NSLineBreakMode.byWordWrapping
-        sequenceRowTwo.numberOfLines = 0
-        
+        addLabel(name: sequenceRowTwo, text: "50\n100\n150\n500\n750\n1500\n2500\n3500\n5,000\n10,000\n20,000\n", textColor: myColor.offWhite, textAlignment: .right, fontName: "HelveticaNeue-Bold", fontSize: 20, x: 173, y: 262, width: 500, height: 750, lines: 0)
         //sequence row one label
-        
-        sequenceRowOne.text = "Pair\n3 Flush\n3 Straight\n3 of a Kind\n3 Straight Flush\n5 Straight\n5 Flush\n5 Full House\n4 of a Kind\n5 of a Kind\n5 Straight Flush"
-        
-        sequenceRowOne.textColor = UIColor(red: 215/255, green: 215/255, blue: 215/255, alpha: 1.0)
-        sequenceRowOne.textAlignment = NSTextAlignment.left
-        sequenceRowOne.font = UIFont(name: "HelveticaNeue-Bold", size: fontSizeMultiplier*20)
-        
-        sequenceRowOne.lineBreakMode = NSLineBreakMode.byWordWrapping
-        sequenceRowOne.numberOfLines = 0
-        sequenceRowOne.frame = CGRect(x: (80/750)*screenWidth, y: (237/1334)*screenHeight, width: (500/750)*screenWidth, height: (750/750)*screenWidth)
-        sequenceRowTwo.frame = CGRect(x: (173/750)*screenWidth, y: (262/1334)*screenHeight, width: (500/750)*screenWidth, height: (750/750)*screenWidth)
-        
-        //self.view.addSubview(hint)
-        
+        addLabel(name: sequenceRowOne, text: "Pair\n3 Flush\n3 Straight\n3 of a Kind\n3 Straight Flush\n5 Straight\n5 Flush\n5 Full House\n4 of a Kind\n5 of a Kind\n5 Straight Flush", textColor: myColor.offWhite, textAlignment: .left, fontName: "HelveticaNeue-Bold", fontSize: 20, x: 80, y: 237, width: 500, height: 750, lines: 0)
         //Exit Button
-        exit.frame = CGRect(x: (50/750)*screenWidth, y: (1145/1334)*screenHeight, width: 650*screenWidth/750, height: 87*screenWidth/750)
-        exit.setTitle("Exit", for: UIControlState.normal)
-        exit.titleLabel!.font = UIFont(name: "HelveticaNeue-Bold", size: fontSizeMultiplier*30)
-        exit.setTitleColor(UIColor(red: 215/255, green: 215/255, blue: 215/255, alpha: 1.0), for: .normal)
-        exit.addTarget(self, action: #selector(VsViewController.exit(_:)), for: .touchUpInside)
-        exit.backgroundColor = .clear
-        exit.layer.cornerRadius = 5
-        exit.layer.borderWidth = 1
-        exit.layer.borderColor = UIColor(red: 215/255, green: 215/255, blue: 215/255, alpha: 1.0).cgColor
+        addButton(name: exit, x: 50, y: 1145, width: 650, height: 87, title: "Exit", font: "HelveticaNeue-Bod", fontSize: 30, titleColor: myColor.offWhite, bgColor: .clear, cornerRad: 5, boarderW: 1, boarderColor: myColor.offWhite, act: #selector(VsViewController.exit(_:)), addSubview: false)
         
         for i in 0...66 {
             
@@ -1292,19 +1234,17 @@ class VsViewController: UIViewController {
             }
             
             let dotLabel = UILabel()
+            addLabel(name: dotLabel, text: "", textColor: myColor.white, textAlignment: .center, fontName: "HelveticaNeue-Bold", fontSize: 14, x: 750*(xValue - dotSize/2)/screenWidth, y: 1334*(yValue - dotSize/1.9)/screenHeight, width: 750*dotSize/screenWidth, height: 750*dotSize/screenWidth, lines: 0)
             dotLabel.layer.zPosition = 1
             dotLabels.append(dotLabel)
-            dotLabel.textColor = UIColor(red: 255/255, green: 255/255, blue: 255/255, alpha: 1.0)
-            dotLabel.textAlignment = NSTextAlignment.center
-            dotLabel.font = UIFont(name: "HelveticaNeue-Bold", size: fontSizeMultiplier*17)
-            dotLabel.frame = CGRect(x: xValue - dotSize/2, y: yValue - dotSize/1.9, width: dotSize, height: dotSize)
+            
             
             let circlePath = UIBezierPath(arcCenter: CGPoint(x: xValue,y: yValue), radius: (25/750)*screenWidth, startAngle: CGFloat(0), endAngle:CGFloat(M_PI * 2), clockwise: true)
             let circlePath2 = UIBezierPath(arcCenter: CGPoint(x: xValue,y: yValue), radius: dotSize, startAngle: CGFloat(0), endAngle:CGFloat(M_PI * 2), clockwise: true)
             
             let shapeLayer = CAShapeLayer()
             let shapeLayer2 = CAShapeLayer()
-            shapeLayer.fillColor = UIColor(red: 42/255, green: 42/255, blue: 42/255, alpha: 1.0).cgColor
+            shapeLayer.fillColor = myColor.background.cgColor
             shapeLayers.append(shapeLayer)
             shapeLayers2.append(shapeLayer2)
             shapeLayer.path = circlePath.cgPath
@@ -1314,17 +1254,16 @@ class VsViewController: UIViewController {
         }
         
         for i in 0...4 {
-            let dotLabel = UILabel()
-            displayLabels.append(dotLabel)
-            dotLabel.textColor = UIColor(red: 255/255, green: 255/255, blue: 255/255, alpha: 1.0)
-            dotLabel.textAlignment = NSTextAlignment.center
-            dotLabel.font = UIFont(name: "HelveticaNeue-Bold", size: fontSizeMultiplier*20)
+            let displayLabel = UILabel()
+            addLabel(name: displayLabel, text: "", textColor: myColor.white, textAlignment: .center, fontName: "HelverticaNeue-Bold", fontSize: 25, x: 160 + 90*CGFloat(i), y: 105, width: 70, height: 70, lines: 0)
+            displayLabels.append(displayLabel)
+            
             let _x = CGFloat(i)*(90/750)*screenWidth
-            dotLabel.frame = CGRect(x: (160/750)*screenWidth + _x, y: (105/1334)*screenHeight, width: (70/750)*screenWidth, height: (70/750)*screenWidth)
-            self.view.addSubview(dotLabel)
+            
+            self.view.addSubview(displayLabel)
             let circlePath = UIBezierPath(arcCenter: CGPoint(x: (195/750)*screenWidth + _x, y: (141/1334)*screenHeight), radius: (36/750)*screenWidth, startAngle: CGFloat(0), endAngle:CGFloat(M_PI * 2), clockwise: true)
             let shapeLayer = CAShapeLayer()
-            shapeLayer.fillColor = UIColor(red: 42/255, green: 42/255, blue: 42/255, alpha: 1.0).cgColor
+            shapeLayer.fillColor = myColor.background.cgColor
             shapeLayer.path = circlePath.cgPath
             displayLayers.append(shapeLayer)
             shapeLayer.lineWidth = 4.0*screenWidth/750
@@ -1389,19 +1328,6 @@ class VsViewController: UIViewController {
     public func delay(bySeconds seconds: Double, dispatchLevel: DispatchLevel = .main, closure: @escaping () -> Void) {
         let dispatchTime = DispatchTime.now() + seconds
         dispatchLevel.dispatchQueue.asyncAfter(deadline: dispatchTime, execute: closure)
-    }
-    
-    public enum DispatchLevel {
-        case main, userInteractive, userInitiated, utility, background
-        var dispatchQueue: DispatchQueue {
-            switch self {
-            case .main:                 return DispatchQueue.main
-            case .userInteractive:      return DispatchQueue.global(qos: .userInteractive)
-            case .userInitiated:        return DispatchQueue.global(qos: .userInitiated)
-            case .utility:              return DispatchQueue.global(qos: .utility)
-            case .background:           return DispatchQueue.global(qos: .background)
-            }
-        }
     }
     
 }

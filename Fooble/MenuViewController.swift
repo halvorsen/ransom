@@ -146,15 +146,17 @@ class MenuViewController: UIViewController {
             }
             
             let levelButton = UIButton()
-            switch (i-1)%4 {
-            case 1: //blue
-                levelButton.backgroundColor = UIColor(red: 60/255, green: 54/255, blue: 116/255, alpha: 1.0)
-            case 2: //green
-                levelButton.backgroundColor = UIColor(red: 69/255, green: 125/255, blue: 59/255, alpha: 1.0)
-            case 3: //yellow
-                levelButton.backgroundColor = UIColor(red: 190/255, green: 154/255, blue: 35/255, alpha: 1.0)
-            case 0: //red
-                levelButton.backgroundColor = UIColor(red: 101/255, green: 34/255, blue: 35/255, alpha: 1.0)
+            switch (i-1)%5 {
+            case 2: //red
+                levelButton.backgroundColor = UIColor(red: 170/255, green: 47/255, blue: 65/255, alpha: 1.0)
+            case 3: //light
+                levelButton.backgroundColor = UIColor(red: 229/255, green: 223/255, blue: 197/255, alpha: 1.0)
+            case 0: //light
+                levelButton.backgroundColor = UIColor(red: 229/255, green: 223/255, blue: 197/255, alpha: 1.0)
+            case 1: //teal
+                levelButton.backgroundColor = UIColor(red: 144/255, green: 199/255, blue: 168/255, alpha: 1.0)
+            case 4: //red
+                levelButton.backgroundColor = UIColor(red: 170/255, green: 47/255, blue: 65/255, alpha: 1.0)
             default:
                 break
             }
@@ -179,7 +181,7 @@ class MenuViewController: UIViewController {
         //top add more levels labels
         let menuHeader1 = UILabel()
         menuHeader1.text = "More Levels Super Soon"
-        menuHeader1.textColor = UIColor(red: 23/255, green: 23/255, blue: 23/255, alpha: 0.25)
+        menuHeader1.textColor = UIColor(red: 229/255, green: 223/255, blue: 197/255, alpha: 1.0)
         menuHeader1.textAlignment = NSTextAlignment.right
         menuHeader1.font = UIFont(name: "HelveticaNeue-Bold", size: fontSizeMultiplier*15)
         menuHeader1.backgroundColor = UIColor(red: 42/255, green: 42/255, blue: 42/255, alpha: 1.0)
@@ -196,7 +198,7 @@ class MenuViewController: UIViewController {
         menuX.frame = CGRect(x: (25/750)*screenWidth, y: (25/750)*screenWidth, width: 50*screenWidth/750, height: 50*screenWidth/750)
         menuX.setTitle("X", for: UIControlState.normal)
         menuX.titleLabel!.font = UIFont(name: "HelveticaNeue-Bold", size: fontSizeMultiplier*30)
-        menuX.setTitleColor(UIColor(red: 215/255, green: 215/255, blue: 215/255, alpha: 1.0), for: .normal)
+        menuX.setTitleColor(UIColor(red: 229/255, green: 223/255, blue: 197/255, alpha: 1.0), for: .normal)
         menuX.addTarget(self, action: #selector(MenuViewController.menuX(_:)), for: .touchUpInside)
         self.view.addSubview(menuX)
         

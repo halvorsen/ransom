@@ -28,10 +28,10 @@ class ShuffleAndDeal {
     // non-vs matches play with 2 decks of 40 dots (4 colors with 10 numbers per color). vs matches need more dots because there is a continuous feed of them so 4 decks are used. red green blue yellow 0-9 are ordered to form index integer identifier for decks 1,2,3,4. e.g. red number 0 from deck 1 is index identifier "0" and green number 1 from deck 1 is index identifier "11", yellow 9 from deck 1 is index identifier 39, red number 0 from deck 2 is index identifier 40 [index identifier == card, ie card number 65, 101, 5...].
     
     enum DotColor {
-        case red
-        case green
-        case blue
-        case yellow
+        case custom1
+        case custom2
+        case custom3
+        case custom4
     }
     
     func threeDeckShuffle() {
@@ -65,19 +65,19 @@ class ShuffleAndDeal {
     }
     
     func whatColorIsCard(card: Int) -> DotColor {
-        var color = DotColor.blue
+        var color = DotColor.custom1
         switch card {
         case 0...6, 28...34, 56...62, 84...90, 112...118:
-            color = .red
+            color = .custom1
             
         case 7...13, 35...41, 63...69, 91...97, 119...125:
-            color = .green
+            color = .custom2
             
         case 14...20, 42...48, 70...76, 98...104, 126...132:
-            color = .blue
+            color = .custom3
             
         case 21...27, 49...55, 77...83, 105...111, 133...139:
-            color = .yellow
+            color = .custom4
             
         default:
             break
