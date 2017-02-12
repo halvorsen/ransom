@@ -62,50 +62,15 @@ class GameViewController: UIViewController {
     var shuffled = [Int]()
     var allNumbers = [Int]()
     var pan = UIPanGestureRecognizer()
-    var displayLayers = [CAShapeLayer]()
-    var shapeLayers = [CAShapeLayer?]()
-    var shapeLayers2 = [CAShapeLayer]()
-    var annotations = [UILabel]()
-    var hintDisplay = [CAShapeLayer]()
-    var hintNumberLabels = [UILabel]()
     var questButtons = [UIButton]()
+    
+    
+    var shapeLayers = [CAShapeLayer?]()
     var dotLabels = [UILabel?]()
-    var displayLabels = [UILabel]()
-    
-    
-    
-    let score = UILabel()
-    let scoreFlash = UILabel()
-    let sequences = UILabel()
-    let yellowScore = UILabel()
-    let redScore = UILabel()
-    let finishMessage = UILabel()
-    let tutorialAnnotation = UILabel()
-    let tutorialAnnotation2 = UILabel()
-    let tutorialAnnotation3 = UILabel()
-    let sequenceRowOne = UILabel()
-    let sequenceRowTwo = UILabel()
-    let okay = UIButton()
-    let hint = UIButton()
-    let exit = UIButton()
-    let leaderboard = UIButton()
-    let restart = UIButton()
-    let sequence = UIButton()
-    let back = UIButton()
-    let exitSequences = UIButton()
-    let showList = UIButton()
-    let gameCenter = UIButton()
-    let menuX = UIButton()
-    let menuX2 = UIButton()
-    let menuBox = UIButton()
-    let continueToPlay = UIButton()
-    
-//    var shapeLayers = [CAShapeLayer?]()
-//    var dotLabels = [UILabel?]()
-//    var displayLayers, shapeLayers2, hintDisplay: [CAShapeLayer]
-//    var annoations, hintNumberLabels, displayLabels: [UILabel]
-//    let score, scoreFlash, sequences, yellowScore, redScore, finishMessage, tutorialAnnotation, tutorialAnnotation2, tutorialAnnotation3, sequenceRowOne, sequenceRowTwo = UILabel()
-//    let okay, hint, exit, leaderboard, restart, sequence, back, exitSequences, showList, gameCenter, menuX, menuX2, continueToPlay: UIButton
+    var (displayLayers, shapeLayers2, hintDisplay) = ([CAShapeLayer](), [CAShapeLayer](), [CAShapeLayer]())
+    var (annoations, hintNumberLabels, displayLabels) = ([UILabel](), [UILabel](), [UILabel]())
+    let (score, scoreFlash, sequences, yellowScore, redScore, finishMessage, tutorialAnnotation, tutorialAnnotation2, tutorialAnnotation3, sequenceRowOne, sequenceRowTwo) = (UILabel(), UILabel(), UILabel(), UILabel(), UILabel(), UILabel(), UILabel(), UILabel(), UILabel(), UILabel(), UILabel())
+    let (okay, hint, exit, leaderboard, restart, sequence, back, exitSequences, showList, gameCenter, menuX, menuX2, menuBox, continueToPlay) = (UIButton(), UIButton(), UIButton(), UIButton(), UIButton(), UIButton(), UIButton(), UIButton(), UIButton(), UIButton(), UIButton(), UIButton(), UIButton(), UIButton())
     
     
     override var prefersStatusBarHidden: Bool {
@@ -140,6 +105,7 @@ class GameViewController: UIViewController {
     }
     
     override func viewDidAppear(_ animated: Bool) {
+        UIView.animate(withDuration: 0.1) {self.view.alpha = 0.9}
         print("tagLevelIdentifier: \(tagLevelIdentifier)")
         if tagLevelIdentifier > 99 {
             GCHelper.sharedInstance.authenticateLocalUser()
@@ -221,6 +187,7 @@ class GameViewController: UIViewController {
                         
                         displayLabels[0].text = String(deck[i]!%7 + 1)
                         lastIndex = i
+                      //  print("firstindex: \(lastIndex)")
                         
                         futureIndexes = mySelection.selectableIndexesWithOneAlreadySelected(first: i)
                         
@@ -235,82 +202,99 @@ class GameViewController: UIViewController {
                 }
             }
         }
-        outerloop: if gesture.state == UIGestureRecognizerState.changed {
-            let locationOfPan = gesture.location(in: view)
-            if count > 1 {
-                if shapeLayers2[firstIndexDisplayed].path!.contains(locationOfPan){
-                    for i in 0...4 {
-                        if displayLabels[i].isDescendant(of: self.view) {
-                            displayLabels[i].removeFromSuperview()
-                            displayLayers[i].removeFromSuperlayer()
-                            handIndexes.removeAll()
-                            hand.removeAll() //new
-                            futureIndexes.removeAll()
-                            count = 0
+        outerloop: if gesture.state == UIGestureRecognizerState.changed && futureIndexes.count > 0 {
+            if futureIndexes[0] != 666 {
+                let locationOfPan = gesture.location(in: view)
+                if count > 1 {
+                    if shapeLayers2[firstIndexDisplayed].path!.contains(locationOfPan){
+                        for i in 0...4 {
+                            if displayLabels[i].isDescendant(of: self.view) {
+                                displayLabels[i].removeFromSuperview()
+                                displayLayers[i].removeFromSuperlayer()
+                                handIndexes.removeAll()
+                                hand.removeAll() //new
+                                futureIndexes.removeAll()
+                                count = 0
+                            }
                         }
-                    }
-                    
-                    break outerloop
-                }
-            }
-            
-            if count < 5 && count > 0 { //new
-                if self.displayLabels[0].isDescendant(of: self.view) {
-                    
-                    
-                    for i in futureIndexes {
                         
-                        var futureRow = mySelection.thisRow(index: i)
-                        let lastRow = mySelection.thisRow(index: lastIndex)
-                        switch lastIndex {
-                        case 6,14,21,29,36,44,51,59:
-                            if i == lastIndex + 1 {
-                                futureRow = lastRow + 2
-                            }
-                        case 7,15,22,30,37,45,52,60:
-                            if i == lastIndex - 1 {
-                                futureRow = lastRow + 2
-                            }
-                        default: break
-                        }
-                        if shapeLayers2[i].path!.contains(locationOfPan) && dotLabels[i]!.isDescendant(of: self.view) && (lastCardDisplayed != deck[i]!) {
+                        break outerloop
+                    }
+                }
+                
+                
+                if count < 5 && count > 0 { //new
+                    if self.displayLabels[0].isDescendant(of: self.view) {
+                        
+//                       print("future indexes: \(futureIndexes)")
+                        for i in futureIndexes {
                             
-                            if futureRow == lastRow - 1 || futureRow == lastRow + 1 || futureRow == lastRow {
-                                
-                                
-                                switch myShuffleAndDeal.whatColorIsCard(card: deck[i]!) {
-                                case .custom1:
-                                    displayLayers[count].strokeColor = myColor.pink.cgColor
-                                case .custom2:
-                                    displayLayers[count].strokeColor = myColor.yellow.cgColor
-                                case .custom3:
-                                    displayLayers[count].strokeColor = myColor.blue.cgColor
-                                case .custom4:
-                                    displayLayers[count].strokeColor = myColor.white.cgColor
+                            var futureRow = mySelection.thisRow(index: i)
+            
+                            let lastRow = mySelection.thisRow(index: lastIndex)
+                 
+                            switch lastIndex {
+                            case 6,14,21,29,36,44,51,59: //this sabatoges
+                                if i == lastIndex + 1 {
+                                    futureRow = lastRow + 2
                                 }
-                                
-                                displayLabels[count].text = String(deck[i]!%7 + 1)
-                                lastCardDisplayed = deck[i]!
-                                priorIndex = lastIndex
-                                lastIndex = i
-                                var potentialFutureIndex = Int()
-                                potentialFutureIndex = mySelection.linearCheckForNumberAfterLast(last: i, prior: priorIndex)
-                                
-                                if potentialFutureIndex > -1 && potentialFutureIndex < 67 {
-                                    if dotLabels[potentialFutureIndex] != nil {
-                                        if dotLabels[potentialFutureIndex]!.isDescendant(of: self.view) {
-                                            
-                                            futureIndexes.removeAll()
-                                            futureIndexes.append(potentialFutureIndex)
+                            case 7,15,22,30,37,45,52,60:
+                                if i == lastIndex - 1 {
+                                    futureRow = lastRow + 2
+                                }
+                            default: break
+                            }
+                    
+                            if deck[i] != nil && dotLabels[i] != nil {
+                                if shapeLayers2[i].path!.contains(locationOfPan) && dotLabels[i]!.isDescendant(of: self.view) && (lastCardDisplayed != deck[i]!) {
+
+                                    
+                                    if futureRow == lastRow - 1 || futureRow == lastRow + 1 || futureRow == lastRow {
+                                        switch myShuffleAndDeal.whatColorIsCard(card: deck[i]!) {
+                                        case .custom1:
+                                            displayLayers[count].strokeColor = myColor.pink.cgColor
+                                        case .custom2:
+                                            displayLayers[count].strokeColor = myColor.yellow.cgColor
+                                        case .custom3:
+                                            displayLayers[count].strokeColor = myColor.blue.cgColor
+                                        case .custom4:
+                                            displayLayers[count].strokeColor = myColor.white.cgColor
                                         }
+                                        
+                                        displayLabels[count].text = String(deck[i]!%7 + 1)
+                                        lastCardDisplayed = deck[i]!
+                                        priorIndex = lastIndex
+                                        lastIndex = i
+                                        var potentialFutureIndex = Int()
+                                        potentialFutureIndex = mySelection.linearCheckForNumberAfterLast(last: i, prior: priorIndex)
+                                        
+                                        if potentialFutureIndex > -1 && potentialFutureIndex < 67 {
+                                            if dotLabels[potentialFutureIndex] != nil {
+                                                if dotLabels[potentialFutureIndex]!.isDescendant(of: self.view) {
+                                                    
+                                                    futureIndexes.removeAll()
+                                                    futureIndexes.append(potentialFutureIndex)
+                                                } else {
+                                                    futureIndexes.removeAll()
+                                                    futureIndexes.append(666)
+                                                }
+                                            } else {
+                                                futureIndexes.removeAll()
+                                                futureIndexes.append(666)
+                                            }
+                                        } else {
+                                            futureIndexes.removeAll()
+                                            futureIndexes.append(666)
+                                        }
+                                        
+                                        view.layer.addSublayer(displayLayers[count])
+                                        self.view.addSubview(displayLabels[count])
+                                        hand.append(deck[i]!)
+                                        handIndexes.append(i)
+                                        count += 1
                                     }
+                                    //
                                 }
-                                
-                                view.layer.addSublayer(displayLayers[count])
-                                self.view.addSubview(displayLabels[count])
-                                hand.append(deck[i]!)
-                                handIndexes.append(i)
-                                count += 1
                             }
                         }
                     }
@@ -375,7 +359,7 @@ class GameViewController: UIViewController {
         }
         isDropInProgress = true
         delay(bySeconds: 0.2) { while self.trackerSum != self.trackerSumPrior || self.bool {
-            print("enteredWhileLoop")
+            
             self.trackerSumPrior = self.trackerSum
             //
             for i in self.iReverse {
@@ -427,13 +411,18 @@ class GameViewController: UIViewController {
         bool = true
         self.view.addGestureRecognizer(pan)
         delay(bySeconds: 0.6) {
-            if self.dotLabels[30] == nil && self.dotLabels[31] == nil {
-                let _ = self.myAllPossibilities.calculateBestHandIndexes(deck: self.deck)}
             
+                let _ = self.myAllPossibilities.calculateBestHandIndexes(deck: self.deck)}
+            print("checkall")
+        self.delay(bySeconds: 0.6) {
             if !self.myAllPossibilities.stopEverything {
                 self.noMoreMoves()
             }
         }
+    }
+    public func delay(bySeconds seconds: Double, dispatchLevel: DispatchLevel = .main, closure: @escaping () -> Void) {
+        let dispatchTime = DispatchTime.now() + seconds
+        dispatchLevel.dispatchQueue.asyncAfter(deadline: dispatchTime, execute: closure)
     }
     
     private func dropRight(currentDeck: [Int?]) {
@@ -562,8 +551,6 @@ class GameViewController: UIViewController {
         view.addSubview(backBlack)
         view.bringSubview(toFront: backBlack)
         view.addSubview(menuBox)
-        //view.addSubview(continueToPlay)
-        //finishMessage.text = myNarrative.finishMessages[tagLevelIdentifier-1]
         view.addSubview(finishMessage)
         myLoadSaveCoreData.saveLevel(tagLevelIdentifier: tagLevelIdentifier)
         if tagLevelIdentifier == 1 {
@@ -571,7 +558,7 @@ class GameViewController: UIViewController {
         }
         let array = [1,4,9,17,25,33,37,40,41,42,43]
         if array.contains(tagLevelIdentifier) {
-            let image = UIImage(named: "Icon.png")
+            let image = UIImage(named: "menuIcon.png")
             let imageView = UIImageView(image: image)
             imageView.frame = CGRect(x: 0.28*screenWidth, y: (300/1334)*screenHeight, width: 0.93*screenWidth/2, height: 0.6205*screenWidth)
             view.addSubview(imageView)
@@ -617,6 +604,7 @@ class GameViewController: UIViewController {
         
         // black background
         backBlack.backgroundColor = myColor.background
+        backBlack.alpha = 0.9
         backBlack.frame = CGRect(x: 0, y: 0, width: screenWidth, height: screenHeight)
         
         //scoreFlash label
@@ -656,7 +644,7 @@ class GameViewController: UIViewController {
         //Menux2 Button (transition in exiting game)
         addButton(name: menuX2, x: 25, y: 25, width: 50, height: 50, title: "X", font: "HelveticaNeue-Bold", fontSize: 30, titleColor: myColor.offWhite, bgColor: .clear, cornerRad: 0, boarderW: 0, boarderColor: .clear, act: #selector(GameViewController.menuX2(_:)), addSubview: false)
         //Okay Button
-        addButton(name: okay, x: 199, y: 1250, width: 353, height: 55, title: "Okay", font: "HelveticaNeue-Bold", fontSize: 20, titleColor: myColor.offWhite, bgColor: UIColor(red: 42/255, green: 42/255, blue: 42/255, alpha: 1.0), cornerRad: 5, boarderW: 1, boarderColor: myColor.offWhite, act: #selector(GameViewController.okay(_:)), addSubview: false)
+        addButton(name: okay, x: 199, y: 1250, width: 353, height: 55, title: "Okay", font: "HelveticaNeue-Bold", fontSize: 20, titleColor: myColor.offWhite, bgColor: myColor.background, cornerRad: 5, boarderW: 1, boarderColor: myColor.offWhite, act: #selector(GameViewController.okay(_:)), addSubview: false)
         if tagLevelIdentifier == 100 {
             okay.frame.origin.y -= 50
         }
@@ -676,8 +664,11 @@ class GameViewController: UIViewController {
         addButton(name: menuBox, x: 59, y: 1084, width: 633, height: 85, title: "Menu", font: "HelveticaNeue-Bold", fontSize: 30, titleColor: myColor.offWhite, bgColor: .clear, cornerRad: 5, boarderW: 1, boarderColor: myColor.offWhite, act: #selector(GameViewController.menuBox(_:)), addSubview: false)
         //score label
         addLabel(name: score, text: "SCORE", textColor: myColor.offWhite, textAlignment: .right, fontName: "HelveticaNeue-CondensedBold", fontSize: 36, x: 200, y: 1252, width: 525, height: 60, lines: 0)
+        print("taglevel")
+        print(tagLevelIdentifier)
+        if tagLevelIdentifier == 101 { view.addSubview(score) }
         //Exit Button
-        addButton(name: exit, x: 50, y: 1145, width: 650, height: 87, title: "Exit", font: "HelveticaNeue-Bod", fontSize: 30, titleColor: myColor.offWhite, bgColor: .clear, cornerRad: 5, boarderW: 1, boarderColor: myColor.offWhite, act: #selector(GameViewController.exit(_:)), addSubview: false)
+        addButton(name: exit, x: 50, y: 1145, width: 650, height: 87, title: "Exit", font: "HelveticaNeue-Bold", fontSize: 30, titleColor: myColor.offWhite, bgColor: .clear, cornerRad: 5, boarderW: 1, boarderColor: myColor.offWhite, act: #selector(GameViewController.exit(_:)), addSubview: false)
         
         for i in 0...66 {
             
@@ -1022,7 +1013,7 @@ class GameViewController: UIViewController {
         let image = UIImage(named: named)
         imageView.image = image!
         imageView.frame.origin.x = (123/750)*screenWidth
-        imageView.frame.origin.y = (359/1334)*screenHeight
+        imageView.frame.origin.y = (1100/1334)*screenHeight
         imageView.frame.size = CGSize( width: (504/750)*screenWidth, height: (220/750)*screenWidth)
         
         view.addSubview(imageView)

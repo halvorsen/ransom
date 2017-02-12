@@ -52,7 +52,7 @@ struct Narrative {
                           "Level Complete!",
                           "Love binds the rescuer to a ransom of death and destruction, a love that destroys evil.",
                           "I raised my spear against eight hundred men, whom I killed in one encounter.",
-                          "I buy her back with their lives, nearly dead myself, I make my way to her cell, but something is wrong",
-                          "But she was not there, I was too late...that's why we stand here today-to pay a second ransom....."]
+                          "I buy her back with their lives, nearly dead myself, I make my way to her cell, something is wrong",
+                          "She was not there, I was too late...that's why we stand here today-to pay a final ransom....."]
     
 }

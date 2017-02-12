@@ -40,7 +40,7 @@ struct AllPossibilities {
             if deck[i] != nil {
                 
                 nextIndexes =  mySelection.selectableIndexesWithOneAlreadySelected(first: i)
-                for n in nextIndexes {
+                forLoop: for n in nextIndexes {
                     if deck[n] != nil {
                         var m = Int()
                         m = mySelection.linearCheckForNumberAfterLast(last: n, prior: i)
@@ -48,17 +48,17 @@ struct AllPossibilities {
                         let lastRow = mySelection.thisRow(index: n)
                         switch n {
                         case 6,14,21,29,36,44,51,59:
-                            if m == n + 1 {
+                            if m == n + 1 || lastRow == futureRow {
                                 futureRow = lastRow + 2
                             }
                         case 7,15,22,30,37,45,52,60:
-                            if m == n - 1 {
+                            if m == n - 1 || lastRow == futureRow {
                                 futureRow = lastRow + 2
                             }
                         default: break
                         }
                         if m < 67 && m > -1 {
-                            if (lastRow == futureRow - 1 || lastRow == futureRow + 1) && deck[m] != nil {
+                            if (lastRow == futureRow - 1 || lastRow == futureRow + 1 || futureRow == lastRow) && deck[m] != nil {
                                 
                                 var o = Int()
                                 o = mySelection.linearCheckForNumberAfterLast(last: m, prior: n)
@@ -66,17 +66,17 @@ struct AllPossibilities {
                                 let lastRow = mySelection.thisRow(index: m)
                                 switch m {
                                 case 6,14,21,29,36,44,51,59:
-                                    if o == m + 1 {
+                                    if o == m + 1 || lastRow == futureRow {
                                         futureRow = lastRow + 2
                                     }
                                 case 7,15,22,30,37,45,52,60:
-                                    if o == m - 1 {
+                                    if o == m - 1 || lastRow == futureRow {
                                         futureRow = lastRow + 2
                                     }
                                 default: break
                                 }
                                 if o < 67 && o > -1 {
-                                    if (lastRow == futureRow - 1 || lastRow == futureRow + 1) && deck[o] != nil {
+                                    if (lastRow == futureRow - 1 || lastRow == futureRow + 1 || futureRow == lastRow) && deck[o] != nil {
                                         
                                         var p = Int()
                                         p = mySelection.linearCheckForNumberAfterLast(last: o, prior: m)
@@ -84,17 +84,17 @@ struct AllPossibilities {
                                         let lastRow = mySelection.thisRow(index: o)
                                         switch o {
                                         case 6,14,21,29,36,44,51,59:
-                                            if p == o + 1 {
+                                            if p == o + 1 || lastRow == futureRow {
                                                 futureRow = lastRow + 2
                                             }
                                         case 7,15,22,30,37,45,52,60:
-                                            if p == o - 1 {
+                                            if p == o - 1 || lastRow == futureRow {
                                                 futureRow = lastRow + 2
                                             }
                                         default: break
                                         }
                                         if p < 67 && p > -1 {
-                                            if (lastRow == futureRow - 1 || lastRow == futureRow + 1) && deck[p] != nil {
+                                            if (lastRow == futureRow - 1 || lastRow == futureRow + 1 || futureRow == lastRow) && deck[p] != nil {
                                                 let score = myCalculator.pointAmount(hand: myCalculator.reorderHand(hand: [deck[i]!,deck[m]!,deck[n]!,deck[o]!,deck[p]!]))
                                                 if score > 0 {
                                                     fiveCardHands.append([i,n,m,o,p])
@@ -102,10 +102,16 @@ struct AllPossibilities {
                                                     points.append(score)
                                                 }
                                             }
+                                        } else {
+                                            break forLoop
                                         }
                                     }
+                                } else {
+                                    break forLoop
                                 }
                             }
+                        } else {
+                            break forLoop
                         }
                     }
                     
@@ -120,7 +126,7 @@ struct AllPossibilities {
             if deck[i] != nil {
                 
                 nextIndexes =  mySelection.selectableIndexesWithOneAlreadySelected(first: i)
-                for n in nextIndexes {
+                forLoop: for n in nextIndexes {
                     if deck[n] != nil {
                         var m = Int()
                         m = mySelection.linearCheckForNumberAfterLast(last: n, prior: i)
@@ -128,17 +134,17 @@ struct AllPossibilities {
                         let lastRow = mySelection.thisRow(index: n)
                         switch n {
                         case 6,14,21,29,36,44,51,59:
-                            if m == n + 1 {
+                            if m == n + 1 || lastRow == futureRow {
                                 futureRow = lastRow + 2
                             }
                         case 7,15,22,30,37,45,52,60:
-                            if m == n - 1 {
+                            if m == n - 1 || lastRow == futureRow {
                                 futureRow = lastRow + 2
                             }
                         default: break
                         }
                         if m < 67 && m > -1 {
-                            if (lastRow == futureRow - 1 || lastRow == futureRow + 1) && deck[m] != nil {
+                            if (lastRow == futureRow - 1 || lastRow == futureRow + 1 || futureRow == lastRow) && deck[m] != nil {
                                 
                                 var o = Int()
                                 o = mySelection.linearCheckForNumberAfterLast(last: m, prior: n)
@@ -146,17 +152,17 @@ struct AllPossibilities {
                                 let lastRow = mySelection.thisRow(index: m)
                                 switch m {
                                 case 6,14,21,29,36,44,51,59:
-                                    if o == m + 1 {
+                                    if o == m + 1 || lastRow == futureRow {
                                         futureRow = lastRow + 2
                                     }
                                 case 7,15,22,30,37,45,52,60:
-                                    if o == m - 1 {
+                                    if o == m - 1 || lastRow == futureRow {
                                         futureRow = lastRow + 2
                                     }
                                 default: break
                                 }
                                 if o < 67 && o > -1 {
-                                    if (lastRow == futureRow - 1 || lastRow == futureRow + 1) && deck[o] != nil {
+                                    if (lastRow == futureRow - 1 || lastRow == futureRow + 1 || futureRow == lastRow) && deck[o] != nil {
                                         let score = myCalculator.pointAmount(hand: myCalculator.reorderHand(hand: [deck[i]!,deck[m]!,deck[n]!,deck[o]!]))
                                         if score > 0 {
                                             fourCardHands.append([i,n,m,o])
@@ -165,8 +171,12 @@ struct AllPossibilities {
                                         }
                                         
                                     }
+                                } else {
+                                    break forLoop
                                 }
                             }
+                        } else {
+                            break forLoop
                         }
                     }
                 }
@@ -181,7 +191,7 @@ struct AllPossibilities {
                 if deck[i] != nil {
                     
                     nextIndexes =  mySelection.selectableIndexesWithOneAlreadySelected(first: i)
-                    for n in nextIndexes {
+                    forLoop: for n in nextIndexes {
                         if deck[n] != nil {
                             var m = Int()
                             m = mySelection.linearCheckForNumberAfterLast(last: n, prior: i)
@@ -189,17 +199,17 @@ struct AllPossibilities {
                             let lastRow = mySelection.thisRow(index: n)
                             switch n {
                             case 6,14,21,29,36,44,51,59:
-                                if m == n + 1 {
+                                if m == n + 1 || lastRow == futureRow {
                                     futureRow = lastRow + 2
                                 }
                             case 7,15,22,30,37,45,52,60:
-                                if m == n - 1 {
+                                if m == n - 1 || lastRow == futureRow {
                                     futureRow = lastRow + 2
                                 }
                             default: break
                             }
                             if m < 67 && m > -1 {
-                                if (lastRow == futureRow - 1 || lastRow == futureRow + 1) && deck[m] != nil {
+                                if (lastRow == futureRow - 1 || lastRow == futureRow + 1 || futureRow == lastRow) && deck[m] != nil {
                                     let score = myCalculator.pointAmount(hand: myCalculator.reorderHand(hand: [deck[i]!,deck[m]!,deck[n]!]))
                                     if score > 0 {
                                         threeCardHands.append([i,n,m])
@@ -207,6 +217,8 @@ struct AllPossibilities {
                                         points.append(score)
                                     }
                                 }
+                            } else {
+                                break forLoop
                             }
                             
                         }
@@ -285,13 +297,14 @@ struct AllPossibilities {
         
         
         keepGoing = true
-        print("counts")
+//        print("counts")
+        print("allpossibilities")
         print(allHands.count)
         print(allHands)
-        print(points.count)
-        print(points)
-        print("deck: \(deck)")
-        print(allHands[highScoreIndex])
+//        print(points.count)
+//        print(points)
+//        print("deck: \(deck)")
+//        print(allHands[highScoreIndex])
         print(stopEverything)
         return allHands[highScoreIndex]  // what if allHands are nil and I try calling allHands[0], when using this function make sure to check for a lastscore first, if no score then there are no moves left and the allHands array is outputting [0,0]
     }

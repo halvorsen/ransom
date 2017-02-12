@@ -2,8 +2,8 @@
 
 import UIKit
 import CoreData
-//import SwiftyStoreKit
-//import StoreKit
+import SwiftyStoreKit
+import StoreKit
 
 
 class MenuViewController: UIViewController {
@@ -27,10 +27,36 @@ class MenuViewController: UIViewController {
     var fontSizeMultiplier = UIScreen.main.bounds.width / 375
     let menuX = UIButton()
     var seg = String()
-    var campaignUnlocked = false
+    var campaignUnlocked = false {didSet{print("campaignunlocked changed to: \(campaignUnlocked)")}}
     var levelsPassed = [Int]()
     let myLoadSaveCoreData = LoadSaveCoreData()
-    let myIAP = IAP()
+    let myColor = PersonalColor()
+    
+    func addButton(name: UIButton, x: CGFloat, y: CGFloat, width: CGFloat, height: CGFloat, title: String, font: String, fontSize: CGFloat, titleColor: UIColor, bgColor: UIColor, cornerRad: CGFloat, boarderW: CGFloat, boarderColor: UIColor, act:
+        Selector, addSubview: Bool) {
+        name.frame = CGRect(x: (x/750)*screenWidth, y: (y/1334)*screenHeight, width: width*screenWidth/750, height: height*screenWidth/750)
+        name.setTitle(title, for: UIControlState.normal)
+        name.titleLabel!.font = UIFont(name: font, size: fontSizeMultiplier*fontSize)
+        name.setTitleColor(titleColor, for: .normal)
+        name.backgroundColor = bgColor
+        name.layer.cornerRadius = cornerRad
+        name.layer.borderWidth = boarderW
+        name.layer.borderColor = boarderColor.cgColor
+        name.addTarget(self, action: act, for: .touchUpInside)
+        if addSubview {
+            view.addSubview(name)
+        }
+    }
+    func addLabel(name: UILabel, text: String, textColor: UIColor, textAlignment: NSTextAlignment, fontName: String, fontSize: CGFloat, x: CGFloat, y: CGFloat, width: CGFloat, height: CGFloat, lines: Int) {
+        
+        name.text = text
+        name.textColor = textColor
+        name.textAlignment = textAlignment
+        name.font = UIFont(name: fontName, size: fontSizeMultiplier*fontSize)
+        name.frame = CGRect(x: (x/750)*screenWidth, y: (y/1334)*screenHeight, width: (width/750)*screenWidth, height: (height/750)*screenWidth)
+        name.numberOfLines = lines
+        
+    }
 
     private func setUpLabelsWithCheckmarks() {
         var levelsAddressed = [Int]()
@@ -146,17 +172,15 @@ class MenuViewController: UIViewController {
             }
             
             let levelButton = UIButton()
-            switch (i-1)%5 {
+            switch (i-1)%4 {
             case 2: //red
-                levelButton.backgroundColor = UIColor(red: 170/255, green: 47/255, blue: 65/255, alpha: 1.0)
+                levelButton.backgroundColor = myColor.pink
             case 3: //light
-                levelButton.backgroundColor = UIColor(red: 229/255, green: 223/255, blue: 197/255, alpha: 1.0)
+                levelButton.backgroundColor = myColor.yellow
             case 0: //light
-                levelButton.backgroundColor = UIColor(red: 229/255, green: 223/255, blue: 197/255, alpha: 1.0)
+                levelButton.backgroundColor = myColor.blue
             case 1: //teal
-                levelButton.backgroundColor = UIColor(red: 144/255, green: 199/255, blue: 168/255, alpha: 1.0)
-            case 4: //red
-                levelButton.backgroundColor = UIColor(red: 170/255, green: 47/255, blue: 65/255, alpha: 1.0)
+                levelButton.backgroundColor = myColor.white
             default:
                 break
             }
@@ -167,7 +191,7 @@ class MenuViewController: UIViewController {
             self.view.addSubview(levelButton)
             levelButton.setTitle(String(n[i-1]), for: UIControlState.normal)
             levelButton.titleLabel!.font = UIFont(name: "HelveticaNeue-Bold", size: fontSizeMultiplier*18)
-            levelButton.setTitleColor(UIColor(red: 42/255, green: 42/255, blue: 42/255, alpha: 1.0), for: .normal)
+            levelButton.setTitleColor(myColor.background, for: .normal)
             levelButton.tag = n[i-1]
             levelButton.addTarget(self, action: #selector(MenuViewController.levels(_:)), for: .touchUpInside)
             levelButtons.append(levelButton)
@@ -181,16 +205,17 @@ class MenuViewController: UIViewController {
         //top add more levels labels
         let menuHeader1 = UILabel()
         menuHeader1.text = "More Levels Super Soon"
-        menuHeader1.textColor = UIColor(red: 229/255, green: 223/255, blue: 197/255, alpha: 1.0)
+        menuHeader1.textColor = myColor.offWhite
         menuHeader1.textAlignment = NSTextAlignment.right
         menuHeader1.font = UIFont(name: "HelveticaNeue-Bold", size: fontSizeMultiplier*15)
-        menuHeader1.backgroundColor = UIColor(red: 42/255, green: 42/255, blue: 42/255, alpha: 1.0)
+        menuHeader1.backgroundColor = myColor.background
         menuHeader1.frame = CGRect(x: screenWidth/2, y: 0, width: screenWidth/2.1, height: (40/750)*screenWidth)
         view.addSubview(menuHeader1)
         
         
         //bottom dude image
-        let image = UIImage(named: "Icon.png")
+        let image = UIImage(named: "menuIcon.png")
+        
         let imageView = UIImageView(image: image)
         imageView.frame = CGRect(x: 0.28*screenWidth, y: 43.15*verticalSpacing + header, width: 0.93*screenWidth/2, height: 0.6205*screenWidth)
         view.addSubview(imageView)
@@ -198,7 +223,7 @@ class MenuViewController: UIViewController {
         menuX.frame = CGRect(x: (25/750)*screenWidth, y: (25/750)*screenWidth, width: 50*screenWidth/750, height: 50*screenWidth/750)
         menuX.setTitle("X", for: UIControlState.normal)
         menuX.titleLabel!.font = UIFont(name: "HelveticaNeue-Bold", size: fontSizeMultiplier*30)
-        menuX.setTitleColor(UIColor(red: 229/255, green: 223/255, blue: 197/255, alpha: 1.0), for: .normal)
+        menuX.setTitleColor(myColor.offWhite, for: .normal)
         menuX.addTarget(self, action: #selector(MenuViewController.menuX(_:)), for: .touchUpInside)
         self.view.addSubview(menuX)
         
@@ -207,7 +232,7 @@ class MenuViewController: UIViewController {
         
     }
     override func viewDidAppear(_ animated: Bool) {
-        
+        UIView.animate(withDuration: 0.1) {self.scrollView.alpha = 0.9}
     }
     
     override func viewDidLoad() {
@@ -215,7 +240,7 @@ class MenuViewController: UIViewController {
         
         self.view = self.scrollView
         self.scrollView.contentSize = CGSize(width: screenWidth, height: (6000/750)*screenWidth)
-        self.scrollView.backgroundColor = UIColor(red: 42/255, green: 42/255, blue: 42/255, alpha: 1.0)
+        self.scrollView.backgroundColor = myColor.background
         
         let point = CGPoint(x: 0.0, y: yScrollCenterLocation)
         self.scrollView.setContentOffset(point, animated: false)
@@ -271,11 +296,48 @@ class MenuViewController: UIViewController {
             seg = "game"
             self.performSegue(withIdentifier: "fromMenuToGame", sender: self)
         } else if !campaignUnlocked {
-            campaignUnlocked = myIAP.purchase(productId: "ransom.iap.campaign")
+            prepareForPurchase(productId: "ransom.iap.campaign")
         } else {
             sender.setTitle("locked", for: UIControlState.normal)
         }
     }
+    
+    var backBlack = UILabel()
+    var purcha = UIButton()
+    var message = UILabel()
+    var tru = UIButton()
+
+    func prepareForPurchase(productId: String) {
+        backBlack.backgroundColor = myColor.background
+        backBlack.alpha = 0.9
+        backBlack.frame = CGRect(x: 0, y: 0, width: screenWidth, height: (6000/750)*screenWidth)
+        view.addSubview(backBlack)
+        view.bringSubview(toFront: backBlack)
+        addButton(name: tru, x: 59, y: 5127, width: 633, height: 85, title: "Try Other Modes", font: "HelveticaNeue-Bold", fontSize: 30, titleColor: myColor.offWhite, bgColor: .clear, cornerRad: 5, boarderW: 1, boarderColor: myColor.offWhite, act: #selector(MenuViewController.tru(_:)), addSubview: true)
+        addButton(name: purcha, x: 59, y: 4989, width: 633, height: 85, title: "Purchase", font: "HelveticaNeue-Bold", fontSize: 30, titleColor: myColor.offWhite, bgColor: .clear, cornerRad: 5, boarderW: 1, boarderColor: myColor.offWhite, act: #selector(MenuViewController.purch(_:)), addSubview: true)
+        addLabel(name: message, text: "Campaign Mode Trial Over\n Purchase for $0.99 or\n Try other game modes for free", textColor: myColor.offWhite, textAlignment: .center, fontName: "HelveticaNeue-Bold", fontSize: 18, x: 100, y: 4726, width: 550, height: 200, lines: 0)
+        view.addSubview(message)
+        
+  
+    }
+    @objc private func tru(_ button: UIButton) {
+    self.performSegue(withIdentifier: "fromMenuToIntro", sender: self)
+    }
+    let progressHUD = ProgressHUD(text: "Loading")
+    @objc private func purch(_ button: UIButton) {
+       // progressHUD.activityIndictor.frame.origin.y = 5100*screenHeight/1334
+        
+        self.view.addSubview(progressHUD)
+        backBlack.removeFromSuperview()
+        tru.removeFromSuperview()
+        purcha.removeFromSuperview()
+        message.removeFromSuperview()
+        
+
+        purchase(productId: "ransom.iap.campaign")
+        print("campaignUnlocked Bool: \(campaignUnlocked)")
+    }
+
     
     
     func unlockLevel() -> Int {
@@ -300,5 +362,30 @@ class MenuViewController: UIViewController {
         self.performSegue(withIdentifier: "fromMenuToIntro", sender: self)
     }
     
+    func purchase(productId: String) {
+        print("enter")
+        var purchasebool = false
+        
+        SwiftyStoreKit.purchaseProduct(productId) { result in
+            switch result {
+            case .success( _):
+                print("enter1")
+                if productId == "ransom.iap.campaign" {
+                    self.myLoadSaveCoreData.savePurchase(purchase: "campaign")
+                    self.campaignUnlocked = true
+                    print("enter2")
+                   self.progressHUD.removeFromSuperview()
+                }
+                
+                
+            case .error(let error):
+                print("error: \(error)")
+                print("Purchase Failed: \(error)")
+                print("enter5")
+                self.progressHUD.removeFromSuperview()
+            }
+        }
+        print("enter5")
+    }
     
 }
