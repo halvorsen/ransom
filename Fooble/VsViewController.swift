@@ -18,10 +18,7 @@ class VsViewController: UIViewController {
     var panTouchLocation = CGPoint()
     var locationOfBeganPan = CGPoint()
     var locationOfEndPan = CGPoint()
-    let screenWidth = UIScreen.main.bounds.width
-    let screenHeight = UIScreen.main.bounds.height
-    var fontSizeMultiplier = UIScreen.main.bounds.width / 375
-    let topMargin = (269/1332)*UIScreen.main.bounds.height
+
     var frontMargin = CGFloat()//(35/750)*screenWidth
     var annotations = [UILabel]()
     var goalScoreInt = Int() {didSet{goalScoreString = String(goalScoreInt)}}

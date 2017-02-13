@@ -9,10 +9,7 @@ import UIKit
 import GCHelper
 
 class GameViewController: UIViewController {
-    let screenWidth = UIScreen.main.bounds.width
-    let screenHeight = UIScreen.main.bounds.height
-    var fontSizeMultiplier = UIScreen.main.bounds.width / 375
-    let topMargin = (269/1332)*UIScreen.main.bounds.height
+    
     var seg = "nothing"
     var center = Int()
     var centerPoint = CGPoint()

@@ -23,9 +23,6 @@ class IntroViewController: UIViewController {
     var restore = UIButton()
     var playerVsPlayer = UIButton()
     var aI = UIButton()
-    let screenWidth = UIScreen.main.bounds.width
-    let screenHeight = UIScreen.main.bounds.height
-    var fontSizeMultiplier = UIScreen.main.bounds.width / 375
     var seg = String()
     var tagLevelIdentifier = Int()
     var triedSolo = false

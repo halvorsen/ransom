@@ -18,13 +18,12 @@ class MenuViewController: UIViewController {
     let scrollView = UIScrollView(frame: UIScreen.main.bounds)
     var levelButtons = [UIButton]()
     var tagLevelIdentifier = Int()
-    let screenWidth = UIScreen.main.bounds.width
-    let screenHeight = UIScreen.main.bounds.height
+
     var yScrollCenterLocation: CGFloat = 3000*UIScreen.main.bounds.height/600
     let header = 326*UIScreen.main.bounds.width/750
     let verticalSpacing = (120/750)*(UIScreen.main.bounds.width)
     var isFirstLoadView = true
-    var fontSizeMultiplier = UIScreen.main.bounds.width / 375
+
     let menuX = UIButton()
     var seg = String()
     var campaignUnlocked = false {didSet{print("campaignunlocked changed to: \(campaignUnlocked)")}}
