@@ -654,7 +654,7 @@ class VsViewController: GameSetupViewController {
                         aISequence()
                     }
                 } else {
-                    thisTurn = .yellow //change to .red if you want two turns per player
+                    thisTurn = .red //change to .red if you want two turns per player
                     twoTurnsAgo = .yellow
                 }
                 
@@ -679,7 +679,7 @@ class VsViewController: GameSetupViewController {
                     
                     twoTurnsAgo = .yellow
                 } else {
-                    thisTurn = .red //change to .yellow if you want two turns per player
+                    thisTurn = .yellow //change to .yellow if you want two turns per player
                     twoTurnsAgo = .red
                     if tagLevelIdentifier == 1000 {
                         aISequence()

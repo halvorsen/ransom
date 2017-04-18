@@ -410,7 +410,7 @@ class GameViewController: GameSetupViewController {
         if array.contains(tagLevelIdentifier) {
             let image = UIImage(named: "Princess.png")
             let imageView = UIImageView(image: image)
-            imageView.frame = CGRect(x: 0.18*screenWidth, y: (300/1334)*screenHeight, width: 0.6205*screenWidth, height: 0.6205*screenWidth)
+            imageView.frame = CGRect(x: screenWidth/4, y: (300/1334)*screenHeight, width: screenWidth/2, height: screenWidth/2)
             view.addSubview(imageView)
             imageViewGlobal = imageView
             finishMessage.frame.origin.y += (200/1334)*screenHeight
