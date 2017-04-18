@@ -11,18 +11,6 @@ import Foundation
 class ShuffleAndDeal {
     
     
-    
-    //    func newDeckOrderLeftDrop((handIndexes: [Int], currentDeck: [Int?]) -> [Int] {
-    //
-    //    }
-    //    func newDeckOrderRightDrop((handIndexes: [Int], currentDeck: [Int?]) -> [Int] {
-    //
-    //    }
-    //
-    
-    
-    
-    
     var shuffledDeck = [Int]()
     
     // non-vs matches play with 2 decks of 40 dots (4 colors with 10 numbers per color). vs matches need more dots because there is a continuous feed of them so 4 decks are used. red green blue yellow 0-9 are ordered to form index integer identifier for decks 1,2,3,4. e.g. red number 0 from deck 1 is index identifier "0" and green number 1 from deck 1 is index identifier "11", yellow 9 from deck 1 is index identifier 39, red number 0 from deck 2 is index identifier 40 [index identifier == card, ie card number 65, 101, 5...].

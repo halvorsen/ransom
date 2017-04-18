@@ -4,7 +4,7 @@
 //
 //  Created by Aaron Halvorsen on 1/4/17.
 //  Copyright © 2017 Aaron Halvorsen. All rights reserved.
-//
+// This struct scans the game for all possible moves to assist Ai in vs mode and to determine if the game has exhausted it's moves
 
 import Foundation
 
@@ -19,12 +19,6 @@ struct AllPossibilities {
     var lastScore: Int? = 0
     var handScore: Int?
     var stopEverything = true
-    
-    
-    //    mutating func calculateNumberOfMovesLeft(deck: [Int?]) -> Int {
-    //
-    //    }
-    
     
     mutating func calculateBestHandIndexes(deck: [Int?]) -> [Int] {
         var nextIndexes = [Int]()

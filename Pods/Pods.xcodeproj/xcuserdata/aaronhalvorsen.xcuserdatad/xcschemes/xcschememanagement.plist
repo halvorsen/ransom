@@ -9,6 +9,11 @@
 			<key>isShown</key>
 			<false/>
 		</dict>
+		<key>Intro.xcscheme</key>
+		<dict>
+			<key>isShown</key>
+			<false/>
+		</dict>
 		<key>Pods-Fooble.xcscheme</key>
 		<dict>
 			<key>isShown</key>
@@ -22,17 +27,22 @@
 	</dict>
 	<key>SuppressBuildableAutocreation</key>
 	<dict>
-		<key>0AC340A0EB917FE10B1676FE83D0CC8D</key>
+		<key>409D346B64E1A0085493D71B8EEC1FB5</key>
 		<dict>
 			<key>primary</key>
 			<true/>
 		</dict>
-		<key>EA8C015C8B8D7B8C8443F24B9CF01B5A</key>
+		<key>E8998FF443C3EC60FF3C0E3EB23175B2</key>
 		<dict>
 			<key>primary</key>
 			<true/>
 		</dict>
 		<key>FA4A8A52A244CA0C34968D86876C9E35</key>
+		<dict>
+			<key>primary</key>
+			<true/>
+		</dict>
+		<key>FA8338E1F6BE8A04CAD13C4F237AFBA7</key>
 		<dict>
 			<key>primary</key>
 			<true/>

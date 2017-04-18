@@ -7,6 +7,7 @@ target 'Fooble' do
 
   pod 'SwiftyStoreKit'
   pod 'GCHelper', '~> 0.3'
+  pod 'Intro'
 
   # Pods for Fooble
 

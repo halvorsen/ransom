@@ -138,7 +138,7 @@ class MenuViewController: UIViewController {
         
         let princessImage = UIImage(named: "Princess.png")
         let princessView = UIImageView(image: princessImage)
-        princessView.frame = CGRect(x: (410/750)*screenWidth, y: header - (236/750)*screenWidth, width: 263*screenWidth/750, height: 242*screenWidth/750)
+        princessView.frame = CGRect(x: (450/750)*screenWidth, y: header - (265/750)*screenWidth, width: 263*screenWidth/750, height: 242*screenWidth/750)
         self.view.addSubview(princessView)
         
         var n = [Int]()
@@ -215,24 +215,77 @@ class MenuViewController: UIViewController {
         //bottom dude image
         let image = UIImage(named: "menuIcon.png")
         
-        let imageView = UIImageView(image: image)
-        imageView.frame = CGRect(x: 0.28*screenWidth, y: 43.15*verticalSpacing + header, width: 0.93*screenWidth/2, height: 0.6205*screenWidth)
+        imageView = UIImageView(image: image)
+        imageView.frame = CGRect(x: 0.28*screenWidth, y: 43.15*verticalSpacing + header, width: 0.93*screenWidth/2, height: 0.93*screenWidth/2)
         view.addSubview(imageView)
         imageViewArray.append(imageView)
-        menuX.frame = CGRect(x: (25/750)*screenWidth, y: (25/750)*screenWidth, width: 50*screenWidth/750, height: 50*screenWidth/750)
-        menuX.setTitle("X", for: UIControlState.normal)
+        //imageView.isUserInteractionEnabled = true
+        let tap = UITapGestureRecognizer(target: self, action: #selector(MenuViewController.punchGhost(_:)))
+        view.addGestureRecognizer(tap)
+        menuX.frame = CGRect(x: (0/750)*screenWidth, y: (0/750)*screenWidth, width: 116*screenWidth/750, height: 122*screenWidth/750)
+        menuX.setTitle("", for: UIControlState.normal)
         menuX.titleLabel!.font = UIFont(name: "HelveticaNeue-Bold", size: fontSizeMultiplier*30)
         menuX.setTitleColor(myColor.offWhite, for: .normal)
         menuX.addTarget(self, action: #selector(MenuViewController.menuX(_:)), for: .touchUpInside)
         self.view.addSubview(menuX)
+        menuX.setImage(#imageLiteral(resourceName: "menu215"), for: .normal)
         
         
         
         
     }
+    @objc private func punchGhost(_ gesture: UIGestureRecognizer) {
+        if imageView.frame.contains(gesture.location(in: view)) {  //gesture.location(in: view)
+        imageView.image = #imageLiteral(resourceName: "ghostHurt")
+        }
+    }
+    var imageView = UIImageView()
     override func viewDidAppear(_ animated: Bool) {
         UIView.animate(withDuration: 0.1) {self.scrollView.alpha = 0.9}
+        ghostAnimation()
+        _ = Timer.scheduledTimer(timeInterval: 1.5, target: self, selector: #selector(MenuViewController.ghostAnimation), userInfo: nil, repeats: true)
     }
+    
+    @objc private func ghostAnimation() {
+        let rz = drand48()
+        if rz > 0.95 {
+            wink()
+        }
+        if rz < 0.1 {
+            blink()
+        }
+        
+        let rx = drand48()
+        let ry = drand48()
+        let x = 4*screenWidth*CGFloat(rx)/5  - screenWidth/6
+        let y = 4.3*screenHeight - screenHeight*CGFloat(ry)/4
+                UIView.animate(withDuration: 8.0) {
+        self.imageView.frame.origin = CGPoint(x: x, y: y)
+        }
+    }
+    
+    private func wink() {
+        imageView.image = #imageLiteral(resourceName: "ghostWink")
+        delay(bySeconds: 0.7) {
+            self.imageView.image = #imageLiteral(resourceName: "menuIcon")
+        }
+        
+    }
+    
+    private func blink() {
+        imageView.image = #imageLiteral(resourceName: "ghostBlink")
+        delay(bySeconds: 0.2) {
+            self.imageView.image = #imageLiteral(resourceName: "menuIcon")
+            delay(bySeconds: 0.5) {
+                self.imageView.image = #imageLiteral(resourceName: "ghostBlink")
+                delay(bySeconds: 0.2) {
+                    self.imageView.image = #imageLiteral(resourceName: "menuIcon")
+                    
+                }
+            }
+        }
+    }
+    
     
     override func viewDidLoad() {
         
@@ -362,9 +415,6 @@ class MenuViewController: UIViewController {
     }
     
     func purchase(productId: String) {
-        print("enter")
-        var purchasebool = false
-        
         SwiftyStoreKit.purchaseProduct(productId) { result in
             switch result {
             case .success( _):

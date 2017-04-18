@@ -4,30 +4,22 @@
 //
 //  Created by Aaron Halvorsen on 1/2/17.
 //  Copyright © 2017 Aaron Halvorsen. All rights reserved.
-//
+//  campaign mode has a hero narrative. later version maybe once the quote is unlocked it can be easily accessable
 
 import Foundation
 
 struct Narrative {
     
     
-    let finishMessages = ["I let her go to find my own way, to become something. I was a fool.",
+    let finishMessages = ["I'll stump you next time!",
                           "Level Complete!",
                           "Level Complete!",
-                          "Why risk my life for her? You've never heard her voice you've never seen her. You couldn't know.",
-                          "Level Complete!",
-                          "Level Complete!",
-                          "Level Complete!",
-                          "Level Complete!",
-                          "Her world was not safe, I did not know nor could I have changed it",
+                          "I'll stump you next time!",
                           "Level Complete!",
                           "Level Complete!",
                           "Level Complete!",
                           "Level Complete!",
-                          "Level Complete!",
-                          "Level Complete!",
-                          "Level Complete!",
-                          "Regret, fear, hopelessness: only shadows to find my light.",
+                          "I'll stump you next time!",
                           "Level Complete!",
                           "Level Complete!",
                           "Level Complete!",
@@ -35,7 +27,7 @@ struct Narrative {
                           "Level Complete!",
                           "Level Complete!",
                           "Level Complete!",
-                          "She sang colors into my blind eyes. Now the darkness has her, so darkness will be my covering.",
+                          "I'll stump you next time!",
                           "Level Complete!",
                           "Level Complete!",
                           "Level Complete!",
@@ -43,16 +35,24 @@ struct Narrative {
                           "Level Complete!",
                           "Level Complete!",
                           "Level Complete!",
-                          "Her cry came before me, into my ears. The earth trembled because I was angry.",
+                          "I'll stump you next time!",
                           "Level Complete!",
                           "Level Complete!",
                           "Level Complete!",
-                          "With flaming arrows and sword I will scatter all who stand against me.",
                           "Level Complete!",
                           "Level Complete!",
-                          "Love binds the rescuer to a ransom of death and destruction, a love that destroys evil.",
-                          "I raised my spear against eight hundred men, whom I killed in one encounter.",
-                          "I buy her back with their lives, nearly dead myself, I make my way to her cell, something is wrong",
-                          "She was not there, I was too late...that's why we stand here today-to pay a final ransom....."]
+                          "Level Complete!",
+                          "Level Complete!",
+                          "I'll stump you next time!",
+                          "Level Complete!",
+                          "Level Complete!",
+                          "Level Complete!",
+                          "I'll stump you next time!",
+                          "Level Complete!",
+                          "Level Complete!",
+                          "I'll stump you next time!",
+                          "I'll stump you next time!",
+                          "I'll stump you next time!",
+                          "I'll stump you next time!"]
     
 }

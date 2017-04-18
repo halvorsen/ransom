@@ -19,14 +19,13 @@
 		068866581E0DB76D005B2577 /* Fooble.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = 068866561E0DB76D005B2577 /* Fooble.xcdatamodeld */; };
 		0688665A1E0DB76D005B2577 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 068866591E0DB76D005B2577 /* Assets.xcassets */; };
 		0688665D1E0DB76D005B2577 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 0688665B1E0DB76D005B2577 /* LaunchScreen.storyboard */; };
-		069FD1141E5216A7003BDFE2 /* ExtensionUIViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 069FD1131E5216A7003BDFE2 /* ExtensionUIViewController.swift */; };
+		069FD1141E5216A7003BDFE2 /* GameSetupViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 069FD1131E5216A7003BDFE2 /* GameSetupViewController.swift */; };
 		06AF4F2B1E1ACE95009AE9ED /* Narrative.swift in Sources */ = {isa = PBXBuildFile; fileRef = 06AF4F2A1E1ACE95009AE9ED /* Narrative.swift */; };
 		06AF4F2D1E1C7D23009AE9ED /* VsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 06AF4F2C1E1C7D23009AE9ED /* VsViewController.swift */; };
-		06AF4F2F1E1DBFAB009AE9ED /* IAP.swift in Sources */ = {isa = PBXBuildFile; fileRef = 06AF4F2E1E1DBFAB009AE9ED /* IAP.swift */; };
 		06AF4F311E1DC00B009AE9ED /* GameCenter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 06AF4F301E1DC00B009AE9ED /* GameCenter.swift */; };
 		06AF4F331E1DC083009AE9ED /* LoadSaveCoreData.swift in Sources */ = {isa = PBXBuildFile; fileRef = 06AF4F321E1DC083009AE9ED /* LoadSaveCoreData.swift */; };
 		06CEEA9D1E1DF8AD001B0208 /* AllPossibilities.swift in Sources */ = {isa = PBXBuildFile; fileRef = 06CEEA9C1E1DF8AD001B0208 /* AllPossibilities.swift */; };
-		06F7AB1A1E157BE900A929DE /* IntroViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 06F7AB191E157BE900A929DE /* IntroViewController.swift */; };
+		06F7AB1A1E157BE900A929DE /* IntroVController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 06F7AB191E157BE900A929DE /* IntroVController.swift */; };
 		3A2972A09CB08FD7737D3A1C /* Pods_Fooble.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 164F7FE665D9EB981DE315CE /* Pods_Fooble.framework */; };
 /* End PBXBuildFile section */
 
@@ -45,14 +44,13 @@
 		068866591E0DB76D005B2577 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		0688665C1E0DB76D005B2577 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		0688665E1E0DB76D005B2577 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
-		069FD1131E5216A7003BDFE2 /* ExtensionUIViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ExtensionUIViewController.swift; sourceTree = "<group>"; };
+		069FD1131E5216A7003BDFE2 /* GameSetupViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = GameSetupViewController.swift; sourceTree = "<group>"; };
 		06AF4F2A1E1ACE95009AE9ED /* Narrative.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Narrative.swift; sourceTree = "<group>"; };
 		06AF4F2C1E1C7D23009AE9ED /* VsViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = VsViewController.swift; sourceTree = "<group>"; };
-		06AF4F2E1E1DBFAB009AE9ED /* IAP.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = IAP.swift; sourceTree = "<group>"; };
 		06AF4F301E1DC00B009AE9ED /* GameCenter.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = GameCenter.swift; sourceTree = "<group>"; };
 		06AF4F321E1DC083009AE9ED /* LoadSaveCoreData.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = LoadSaveCoreData.swift; sourceTree = "<group>"; };
 		06CEEA9C1E1DF8AD001B0208 /* AllPossibilities.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AllPossibilities.swift; sourceTree = "<group>"; };
-		06F7AB191E157BE900A929DE /* IntroViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = IntroViewController.swift; sourceTree = "<group>"; };
+		06F7AB191E157BE900A929DE /* IntroVController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = IntroVController.swift; sourceTree = "<group>"; };
 		164F7FE665D9EB981DE315CE /* Pods_Fooble.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_Fooble.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		2B83308E59A05CF00C5C3204 /* Pods-Fooble.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Fooble.debug.xcconfig"; path = "Pods/Target Support Files/Pods-Fooble/Pods-Fooble.debug.xcconfig"; sourceTree = "<group>"; };
 		CA73960F58164E136E91A055 /* Pods-Fooble.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Fooble.release.xcconfig"; path = "Pods/Target Support Files/Pods-Fooble/Pods-Fooble.release.xcconfig"; sourceTree = "<group>"; };
@@ -94,7 +92,7 @@
 			children = (
 				0688664F1E0DB76C005B2577 /* AppDelegate.swift */,
 				068866511E0DB76C005B2577 /* MenuViewController.swift */,
-				069FD1131E5216A7003BDFE2 /* ExtensionUIViewController.swift */,
+				069FD1131E5216A7003BDFE2 /* GameSetupViewController.swift */,
 				061BA5D81E14BA56003EA7E1 /* GameViewController.swift */,
 				06AF4F2C1E1C7D23009AE9ED /* VsViewController.swift */,
 				06CEEA9C1E1DF8AD001B0208 /* AllPossibilities.swift */,
@@ -102,9 +100,8 @@
 				061F8FB81E184E0200970955 /* Calculator.swift */,
 				061F8FB61E17F27C00970955 /* Selection.swift */,
 				068866531E0DB76C005B2577 /* Main.storyboard */,
-				06F7AB191E157BE900A929DE /* IntroViewController.swift */,
+				06F7AB191E157BE900A929DE /* IntroVController.swift */,
 				061F8FB41E16B46B00970955 /* ShuffleAndDeal.swift */,
-				06AF4F2E1E1DBFAB009AE9ED /* IAP.swift */,
 				06AF4F301E1DC00B009AE9ED /* GameCenter.swift */,
 				06AF4F321E1DC083009AE9ED /* LoadSaveCoreData.swift */,
 				068866591E0DB76D005B2577 /* Assets.xcassets */,
@@ -267,11 +264,10 @@
 				061F8FB71E17F27C00970955 /* Selection.swift in Sources */,
 				060580231E4978320079ACC3 /* MyVars.swift in Sources */,
 				06AF4F311E1DC00B009AE9ED /* GameCenter.swift in Sources */,
-				069FD1141E5216A7003BDFE2 /* ExtensionUIViewController.swift in Sources */,
-				06F7AB1A1E157BE900A929DE /* IntroViewController.swift in Sources */,
+				069FD1141E5216A7003BDFE2 /* GameSetupViewController.swift in Sources */,
+				06F7AB1A1E157BE900A929DE /* IntroVController.swift in Sources */,
 				06AF4F331E1DC083009AE9ED /* LoadSaveCoreData.swift in Sources */,
 				06AF4F2D1E1C7D23009AE9ED /* VsViewController.swift in Sources */,
-				06AF4F2F1E1DBFAB009AE9ED /* IAP.swift in Sources */,
 				061BA5D91E14BA56003EA7E1 /* GameViewController.swift in Sources */,
 				068866521E0DB76C005B2577 /* MenuViewController.swift in Sources */,
 				068866501E0DB76C005B2577 /* AppDelegate.swift in Sources */,

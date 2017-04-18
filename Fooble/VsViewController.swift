@@ -9,73 +9,10 @@
 import UIKit
 import AudioToolbox
 
-class VsViewController: UIViewController {
+class VsViewController: GameSetupViewController {
     
     var a = [Int]()
     var p = Int()
-    var center = Int()
-    var centerPoint = CGPoint()
-    var panTouchLocation = CGPoint()
-    var locationOfBeganPan = CGPoint()
-    var locationOfEndPan = CGPoint()
-
-    var frontMargin = CGFloat()//(35/750)*screenWidth
-    var annotations = [UILabel]()
-    var goalScoreInt = Int() {didSet{goalScoreString = String(goalScoreInt)}}
-    var goalScoreString = String()
-    var currentScoreString = String()
-    var currentScoreInt = Int() {didSet{currentScoreString = String(currentScoreInt)}}
-    let dotSize = (1/16)*UIScreen.main.bounds.width
-    let exit = UIButton()
-    
-    let scoreFlash = UILabel()
-    var displayLayers = [CAShapeLayer]()
-    var shapeLayers = [CAShapeLayer?]()
-    var shapeLayers2 = [CAShapeLayer]()
-    var yellowPointsInt = Int() {didSet{yellowPointsString = String(yellowPointsInt)}}
-    var yellowPointsString = "Score"
-    var redPointsInt = Int() {didSet{redPointsString = String(redPointsInt)}}
-    var redPointsString = "Score"
-    let sequence = UIButton()
-    let sequences = UILabel()
-    let back = UIButton()
-    let exitSequences = UIButton()
-    let showList = UIButton()
-    let yellowScore = UILabel()
-    let redScore = UILabel()
-    var hintDisplay = [CAShapeLayer]()
-    var hintNumbersAsStrings = [String]()
-    var hintNumberLabels = [UILabel]()
-    var tagLevelIdentifier = Int()
-    let menuX = UIButton()
-    let menuX2 = UIButton()
-    let menuBox = UIButton()
-    let sequenceRowOne = UILabel()
-    let sequenceRowTwo = UILabel()
-    let dotNumbersAsStrings = [String]()
-    var dotLabels = [UILabel?]()
-    var displayLabels = [UILabel]()
-    var additionalScoreString: String = "0"
-    var additionalScoreInt = Int() {didSet{additionalScoreString = String(additionalScoreInt)}}
-    var deck = [Int?]()
-    var myShuffleAndDeal = ShuffleAndDeal()
-    let mySelection = Selection()
-    let myCalculator = Calculator()
-    let myNarrative = Narrative()
-    let myLoadSaveCoreData = LoadSaveCoreData()
-    var myAllPossibilities = AllPossibilities()
-    var count: Int = 0
-    var lastCardDisplayed = Int()
-    var firstIndexDisplayed = Int()
-    var hand = [Int]()
-    var handIndexes = [Int]()
-    var additionalPoints = Int()
-    var trackerSum: Int = 0
-    var trackerSumPrior: Int = 0
-    var iReverse = [Int]()
-    var isDropInProgress = false
-    var bool = true
-    var backBlack = UILabel()
     var futureIndexes = [Int]()
     var priorIndex = Int()
     var lastIndex = Int()
@@ -91,16 +28,16 @@ class VsViewController: UIViewController {
     var swipeLeft = UISwipeGestureRecognizer()
     var swipeRight = UISwipeGestureRecognizer()
     var swipeDown = UISwipeGestureRecognizer()
-    var pan = UIPanGestureRecognizer()
-    var imageView = UIImageView()
     var dynamicBarCue = Timer()
     var ticker: Float = 0.0 //{didSet { print(ticker)}}
     var percentageOfBar: CGFloat = 1.0
-    var shuffled = [Int]()
-    var allNumbers = [Int]()
     var test = false
     var timerRanOutOn: Team = .red
-    let myColor = PersonalColor()
+    var yellowPointsInt = Int() {didSet{yellowPointsString = String(yellowPointsInt)}}
+    var yellowPointsString = "Score"
+    var redPointsInt = Int() {didSet{redPointsString = String(redPointsInt)}}
+    var redPointsString = "Score"
+   
     
     override var prefersStatusBarHidden: Bool {
         return true
@@ -120,7 +57,7 @@ class VsViewController: UIViewController {
             iReverse.append(59-i)
             
         }
-        
+        addLabels()
         addButtons()
         view.addSubview(redScore)
         view.addSubview(yellowScore)
@@ -137,10 +74,14 @@ class VsViewController: UIViewController {
         deck = shuffled
         lastCardDisplayed = 999
         populateDots()
+        
         view.addSubview(menuX)
         
         
         
+    }
+    override func viewWillAppear(_ animated: Bool) {
+        populateDotsExtended()
     }
     
     override func viewDidAppear(_ animated: Bool) {
@@ -175,35 +116,9 @@ class VsViewController: UIViewController {
         swipeDown.direction = UISwipeGestureRecognizerDirection.down
     }
     
-    
-    private func populateDots() {
-        lastCardDisplayed = 999
-        for i in 0..<67 {
-            switch myShuffleAndDeal.whatColorIsCard(card: deck[i]!) {
-            case .custom1:
-                shapeLayers[i]!.strokeColor = myColor.pink.cgColor
-                
-            case .custom2:
-                shapeLayers[i]!.strokeColor = myColor.yellow.cgColor
-                
-            case .custom3:
-                shapeLayers[i]!.strokeColor = myColor.blue.cgColor
-                
-            case .custom4:
-                shapeLayers[i]!.strokeColor = myColor.white.cgColor
-                
-            }
-            let linewidth = 2.0*screenWidth/750
-            shapeLayers[i]!.lineWidth = linewidth
-            dotLabels[i]!.text = String(deck[i]!%7 + 1)
-            view.layer.addSublayer(shapeLayers[i]!)
-            self.view.addSubview(dotLabels[i]!)
-        }
-        
+    private func populateDotsExtended() {
         view.addSubview(menuX)
-        
     }
-    
     
     
     @objc func respondToPanGesture(_ gesture: UIPanGestureRecognizer) {
@@ -481,10 +396,7 @@ class VsViewController: UIViewController {
         }
         
     }
-    public func delay(bySeconds seconds: Double, dispatchLevel: DispatchLevel = .main, closure: @escaping () -> Void) {
-        let dispatchTime = DispatchTime.now() + seconds
-        dispatchLevel.dispatchQueue.asyncAfter(deadline: dispatchTime, execute: closure)
-    }
+
     @objc private func respondToSwipeRight() {
         for i in handIndexes {shapeLayers[i] = nil}  /// this is new
         print("swipeRightfunc")
@@ -528,23 +440,27 @@ class VsViewController: UIViewController {
             extraDots.remove(at:0)
             switch myShuffleAndDeal.whatColorIsCard(card: deck[a[i]]!) {
             case .custom1:
-                shapeLayers[a[i]]!.strokeColor = myColor.pink.cgColor
+                dotLabels[a[i]]?.layer.borderColor = myColor.pink.cgColor
+           //     shapeLayers[a[i]]!.strokeColor = myColor.pink.cgColor
                 delay(bySeconds: 1.0, closure: {self.view.layer.addSublayer(self.shapeLayers[self.a[i]]!)})
                 
                 
             case .custom2:
-                shapeLayers[a[i]]!.strokeColor =  myColor.yellow.cgColor
+                dotLabels[a[i]]?.layer.borderColor = myColor.yellow.cgColor
+            //    shapeLayers[a[i]]!.strokeColor =  myColor.yellow.cgColor
                 delay(bySeconds: 1.0, closure: {self.view.layer.addSublayer(self.shapeLayers[self.a[i]]!)})
                 
                 
             case .custom3:
-                shapeLayers[a[i]]!.strokeColor =  myColor.blue.cgColor
+                dotLabels[a[i]]?.layer.borderColor = myColor.blue.cgColor
+             //   shapeLayers[a[i]]!.strokeColor =  myColor.blue.cgColor
                 delay(bySeconds: 1.0, closure: {self.view.layer.addSublayer(self.shapeLayers[self.a[i]]!)})
                 
                 
             case .custom4:
-                shapeLayers[a[i]]!.strokeColor = myColor.white.cgColor
-                delay(bySeconds: 1.0, closure: {self.view.layer.addSublayer(self.shapeLayers[self.a[i]]!)})
+                dotLabels[a[i]]?.layer.borderColor = myColor.white.cgColor
+           //     shapeLayers[a[i]]!.strokeColor = myColor.white.cgColor
+           //     delay(bySeconds: 1.0, closure: {self.view.layer.addSublayer(self.shapeLayers[self.a[i]]!)})
                 
                 
             }
@@ -577,124 +493,8 @@ class VsViewController: UIViewController {
         }
     }
     
-    private func dropLeft(currentDeck: [Int?]) {
-        print("dropleftfunc")
-        while isDropInProgress {
-            
-        }
-        isDropInProgress = true
-        delay(bySeconds: 0.2) { while self.trackerSum != self.trackerSumPrior || self.bool {
-            
-            self.trackerSumPrior = self.trackerSum
-            //
-            for i in self.iReverse {
-                
-                if i != 7 && i != 22 && i != 37 && i != 52 {
-                    
-                    if self.deck[i] != nil {
-                        
-                        if self.deck[i+7] == nil {
-                            UIView.animate(withDuration: 0.17, animations: {
-                                self.dotLabels[i]!.frame.origin.x -= self.dotSize
-                            })
-                            UIView.animate(withDuration: 0.17, animations: {
-                                self.dotLabels[i]!.frame.origin.y += 2*self.dotSize
-                            })
-                            
-                            
-                            self.dotLabels[i+7] = self.dotLabels[i]!
-                            self.dotLabels[i] = nil
-                            //                        UIView.animate(withDuration: 0.5, animations: {
-                            self.shapeLayers[i]!.frame.origin.x -= self.dotSize
-                            //                        })
-                            //                        UIView.animate(withDuration: 0.5, animations: {
-                            self.shapeLayers[i]!.frame.origin.y += 2*self.dotSize
-                            //                        })
-                            
-                            self.shapeLayers[i+7] = self.shapeLayers[i]!
-                            self.shapeLayers[i] = nil
-                            self.deck[i+7] = self.deck[i]
-                            self.deck[i] = nil
-                            
-                            self.trackerSum += 1
-                            
-                            //       }
-                        }
-                    }
-                }
-            }
-            
-            
-            self.bool = false
-            }
-        }
-        isDropInProgress = false
-        bool = true
         
         
-        
-    }
-    
-    private func dropRight(currentDeck: [Int?]) {
-        print("droprightfunc")
-        while isDropInProgress {
-            
-        }
-        isDropInProgress = true
-        
-        delay(bySeconds: 0.2) {  while self.trackerSum != self.trackerSumPrior || self.bool {
-            
-            self.trackerSumPrior = self.trackerSum
-            
-            for i in self.iReverse {
-                
-                if i != 14 && i != 29 && i != 44 && i != 59 {
-                    
-                    if self.deck[i] != nil {
-                        
-                        if self.deck[i+8] == nil {
-                            
-                            UIView.animate(withDuration: 0.18, animations: {
-                                self.dotLabels[i]!.frame.origin.x += self.dotSize
-                            })
-                            
-                            UIView.animate(withDuration: 0.18, animations: {
-                                self.dotLabels[i]!.frame.origin.y += 2*self.dotSize
-                            })
-                            
-                            self.dotLabels[i+8] = self.dotLabels[i]!
-                            self.dotLabels[i] = nil
-                            //                        UIView.animate(withDuration: 0.5, animations: {
-                            self.shapeLayers[i]!.frame.origin.x += self.dotSize
-                            //                        })
-                            
-                            //                        UIView.animate(withDuration: 0.5, animations: {
-                            self.shapeLayers[i]!.frame.origin.y += 2*self.dotSize
-                            //                        })
-                            
-                            self.shapeLayers[i+8] = self.shapeLayers[i]!
-                            self.shapeLayers[i] = nil
-                            self.deck[i+8] = self.deck[i]
-                            self.deck[i] = nil
-                            self.trackerSum += 1
-                            
-                            
-                            
-                        }
-                    }
-                    
-                }
-            }
-            
-            
-            
-            self.bool = false
-            }
-        }
-        isDropInProgress = false
-        bool = true
-        
-    }
     enum Team {
         case red
         case yellow
@@ -815,8 +615,6 @@ class VsViewController: UIViewController {
     
     
     @objc private func scoreFlashEnd() {
-        
-        print("scoreFlashEndFunc")
         UIView.animate(withDuration: 0.5, animations: {
             self.scoreFlash.alpha = 0.0
         })
@@ -856,7 +654,7 @@ class VsViewController: UIViewController {
                         aISequence()
                     }
                 } else {
-                    thisTurn = .red
+                    thisTurn = .yellow //change to .red if you want two turns per player
                     twoTurnsAgo = .yellow
                 }
                 
@@ -881,7 +679,7 @@ class VsViewController: UIViewController {
                     
                     twoTurnsAgo = .yellow
                 } else {
-                    thisTurn = .yellow
+                    thisTurn = .red //change to .yellow if you want two turns per player
                     twoTurnsAgo = .red
                     if tagLevelIdentifier == 1000 {
                         aISequence()
@@ -1102,192 +900,27 @@ class VsViewController: UIViewController {
             }
         }
     }
-    func addButton(name: UIButton, x: CGFloat, y: CGFloat, width: CGFloat, height: CGFloat, title: String, font: String, fontSize: CGFloat, titleColor: UIColor, bgColor: UIColor, cornerRad: CGFloat, boarderW: CGFloat, boarderColor: UIColor, act:
-        Selector, addSubview: Bool) {
-        name.frame = CGRect(x: (x/750)*screenWidth, y: (y/1334)*screenHeight, width: width*screenWidth/750, height: height*screenWidth/750)
-        name.setTitle(title, for: UIControlState.normal)
-        name.titleLabel!.font = UIFont(name: font, size: fontSizeMultiplier*fontSize)
-        name.setTitleColor(titleColor, for: .normal)
-        name.backgroundColor = bgColor
-        name.layer.cornerRadius = cornerRad
-        name.layer.borderWidth = boarderW
-        name.layer.borderColor = boarderColor.cgColor
-        name.addTarget(self, action: act, for: .touchUpInside)
-        if addSubview {
-            view.addSubview(name)
-        }
-    }
-    func addLabel(name: UILabel, text: String, textColor: UIColor, textAlignment: NSTextAlignment, fontName: String, fontSize: CGFloat, x: CGFloat, y: CGFloat, width: CGFloat, height: CGFloat, lines: Int) {
-        
-        name.text = text
-        name.textColor = textColor
-        name.textAlignment = textAlignment
-        name.font = UIFont(name: fontName, size: fontSizeMultiplier*fontSize)
-        name.frame = CGRect(x: (x/750)*screenWidth, y: (y/1334)*screenHeight, width: (width/750)*screenWidth, height: (height/750)*screenWidth)
-        name.numberOfLines = lines
-        
-    }
+    
     func addButtons() {
-        
-        // black background
-        backBlack.backgroundColor = myColor.background
-        backBlack.frame = CGRect(x: 0, y: 0, width: screenWidth, height: screenHeight)
-        
-        //scoreFlash label
-        addLabel(name: scoreFlash, text: additionalScoreString, textColor: myColor.offWhite, textAlignment: .center, fontName: "HelveticaNeue-Bold", fontSize: 70, x: 0, y: 88, width: 750, height: 110, lines: 0)
-        if tagLevelIdentifier > 99 {
-            scoreFlash.font = UIFont(name: "HelveticaNeue-Bold", size: fontSizeMultiplier*70)
-        } else {
-            scoreFlash.font = UIFont(name: "HelveticaNeue-Bold", size: fontSizeMultiplier*50)
-        }
-        
+        addLabel(name: yellowScore, text: currentScoreString, textColor: myColor.yellow, textAlignment: .left, fontName: "HelveticaNeue-Bold", fontSize: 20, x: 49, y: 1230, width: 150, height: 60, lines: 0)
+        // red score label
+        addLabel(name: redScore, text: currentScoreString, textColor: myColor.pink, textAlignment: .right, fontName: "HelveticaNeue-Bold", fontSize: 55, x: 300, y: 1180, width: 400, height: 106, lines: 0)
         //back button
         addButton(name: back, x: 59, y: 594, width: 633, height: 85, title: "Resume Game", font: "HelveticaNeue-Bold", fontSize: 30, titleColor: myColor.offWhite, bgColor: .clear, cornerRad: 5, boarderW: 1, boarderColor: myColor.offWhite, act: #selector(VsViewController.back(_:)), addSubview: false)
-        
         //sequencebutton
         addButton(name: sequence, x: 59, y: 460, width: 633, height: 85, title: "Sequences", font: "HelveticaNeue-Bold", fontSize: 30, titleColor: myColor.offWhite, bgColor: .clear, cornerRad: 5, boarderW: 1, boarderColor: myColor.offWhite, act: #selector(VsViewController.sequence(_:)), addSubview: false)
         //sequence label
         addLabel(name: sequences, text: "Sequences", textColor: myColor.offWhite, textAlignment: .center, fontName: "HelveticaNeue-Bold", fontSize: 50, x: 0, y: 100, width: 750, height: 110, lines: 0)
-        
-        addLabel(name: yellowScore, text: currentScoreString, textColor: myColor.yellow, textAlignment: .left, fontName: "HelveticaNeue-Bold", fontSize: 20, x: 49, y: 1230, width: 150, height: 60, lines: 0)
-        // red score label
-        addLabel(name: redScore, text: currentScoreString, textColor: myColor.pink, textAlignment: .right, fontName: "HelveticaNeue-Bold", fontSize: 55, x: 300, y: 1180, width: 400, height: 106, lines: 0)
         //Menux Button (transition in exiting game)
         addButton(name: menuX, x: 25, y: 25, width: 50, height: 50, title: "X", font: "HelveticaNeue-Bold", fontSize: 30, titleColor: myColor.offWhite, bgColor: .clear, cornerRad: 0, boarderW: 0, boarderColor: .clear, act: #selector(VsViewController.menuX(_:)), addSubview: false)
         //Menux2 Button (transition in exiting game)
-        addButton(name: menuX2, x: 25, y: 25, width: 50, height: 50, title: "X", font: "HelveticaNeue-Bold", fontSize: 30, titleColor: myColor.offWhite, bgColor: .clear, cornerRad: 0, boarderW: 0, boarderColor: .clear, act: #selector(VsViewController.menuX2(_:)), addSubview: false)
-        //sequence row two label
-        addLabel(name: sequenceRowTwo, text: "50\n100\n150\n500\n750\n1500\n2500\n3500\n5,000\n10,000\n20,000\n", textColor: myColor.offWhite, textAlignment: .right, fontName: "HelveticaNeue-Bold", fontSize: 20, x: 173, y: 262, width: 500, height: 750, lines: 0)
-        //sequence row one label
-        addLabel(name: sequenceRowOne, text: "Pair\n3 Flush\n3 Straight\n3 of a Kind\n3 Straight Flush\n5 Straight\n5 Flush\n5 Full House\n4 of a Kind\n5 of a Kind\n5 Straight Flush", textColor: myColor.offWhite, textAlignment: .left, fontName: "HelveticaNeue-Bold", fontSize: 20, x: 80, y: 237, width: 500, height: 750, lines: 0)
+        addButton(name: menuX2, x: 0, y: 0, width: 116, height: 122, title: "", font: "HelveticaNeue-Bold", fontSize: 30, titleColor: myColor.offWhite, bgColor: .clear, cornerRad: 0, boarderW: 0, boarderColor: .clear, act: #selector(VsViewController.menuX2(_:)), addSubview: false)
+        menuX2.setImage(#imageLiteral(resourceName: "menu215"), for: .normal)
         //Exit Button
         addButton(name: exit, x: 50, y: 1145, width: 650, height: 87, title: "Exit", font: "HelveticaNeue-Bold", fontSize: 30, titleColor: myColor.offWhite, bgColor: .clear, cornerRad: 5, boarderW: 1, boarderColor: myColor.offWhite, act: #selector(VsViewController.exit(_:)), addSubview: false)
-        
-        for i in 0...66 {
-            
-            var xValue = CGFloat()
-            var yValue = CGFloat()
-            switch i {
-            case 0...6:
-                yValue = topMargin + 0.5*dotSize
-                
-            case 7...14:
-                yValue = topMargin + 2.5*dotSize
-                
-            case 15...21:
-                yValue = topMargin + 4.5*dotSize
-                
-            case 22...29:
-                yValue = topMargin + 6.5*dotSize
-                
-            case 30...36:
-                yValue = topMargin + 8.5*dotSize
-                
-            case 37...44:
-                yValue = topMargin + 10.5*dotSize
-                
-            case 45...51:
-                yValue = topMargin + 12.5*dotSize
-                
-            case 52...59:
-                yValue = topMargin + 14.5*dotSize
-                
-            case 60...66:
-                yValue = topMargin + 16.5*dotSize
-                
-            default:
-                break
-            }
-            
-            switch i {
-            case 0,15,30,45,60:
-                xValue = 2*dotSize
-                
-            case 1,16,31,46,61:
-                xValue = 4*dotSize
-                
-            case 2,17,32,47,62:
-                xValue = 6*dotSize
-                
-            case 3,18,33,48,63:
-                xValue = 8*dotSize
-                
-            case 4,19,34,49,64:
-                xValue = 10*dotSize
-                
-            case 5,20,35,50,65:
-                xValue = 12*dotSize
-                
-            case 6,21,36,51,66:
-                xValue = 14*dotSize
-                
-            case 7,22,37,52:
-                xValue = dotSize
-                
-            case 8,23,38,53:
-                xValue = 3*dotSize
-                
-            case 9,24,39,54:
-                xValue = 5*dotSize
-                
-            case 10,25,40,55:
-                xValue = 7*dotSize
-                
-            case 11,26,41,56:
-                xValue = 9*dotSize
-                
-            case 12,27,42,57:
-                xValue = 11*dotSize
-                
-            case 13,28,43,58:
-                xValue = 13*dotSize
-                
-            case 14,29,44,59:
-                xValue = 15*dotSize
-                
-                
-            default:
-                break
-            }
-            
-            let dotLabel = UILabel()
-            addLabel(name: dotLabel, text: "", textColor: myColor.white, textAlignment: .center, fontName: "HelveticaNeue-Bold", fontSize: 14, x: 750*(xValue - dotSize/2)/screenWidth, y: 1334*(yValue - dotSize/1.9)/screenHeight, width: 750*dotSize/screenWidth, height: 750*dotSize/screenWidth, lines: 0)
-            dotLabel.layer.zPosition = 1
-            dotLabels.append(dotLabel)
-            
-            
-            let circlePath = UIBezierPath(arcCenter: CGPoint(x: xValue,y: yValue), radius: (25/750)*screenWidth, startAngle: CGFloat(0), endAngle:CGFloat(M_PI * 2), clockwise: true)
-            let circlePath2 = UIBezierPath(arcCenter: CGPoint(x: xValue,y: yValue), radius: dotSize, startAngle: CGFloat(0), endAngle:CGFloat(M_PI * 2), clockwise: true)
-            
-            let shapeLayer = CAShapeLayer()
-            let shapeLayer2 = CAShapeLayer()
-            shapeLayer.fillColor = myColor.background.cgColor
-            shapeLayers.append(shapeLayer)
-            shapeLayers2.append(shapeLayer2)
-            shapeLayer.path = circlePath.cgPath
-            shapeLayer2.path = circlePath2.cgPath
-            
-            
-        }
-        
-        for i in 0...4 {
-            let displayLabel = UILabel()
-            addLabel(name: displayLabel, text: "", textColor: myColor.white, textAlignment: .center, fontName: "HelverticaNeue-Bold", fontSize: 25, x: 160 + 90*CGFloat(i), y: 105, width: 70, height: 70, lines: 0)
-            displayLabels.append(displayLabel)
-            
-            let _x = CGFloat(i)*(90/750)*screenWidth
-            
-            self.view.addSubview(displayLabel)
-            let circlePath = UIBezierPath(arcCenter: CGPoint(x: (195/750)*screenWidth + _x, y: (141/1334)*screenHeight), radius: (36/750)*screenWidth, startAngle: CGFloat(0), endAngle:CGFloat(M_PI * 2), clockwise: true)
-            let shapeLayer = CAShapeLayer()
-            shapeLayer.fillColor = myColor.background.cgColor
-            shapeLayer.path = circlePath.cgPath
-            displayLayers.append(shapeLayer)
-            shapeLayer.lineWidth = 4.0*screenWidth/750
-            
-        }
-        
     }
+    
+   
     
     @objc private func exit(_ button: UIButton) {
         self.backBlack.removeFromSuperview()
@@ -1309,6 +942,7 @@ class VsViewController: UIViewController {
         view.bringSubview(toFront: menuX2)
         for dot in dotLabels {
             dot?.alpha = 0.0
+            dot?.layer.zPosition = 0
         }
         
         
@@ -1327,13 +961,13 @@ class VsViewController: UIViewController {
     
     @objc private func back(_ button: UIButton) {
         self.backBlack.removeFromSuperview()
-        
         self.sequence.removeFromSuperview()
         self.back.removeFromSuperview()
         self.menuX2.removeFromSuperview()
         startTimer()
         for dot in dotLabels {
             dot?.alpha = 1.0
+            dot?.layer.zPosition = 1
         }
         
     }
