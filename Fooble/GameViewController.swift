@@ -60,9 +60,9 @@ class GameViewController: GameSetupViewController {
             isFirst = false
             let vc = IntroViewController()
             vc.items = [
-                ("Form sequences by swiping horizontally or diagonally. For Example: These 5s = Four Of A Kind!", UIImage(named: "Tutorial1.png")),
+                ("Welcome To Ransom! Form sequences by swiping horizontally or diagonally.", UIImage(named: "Tutorial1.png")),
                 ("Tap on labels to see example sequences", UIImage(named: "Tutorial2.png")),
-                ("Try player vs player, player vs iphone, and Game Center modes too!", UIImage(named: "Tutorial3.png"))
+                ("Try Player vs Player, Player vs iPhone, and Game Center modes too!", UIImage(named: "Tutorial3.png"))
             ]
             vc.animationType = .rotate
             vc.titleColor = .black
@@ -356,7 +356,7 @@ class GameViewController: GameSetupViewController {
         if tagLevelIdentifier < 100 {
             view.subviews.forEach({ $0.removeFromSuperview() })
             view.addSubview(backBlack)
-            sequences.text = "No More Moves"
+            sequences.text = ""
             sequences.textColor = .black
             sequences.font = UIFont(name: "HelveticaNeue-Bold", size: 30)
             sequences.layer.zPosition = 5
@@ -368,8 +368,8 @@ class GameViewController: GameSetupViewController {
             restart.frame.origin.y = 1200*screenHeight/1334
             view.addSubview(restart)
             let iv = UIImageView()
-            iv.image = #imageLiteral(resourceName: "ghostHurt")
-            iv.frame = CGRect(x: screenWidth/4, y: 300*screenHeight/1334, width: screenWidth/2, height: screenWidth/2)
+            iv.image = #imageLiteral(resourceName: "ghostHurtWhite250")
+            iv.frame = CGRect(x: 1*screenWidth/6, y: 500*screenHeight/1334, width: 2*screenWidth/3, height: 2*screenWidth/3)
             view.addSubview(iv)
         } else {
             myGameCenter.addDataToGameCenter(score: currentScoreInt)

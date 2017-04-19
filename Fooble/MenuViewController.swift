@@ -139,7 +139,7 @@ class MenuViewController: UIViewController {
         let princessImage = UIImage(named: "Princess.png")
         let princessView = UIImageView(image: princessImage)
         princessView.frame = CGRect(x: (450/750)*screenWidth, y: header - (265/750)*screenWidth, width: 263*screenWidth/750, height: 242*screenWidth/750)
-        self.view.addSubview(princessView)
+      //  self.view.addSubview(princessView)
         
         var n = [Int]()
         for j in 0...42 {
@@ -209,7 +209,7 @@ class MenuViewController: UIViewController {
         menuHeader1.font = UIFont(name: "HelveticaNeue-Bold", size: fontSizeMultiplier*15)
         menuHeader1.backgroundColor = myColor.background
         menuHeader1.frame = CGRect(x: screenWidth/2, y: 0, width: screenWidth/2.1, height: (40/750)*screenWidth)
-        view.addSubview(menuHeader1)
+       // view.addSubview(menuHeader1)
         
         
         //bottom dude image
@@ -222,6 +222,11 @@ class MenuViewController: UIViewController {
         //imageView.isUserInteractionEnabled = true
         let tap = UITapGestureRecognizer(target: self, action: #selector(MenuViewController.punchGhost(_:)))
         view.addGestureRecognizer(tap)
+        
+        let swipeRight = UISwipeGestureRecognizer(target: self, action: #selector(MenuViewController.menuX2(_:)))
+        swipeRight.direction = .right
+        view.addGestureRecognizer(swipeRight)
+        
         menuX.frame = CGRect(x: (0/750)*screenWidth, y: (0/750)*screenWidth, width: 116*screenWidth/750, height: 122*screenWidth/750)
         menuX.setTitle("", for: UIControlState.normal)
         menuX.titleLabel!.font = UIFont(name: "HelveticaNeue-Bold", size: fontSizeMultiplier*30)
@@ -412,6 +417,14 @@ class MenuViewController: UIViewController {
     
     @objc private func menuX(_ button: UIButton) {
         self.performSegue(withIdentifier: "fromMenuToIntro", sender: self)
+    }
+    
+    @objc private func menuX2(_ gesture: UIGestureRecognizer) {
+        UIView.animate(withDuration: 0.2) {
+            self.view.frame.origin.x = self.screenWidth
+        }
+        self.performSegue(withIdentifier: "fromMenuToIntro", sender: self)
+        
     }
     
     func purchase(productId: String) {
