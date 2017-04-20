@@ -640,7 +640,7 @@ class VsViewController: GameSetupViewController {
                     if tagLevelIdentifier == 1000 {
                         aISequence()
                     }
-                } else if oneTurnAgo == .red {
+                } else if oneTurnAgo == .yellow {
                     thisTurn = .yellow
                     if bar.isDescendant(of: view) {
                         bar.removeFromSuperview()
@@ -668,7 +668,7 @@ class VsViewController: GameSetupViewController {
                     if tagLevelIdentifier == 1000 {
                         aISequence()
                     }
-                } else if oneTurnAgo == .yellow {
+                } else if oneTurnAgo == .red {
                     thisTurn = .red
                     if bar.isDescendant(of: view) {
                         bar.removeFromSuperview()
@@ -724,7 +724,7 @@ class VsViewController: GameSetupViewController {
         switch thisTurn {
         case .red:
             if oneTurnAgo == .start {
-                thisTurn = .yellow
+                thisTurn = .yellow //.red
                 oneTurnAgo = .red
                 if tagLevelIdentifier == 1000 {
                     aISequence()
@@ -746,11 +746,13 @@ class VsViewController: GameSetupViewController {
             
         case .yellow:
             if twoTurnsAgo == .start {
-                thisTurn = .yellow
+                thisTurn = .red  //.yellow
                 twoTurnsAgo = .red
                 oneTurnAgo = .yellow
+                timerBool = true
+                ticker = 0
                 if tagLevelIdentifier == 1000 {
-                    aISwipe()
+                    aITurnEnd()//aISwipe()
                 }
             } else {//else if oneTurnAgo == .yellow {
                 thisTurn = .red
