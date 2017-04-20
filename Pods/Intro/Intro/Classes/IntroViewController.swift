@@ -20,13 +20,13 @@ public class IntroViewController: UIViewController {
     public var items: [(String, UIImage?)]!
 
     public var titleColor = UIColor.black
-    public var titleFont = UIFont(name: "HelveticaNeue", size: 16)
+    public var titleFont = UIFont(name: "HelveticaNeue-Bold", size: 16)
 
     public var imageContentMode = UIViewContentMode.center //.scaleAspectFit
 
     public var closeTitle: String!
     public var closeColor = UIColor.white
-    public var closeBackgroundColor = UIColor.black
+    public var closeBackgroundColor = UIColor(colorLiteralRed: 1, green: 1, blue: 1, alpha: 0.8)
     public var closeBorderWidth: CGFloat = 0
     public var closeBorderColor: CGColor = UIColor.black.cgColor
     public var closeCornerRadius: CGFloat = 2
@@ -43,6 +43,11 @@ public class IntroViewController: UIViewController {
         edgesForExtendedLayout = UIRectEdge()
         configureFlowLayout()
         configureCollectionView()
+        
+    }
+    
+    override public var prefersStatusBarHidden: Bool {
+        return true
     }
 
     fileprivate func configureFlowLayout() {
@@ -51,11 +56,13 @@ public class IntroViewController: UIViewController {
         flowLayout.minimumInteritemSpacing = 0
         flowLayout.minimumLineSpacing = 0
     }
+    
+    
 
     fileprivate func configureCollectionView() {
         collectionView = UICollectionView(frame: .zero, collectionViewLayout: flowLayout)
         guard let collectionView = collectionView else { return }
-        collectionView.backgroundColor = .white
+        collectionView.backgroundColor = UIColor(colorLiteralRed: 1, green: 1, blue: 1, alpha: 1.0)
         collectionView.delegate = self
         collectionView.dataSource = self
         collectionView.isPagingEnabled = true
@@ -116,7 +123,7 @@ extension IntroViewController: UICollectionViewDataSource {
         
         cell.closeButton.setTitle(closeTitle, for: .normal)
         cell.closeButton.setTitleColor(closeColor, for: .normal)
-        cell.closeButton.backgroundColor = closeBackgroundColor
+        cell.closeButton.backgroundColor = UIColor(colorLiteralRed: 1, green: 1, blue: 1, alpha: 0.8)
         cell.closeButton.layer.borderWidth = closeBorderWidth
         cell.closeButton.layer.borderColor = closeBorderColor
         cell.closeButton.layer.cornerRadius = closeCornerRadius

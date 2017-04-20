@@ -124,7 +124,7 @@ class IntroVController: UIViewController {
         let princessView = UIImageView(image: princessImage)
         princessView.alpha = 0.0
         princessView.frame = CGRect(x: (490/750)*screenWidth, y: 1300*screenHeight/1334 - 242*screenWidth/750, width: 263*screenWidth/750, height: 242*screenWidth/750)
-        self.view.addSubview(princessView)
+      //  self.view.addSubview(princessView)
         UIView.animate(withDuration: 0.3) {
             princessView.alpha = 1.0
         }
@@ -162,7 +162,7 @@ class IntroVController: UIViewController {
         aI.tag = 1000
         
         //Menux Button (transition in exiting game)
-        addButton(name: menuX, x: 25, y: 25, width: 50, height: 50, title: "X", font: "HelveticaNeue-Bold", fontSize: 30, titleColor: myColor.offWhite, bgColor: .clear, cornerRad: 0, boarderW: 0, boarderColor: .clear, act: #selector(IntroVController.menuX(_:)), addSubview: false, alpha: 0.0)
+        addButton(name: menuX, x: 20, y: 25, width: 65, height: 65, title: "X", font: "HelveticaNeue-Bold", fontSize: 20, titleColor: myColor.offWhite, bgColor: .clear, cornerRad: 0, boarderW: 0, boarderColor: .clear, act: #selector(IntroVController.menuX(_:)), addSubview: false, alpha: 0.0)
         
        
         UIView.animate(withDuration: 0.5) {

@@ -420,9 +420,7 @@ class MenuViewController: UIViewController {
     }
     
     @objc private func menuX2(_ gesture: UIGestureRecognizer) {
-        UIView.animate(withDuration: 0.2) {
-            self.view.frame.origin.x = self.screenWidth
-        }
+        
         self.performSegue(withIdentifier: "fromMenuToIntro", sender: self)
         
     }

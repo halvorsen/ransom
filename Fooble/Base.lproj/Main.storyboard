@@ -73,6 +73,7 @@
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="dkx-z0-nzr" sceneMemberID="firstResponder"/>
             </objects>
+            <point key="canvasLocation" x="-90" y="552"/>
         </scene>
         <!--Game View Controller-->
         <scene sceneID="cm5-ZF-4en">
@@ -98,8 +99,8 @@
         </scene>
     </scenes>
     <inferredMetricsTieBreakers>
-        <segue reference="JM0-aw-4uY"/>
-        <segue reference="pJC-gV-t5v"/>
-        <segue reference="rZX-oT-tQ3"/>
+        <segue reference="gVo-V8-Xpq"/>
+        <segue reference="xeY-ss-iXb"/>
+        <segue reference="NUS-Oz-Ojt"/>
     </inferredMetricsTieBreakers>
 </document>

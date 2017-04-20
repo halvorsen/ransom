@@ -59,19 +59,21 @@ class GameViewController: GameSetupViewController {
         if tagLevelIdentifier == 1 && isFirst {
             isFirst = false
             let vc = IntroViewController()
+            //vc.view.frame = CGRect(x: 10, y: 10, width: 300, height: 600)
             vc.items = [
                 ("Welcome To Ransom! Form sequences by swiping horizontally or diagonally.", UIImage(named: "Tutorial1.png")),
                 ("Tap on labels to see example sequences", UIImage(named: "Tutorial2.png")),
                 ("Try Player vs Player, Player vs iPhone, and Game Center modes too!", UIImage(named: "Tutorial3.png"))
             ]
-            vc.animationType = .rotate
+            vc.animationType = .raise
             vc.titleColor = .black
+            vc.modalPresentationStyle = .overCurrentContext
           //  vc.titleFont = .systemFont(ofSize: 20)
            // vc.imageContentMode = .scaleAspectFit
-            vc.closeTitle = "READY"
+            vc.closeTitle = "OKAY!"
             vc.closeColor = .black
-            vc.closeBackgroundColor = .clear
-            vc.closeBorderWidth = 1
+            vc.closeBackgroundColor = UIColor(colorLiteralRed: 1, green: 1, blue: 1, alpha: 1.0)
+            vc.closeBorderWidth = 3
             vc.closeBorderColor = UIColor.black.cgColor
             vc.closeCornerRadius = 4
 //            vc.didClose = {
@@ -406,18 +408,18 @@ class GameViewController: GameSetupViewController {
         if tagLevelIdentifier == 1 {
             myLoadSaveCoreData.saveDemo(mode: "Campaign")
         }
-        let array = [1,4,9,17,25,33,37,40,41,42,43]
-        if array.contains(tagLevelIdentifier) {
+    //    let array = [1,4,9,17,25,33,37,40,41,42,43]
+    //    if array.contains(tagLevelIdentifier) {
             let image = UIImage(named: "Princess.png")
             let imageView = UIImageView(image: image)
             imageView.frame = CGRect(x: screenWidth/4, y: (300/1334)*screenHeight, width: screenWidth/2, height: screenWidth/2)
             view.addSubview(imageView)
             imageViewGlobal = imageView
             finishMessage.frame.origin.y += (200/1334)*screenHeight
-        } else {
-            finishMessage.font = UIFont(name: "HelveticaNeue-Bold", size: fontSizeMultiplier*35)
-            finishMessage.frame.origin.y -= screenHeight/4
-        }
+     //   } else {
+        //    finishMessage.font = UIFont(name: "HelveticaNeue-Bold", size: fontSizeMultiplier*35)
+        //    finishMessage.frame.origin.y -= screenHeight/4
+     //   }
     }
     func addButtons() {
         //game center
@@ -502,7 +504,7 @@ class GameViewController: GameSetupViewController {
         //sequence label
         addLabel(name: sequences, text: "Sequences", textColor: myColor.offWhite, textAlignment: .center, fontName: "HelveticaNeue-Bold", fontSize: 50, x: 0, y: 100, width: 750, height: 110, lines: 0)
         //Menux Button (transition in exiting game)
-        addButton(name: menuX, x: 25, y: 25, width: 50, height: 50, title: "X", font: "HelveticaNeue-Bold", fontSize: 30, titleColor: myColor.offWhite, bgColor: .clear, cornerRad: 0, boarderW: 0, boarderColor: .clear, act: #selector(GameViewController.menuX(_:)), addSubview: false)
+        addButton(name: menuX, x: 20, y: 25, width: 65, height: 65, title: "X", font: "HelveticaNeue-Bold", fontSize: 20, titleColor: myColor.offWhite, bgColor: .clear, cornerRad: 0, boarderW: 0, boarderColor: .clear, act: #selector(GameViewController.menuX(_:)), addSubview: false)
         //Menux2 Button (transition in exiting game)
         addButton(name: menuX2, x: 0, y: 0, width: 116, height: 122, title: "", font: "HelveticaNeue-Bold", fontSize: 30, titleColor: myColor.offWhite, bgColor: .clear, cornerRad: 0, boarderW: 0, boarderColor: .clear, act: #selector(GameViewController.menuX2(_:)), addSubview: false)
         menuX2.setImage(#imageLiteral(resourceName: "menu215"), for: .normal)

@@ -50,7 +50,7 @@ public class IntroRaiseCollectionViewCell: UICollectionViewCell, IntroCollection
         frame.origin.y -= 44
         frame.size.width = contentView.frame.width - 60
         frame.size.height = 44
-        closeButton.frame = frame
+        closeButton.frame = CGRect(x: UIScreen.main.bounds.width/4, y: 1150*UIScreen.main.bounds.height/1334, width: UIScreen.main.bounds.width/2, height: UIScreen.main.bounds.width*75/750)
     }
 
     fileprivate func configureTextLabel() {

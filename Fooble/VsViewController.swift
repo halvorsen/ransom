@@ -654,7 +654,7 @@ class VsViewController: GameSetupViewController {
                         aISequence()
                     }
                 } else {
-                    thisTurn = .red //change to .red if you want two turns per player
+                    thisTurn = .yellow //change to .red if you want two turns per player
                     twoTurnsAgo = .yellow
                 }
                 
@@ -679,7 +679,7 @@ class VsViewController: GameSetupViewController {
                     
                     twoTurnsAgo = .yellow
                 } else {
-                    thisTurn = .yellow //change to .yellow if you want two turns per player
+                    thisTurn = .red //change to .yellow if you want two turns per player
                     twoTurnsAgo = .red
                     if tagLevelIdentifier == 1000 {
                         aISequence()
@@ -752,7 +752,7 @@ class VsViewController: GameSetupViewController {
                 if tagLevelIdentifier == 1000 {
                     aISwipe()
                 }
-            } else if oneTurnAgo == .yellow {
+            } else {//else if oneTurnAgo == .yellow {
                 thisTurn = .red
                 timerBool = true
                 ticker = 0
@@ -760,13 +760,14 @@ class VsViewController: GameSetupViewController {
                 if tagLevelIdentifier == 1000 {
                     aITurnEnd()
                 }
-            } else {
-                thisTurn = .yellow
-                twoTurnsAgo = .red
-                if tagLevelIdentifier == 1000 {
-                    aISwipe()
-                }
             }
+//            } else {
+//                thisTurn = .yellow
+//                twoTurnsAgo = .red
+//                if tagLevelIdentifier == 1000 {
+//                    aISwipe()
+//                }
+//            }
             
             oneTurnAgo = .yellow
             
@@ -912,7 +913,7 @@ class VsViewController: GameSetupViewController {
         //sequence label
         addLabel(name: sequences, text: "Sequences", textColor: myColor.offWhite, textAlignment: .center, fontName: "HelveticaNeue-Bold", fontSize: 50, x: 0, y: 100, width: 750, height: 110, lines: 0)
         //Menux Button (transition in exiting game)
-        addButton(name: menuX, x: 25, y: 25, width: 50, height: 50, title: "X", font: "HelveticaNeue-Bold", fontSize: 30, titleColor: myColor.offWhite, bgColor: .clear, cornerRad: 0, boarderW: 0, boarderColor: .clear, act: #selector(VsViewController.menuX(_:)), addSubview: false)
+        addButton(name: menuX, x: 20, y: 25, width: 65, height: 65, title: "X", font: "HelveticaNeue-Bold", fontSize: 20, titleColor: myColor.offWhite, bgColor: .clear, cornerRad: 0, boarderW: 0, boarderColor: .clear, act: #selector(VsViewController.menuX(_:)), addSubview: false)
         //Menux2 Button (transition in exiting game)
         addButton(name: menuX2, x: 0, y: 0, width: 116, height: 122, title: "", font: "HelveticaNeue-Bold", fontSize: 30, titleColor: myColor.offWhite, bgColor: .clear, cornerRad: 0, boarderW: 0, boarderColor: .clear, act: #selector(VsViewController.menuX2(_:)), addSubview: false)
         menuX2.setImage(#imageLiteral(resourceName: "menu215"), for: .normal)
