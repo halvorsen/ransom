@@ -18,7 +18,6 @@ class MenuViewController: UIViewController {
     let scrollView = UIScrollView(frame: UIScreen.main.bounds)
     var levelButtons = [UIButton]()
     var tagLevelIdentifier = Int()
-
     var yScrollCenterLocation: CGFloat = 3000*UIScreen.main.bounds.height/600
     let header = 326*UIScreen.main.bounds.width/750
     let verticalSpacing = (120/750)*(UIScreen.main.bounds.width)
@@ -77,6 +76,10 @@ class MenuViewController: UIViewController {
                     
                     if !levelsAddressed.contains(n-1) {
                         levelButtons[n-1].setTitle(nil, for: .normal)
+                       
+                        let offset = levelButtons[n-1].frame.origin.y - 3*screenHeight/4
+                        scrollView.contentOffset.y = offset
+                        
                         let image = UIImage(named: "checkmark.png")
                         let checkImageView = UIImageView(image: image!)
                         checkImageView.frame.size = CGSize( width: (38/750)*screenWidth, height: (30/750)*screenWidth)

@@ -52,6 +52,9 @@ class GameViewController: GameSetupViewController {
         lastCardDisplayed = 999
         populateDots()
         view.addSubview(menuX)
+        
+//        finger = UIImageView(frame: CGRect(x: 0, y: 0, width: 75*screenWidth/375, height: 75*screenWidth/375))
+//        finger.image = #imageLiteral(resourceName: "Finger")
     }
     
     override func viewWillAppear(_ animated: Bool) {
@@ -109,9 +112,10 @@ class GameViewController: GameSetupViewController {
 
         }
     }
-    
+    //var finger = UIImageView()
  
     @objc func respondToPanGesture(_ gesture: UIPanGestureRecognizer) {
+//        finger.frame.origin = gesture.location(in: view)
         
         if tagLevelIdentifier == 1 {
             if tutorialAnnotation3.isDescendant(of: view) {
@@ -120,6 +124,8 @@ class GameViewController: GameSetupViewController {
         }
         
         if gesture.state == UIGestureRecognizerState.began {
+//            finger.frame.origin = gesture.location(in: view)
+//            view.addSubview(finger)
             hand.removeAll()
             handIndexes.removeAll()
             for i in 0...4 {
@@ -164,6 +170,7 @@ class GameViewController: GameSetupViewController {
             }
         }
         outerloop: if gesture.state == UIGestureRecognizerState.changed && futureIndexes.count > 0 {
+            
             if futureIndexes[0] != 666 {
                 let locationOfPan = gesture.location(in: view)
                 if count > 1 {
@@ -264,7 +271,7 @@ class GameViewController: GameSetupViewController {
         }
         if gesture.state == UIGestureRecognizerState.ended {
             
-            
+//            finger.removeFromSuperview()
             hand = myCalculator.reorderHand(hand: hand)
             
             additionalScoreInt = myCalculator.pointAmount(hand: hand)
@@ -410,7 +417,7 @@ class GameViewController: GameSetupViewController {
         }
     //    let array = [1,4,9,17,25,33,37,40,41,42,43]
     //    if array.contains(tagLevelIdentifier) {
-            let image = UIImage(named: "Princess.png")
+            let image = UIImage(named: "PrincessWhite.png")
             let imageView = UIImageView(image: image)
             imageView.frame = CGRect(x: screenWidth/4, y: (300/1334)*screenHeight, width: screenWidth/2, height: screenWidth/2)
             view.addSubview(imageView)
