@@ -299,7 +299,7 @@ class GameSetupViewController: UIViewController {
             let dotLabel = UILabel()
             addLabel(name: dotLabel, text: "", textColor: myColor.white, textAlignment: .center, fontName: "HelveticaNeue-Bold", fontSize: 14, x: 750*(xValue - dotSize/2)/screenWidth, y: 1334*(yValue - dotSize/1.9)/screenHeight, width: 750*dotSize/screenWidth, height: 750*dotSize/screenWidth, lines: 0)
             dotLabel.layer.borderWidth = 1.0
-            dotLabel.layer.cornerRadius = 3
+            dotLabel.layer.cornerRadius = 10
             dotLabel.clipsToBounds = true
             dotLabel.layer.zPosition = 1
             

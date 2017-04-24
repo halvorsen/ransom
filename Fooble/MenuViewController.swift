@@ -199,7 +199,7 @@ class MenuViewController: UIViewController {
             levelButtons.append(levelButton)
         }
         for i in 1...levelButtons.count {
-            levelButtons[i-1].layer.cornerRadius = 5.0
+            levelButtons[i-1].layer.cornerRadius = 0.0
             levelButtons[i-1].clipsToBounds = true
             
         }
@@ -232,7 +232,7 @@ class MenuViewController: UIViewController {
         
         menuX.frame = CGRect(x: (0/750)*screenWidth, y: (0/750)*screenWidth, width: 116*screenWidth/750, height: 122*screenWidth/750)
         menuX.setTitle("", for: UIControlState.normal)
-        menuX.titleLabel!.font = UIFont(name: "HelveticaNeue-Bold", size: fontSizeMultiplier*30)
+        menuX.titleLabel!.font = UIFont(name: "HelveticaNeue-Bold", size: fontSizeMultiplier*20)
         menuX.setTitleColor(myColor.offWhite, for: .normal)
         menuX.addTarget(self, action: #selector(MenuViewController.menuX(_:)), for: .touchUpInside)
         self.view.addSubview(menuX)

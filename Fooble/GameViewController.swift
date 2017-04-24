@@ -501,7 +501,7 @@ class GameViewController: GameSetupViewController {
                 }
                 print("multipliery,multiplierx: \(multipliery), \(multiplierx)")
                 counterForSwitch += 1
-                addButton(name: questButton, x: 145 + 750*multiplierx/screenWidth, y: 1135 + multipliery, width: 137, height: 36, title: i, font: "HelveticaNeue-Bold", fontSize: 11, titleColor: myColor.offWhite, bgColor: .clear, cornerRad: 3, boarderW: 1, boarderColor: myColor.offWhite, act: #selector(GameViewController.describeQuest(_:)), addSubview: true)
+                addButton(name: questButton, x: 145 + 750*multiplierx/screenWidth, y: 1135 + multipliery, width: 161, height: 50, title: i, font: "HelveticaNeue-Bold", fontSize: 10, titleColor: myColor.offWhite, bgColor: .clear, cornerRad: 0, boarderW: 1, boarderColor: myColor.offWhite, act: #selector(GameViewController.describeQuest(_:)), addSubview: true)
             }
         }
         //back button
@@ -516,7 +516,7 @@ class GameViewController: GameSetupViewController {
         addButton(name: menuX2, x: 0, y: 0, width: 116, height: 122, title: "", font: "HelveticaNeue-Bold", fontSize: 30, titleColor: myColor.offWhite, bgColor: .clear, cornerRad: 0, boarderW: 0, boarderColor: .clear, act: #selector(GameViewController.menuX2(_:)), addSubview: false)
         menuX2.setImage(#imageLiteral(resourceName: "menu215"), for: .normal)
         //Exit Button
-        addButton(name: exit, x: 50, y: 1145, width: 650, height: 87, title: "Exit", font: "HelveticaNeue-Bold", fontSize: 30, titleColor: myColor.offWhite, bgColor: .clear, cornerRad: 5, boarderW: 1, boarderColor: myColor.offWhite, act: #selector(GameViewController.exit(_:)), addSubview: false)
+        addButton(name: exit, x: 50, y: 1145, width: 650, height: 87, title: "Exit", font: "HelveticaNeue-Bold", fontSize: 20, titleColor: myColor.offWhite, bgColor: .clear, cornerRad: 0, boarderW: 1, boarderColor: myColor.offWhite, act: #selector(GameViewController.exit(_:)), addSubview: false)
     }
     
     
@@ -639,13 +639,13 @@ class GameViewController: GameSetupViewController {
     }
     
     @objc private func disappear(_ button: UIButton) {
-        tutorialAnnotation2.text = "CLICK X TO SEE SEQUENCES ANY TIME"
+        tutorialAnnotation2.text = ""
         _ = Timer.scheduledTimer(timeInterval: 2.0, target: self, selector: #selector(GameViewController.disappear2), userInfo: nil, repeats: false)
     }
     
     @objc private func disappear2(_ button: UIButton) {
         self.tutorialAnnotation2.removeFromSuperview()
-        tutorialAnnotation2.text = "Pair; 3 Flush; 3 Straight; 3 of a Kind; 3 Straight Flush; 5 Straight; 5 Flush; 5 Full House; 4 of a Kind; 5 of a Kind; 5 Straight Flush\nTAP TO REMOVE"
+        tutorialAnnotation2.text = ""
     }
     
     
@@ -739,13 +739,13 @@ class GameViewController: GameSetupViewController {
     }
     
     private func addDescriptionNamed(named: String) {
-        let image = UIImage(named: named)
-        imageView.image = image!
-        imageView.frame.origin.x = (123/750)*screenWidth
-        imageView.frame.origin.y = (1100/1334)*screenHeight
-        imageView.frame.size = CGSize( width: (504/750)*screenWidth, height: (220/750)*screenWidth)
-        
-        view.addSubview(imageView)
+//        let image = UIImage(named: named)
+//        imageView.image = image!
+//        imageView.frame.origin.x = (123/750)*screenWidth
+//        imageView.frame.origin.y = (1100/1334)*screenHeight
+//        imageView.frame.size = CGSize( width: (504/750)*screenWidth, height: (220/750)*screenWidth)
+//        
+//        view.addSubview(imageView)
     }
     
 }

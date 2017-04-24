@@ -31,13 +31,13 @@ public enum DispatchLevel {
 struct PersonalColor {
     
     //pink
-    var pink = UIColor(red: 255/255, green: 6/255, blue: 107/255, alpha: 1.0)
+    var pink = UIColor(red: 249/255, green: 22/255, blue: 109/255, alpha: 1.0)
     
     //yellow
-    var yellow = UIColor(red: 252/255, green: 216/255, blue: 6/255, alpha: 1.0)
+    var yellow = UIColor(red: 251/255, green: 214/255, blue: 50/255, alpha: 1.0)
     
     //blue
-    var blue = UIColor(red: 73/255, green: 188/255, blue: 255/255, alpha: 1.0)
+    var blue = UIColor(red: 80/255, green: 189/255, blue: 252/255, alpha: 1.0)
     
     //white
     var white = UIColor(red: 255/255, green: 255/255, blue: 255/255, alpha: 1.0)

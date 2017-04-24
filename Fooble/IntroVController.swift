@@ -130,35 +130,35 @@ class IntroVController: UIViewController {
         }
         
         //campaign
-        addButton(name: campaign, x: 59, y: 323, width: 633, height: 85, title: "Campaign", font: "HelveticaNeue-Bold", fontSize: 25, titleColor: myColor.offWhite, bgColor: .clear, cornerRad: 5, boarderW: 1, boarderColor: myColor.offWhite, act: #selector(IntroVController.campaign(_:)), addSubview: true, alpha: 0.0)
+        addButton(name: campaign, x: 59, y: 323, width: 633, height: 85, title: "Campaign", font: "HelveticaNeue-Bold", fontSize: 25, titleColor: myColor.offWhite, bgColor: .clear, cornerRad: 0, boarderW: 1, boarderColor: myColor.offWhite, act: #selector(IntroVController.campaign(_:)), addSubview: true, alpha: 0.0)
         
         //multiplayer
-        addButton(name: multiplayer, x: 59, y: 461, width: 633, height: 85, title: "Multiplayer", font: "HelveticaNeue-Bold", fontSize: 25, titleColor: myColor.offWhite, bgColor: .clear, cornerRad: 5, boarderW: 1, boarderColor: myColor.offWhite, act: #selector(IntroVController.multiplayer(_:)), addSubview: true, alpha: 0.0)
+        addButton(name: multiplayer, x: 59, y: 461, width: 633, height: 85, title: "Multiplayer", font: "HelveticaNeue-Bold", fontSize: 25, titleColor: myColor.offWhite, bgColor: .clear, cornerRad: 0, boarderW: 1, boarderColor: myColor.offWhite, act: #selector(IntroVController.multiplayer(_:)), addSubview: true, alpha: 0.0)
         
         //solo
-        addButton(name: solo, x: 59, y: 593, width: 633, height: 85, title: "Solo", font: "HelveticaNeue-Bold", fontSize: 25, titleColor: myColor.offWhite, bgColor: .clear, cornerRad: 5, boarderW: 1, boarderColor: myColor.offWhite, act: #selector(IntroVController.solo(_:)), addSubview: true, alpha: 0.0)
+        addButton(name: solo, x: 59, y: 593, width: 633, height: 85, title: "Solo", font: "HelveticaNeue-Bold", fontSize: 25, titleColor: myColor.offWhite, bgColor: .clear, cornerRad: 0, boarderW: 1, boarderColor: myColor.offWhite, act: #selector(IntroVController.solo(_:)), addSubview: true, alpha: 0.0)
 
         //IAP
-        addButton(name: store, x: 59, y: 725, width: 633, height: 85, title: "Store", font: "HelveticaNeue-Bold", fontSize: 25, titleColor: myColor.offWhite, bgColor: .clear, cornerRad: 5, boarderW: 1, boarderColor: myColor.offWhite, act: #selector(IntroVController.store(_:)), addSubview: true, alpha: 0.0)
+        addButton(name: store, x: 59, y: 725, width: 633, height: 85, title: "Store", font: "HelveticaNeue-Bold", fontSize: 25, titleColor: myColor.offWhite, bgColor: .clear, cornerRad: 0, boarderW: 1, boarderColor: myColor.offWhite, act: #selector(IntroVController.store(_:)), addSubview: true, alpha: 0.0)
         
         // unlock campaign
-        addButton(name: campaignIAP, x: 59, y: 323, width: 633, height: 85, title: "Unlock Campaign", font: "HelveticaNeue-Bold", fontSize: 25, titleColor: myColor.offWhite, bgColor: .clear, cornerRad: 5, boarderW: 1, boarderColor: myColor.offWhite, act: #selector(IntroVController.campaignIAP(_:)), addSubview: false, alpha: 0.0)
+        addButton(name: campaignIAP, x: 59, y: 323, width: 633, height: 85, title: "Unlock Campaign", font: "HelveticaNeue-Bold", fontSize: 25, titleColor: myColor.offWhite, bgColor: .clear, cornerRad: 0, boarderW: 1, boarderColor: myColor.offWhite, act: #selector(IntroVController.campaignIAP(_:)), addSubview: false, alpha: 0.0)
         
         // unlock multiplayer
-        addButton(name: multiplayerIAP, x: 59, y: 461, width: 633, height: 85, title: "Unlock Multiplayer", font: "HelveticaNeue-Bold", fontSize: 25, titleColor: myColor.offWhite, bgColor: .clear, cornerRad: 5, boarderW: 1, boarderColor: myColor.offWhite, act: #selector(IntroVController.multiplayerIAP(_:)), addSubview: false, alpha: 0.0)
+        addButton(name: multiplayerIAP, x: 59, y: 461, width: 633, height: 85, title: "Unlock Multiplayer", font: "HelveticaNeue-Bold", fontSize: 25, titleColor: myColor.offWhite, bgColor: .clear, cornerRad: 0, boarderW: 1, boarderColor: myColor.offWhite, act: #selector(IntroVController.multiplayerIAP(_:)), addSubview: false, alpha: 0.0)
         
         // unlock solo
-        addButton(name: soloIAP, x: 59, y: 593, width: 633, height: 85, title: "Unlock Solo", font: "HelveticaNeue-Bold", fontSize: 25, titleColor: myColor.offWhite, bgColor: .clear, cornerRad: 5, boarderW: 1, boarderColor: myColor.offWhite, act: #selector(IntroVController.soloIAP(_:)), addSubview: false, alpha: 0.0)
+        addButton(name: soloIAP, x: 59, y: 593, width: 633, height: 85, title: "Unlock Solo", font: "HelveticaNeue-Bold", fontSize: 25, titleColor: myColor.offWhite, bgColor: .clear, cornerRad: 0, boarderW: 1, boarderColor: myColor.offWhite, act: #selector(IntroVController.soloIAP(_:)), addSubview: false, alpha: 0.0)
         
         // restore
-        addButton(name: restore, x: 59, y: 725, width: 633, height: 85, title: "Restore Purchases", font: "HelveticaNeue-Bold", fontSize: 25, titleColor: myColor.offWhite, bgColor: .clear, cornerRad: 5, boarderW: 1, boarderColor: myColor.offWhite, act: #selector(IntroVController.restore(_:)), addSubview: false, alpha: 0.0)
+        addButton(name: restore, x: 59, y: 725, width: 633, height: 85, title: "Restore Purchases", font: "HelveticaNeue-Bold", fontSize: 25, titleColor: myColor.offWhite, bgColor: .clear, cornerRad: 0, boarderW: 1, boarderColor: myColor.offWhite, act: #selector(IntroVController.restore(_:)), addSubview: false, alpha: 0.0)
 
         //playerVsPlayer
-        addButton(name: playerVsPlayer, x: 59, y: 323, width: 633, height: 85, title: "Player Vs Player", font: "HelveticaNeue-Bold", fontSize: 25, titleColor: myColor.offWhite, bgColor: .clear, cornerRad: 5, boarderW: 1, boarderColor: myColor.offWhite, act: #selector(IntroVController.playerVsPlayer(_:)), addSubview: false, alpha: 0.0)
+        addButton(name: playerVsPlayer, x: 59, y: 323, width: 633, height: 85, title: "Player vs Player", font: "HelveticaNeue-Bold", fontSize: 25, titleColor: myColor.offWhite, bgColor: .clear, cornerRad: 0, boarderW: 1, boarderColor: myColor.offWhite, act: #selector(IntroVController.playerVsPlayer(_:)), addSubview: false, alpha: 0.0)
         playerVsPlayer.tag = 2000
         
         //aI
-        addButton(name: aI, x: 59, y: 461, width: 633, height: 85, title: "Vs iPhone", font: "HelveticaNeue-Bold", fontSize: 25, titleColor: myColor.offWhite, bgColor: .clear, cornerRad: 5, boarderW: 1, boarderColor: myColor.offWhite, act: #selector(IntroVController.aI(_:)), addSubview: false, alpha: 0.0)
+        addButton(name: aI, x: 59, y: 461, width: 633, height: 85, title: "Bot", font: "HelveticaNeue-Bold", fontSize: 25, titleColor: myColor.offWhite, bgColor: .clear, cornerRad: 0, boarderW: 1, boarderColor: myColor.offWhite, act: #selector(IntroVController.aI(_:)), addSubview: false, alpha: 0.0)
         aI.tag = 1000
         
         //Menux Button (transition in exiting game)
@@ -279,8 +279,8 @@ class IntroVController: UIViewController {
         backBlack.frame = CGRect(x: 0, y: 0, width: screenWidth, height: screenHeight)
         view.addSubview(backBlack)
         view.bringSubview(toFront: backBlack)
-        addButton(name: tru, x: 59, y: 461, width: 633, height: 85, title: "Try Other Modes", font: "HelveticaNeue-Bold", fontSize: 30, titleColor: myColor.offWhite, bgColor: .clear, cornerRad: 5, boarderW: 1, boarderColor: myColor.offWhite, act: #selector(IntroVController.tru(_:)), addSubview: true, alpha: 0.0)
-        addButton(name: purcha, x: 59, y: 323, width: 633, height: 85, title: "Purchase", font: "HelveticaNeue-Bold", fontSize: 30, titleColor: myColor.offWhite, bgColor: .clear, cornerRad: 5, boarderW: 1, boarderColor: myColor.offWhite, act: #selector(IntroVController.purch(_:)), addSubview: true, alpha: 0.0)
+        addButton(name: tru, x: 59, y: 461, width: 633, height: 85, title: "Try Other Modes", font: "HelveticaNeue-Bold", fontSize: 30, titleColor: myColor.offWhite, bgColor: .clear, cornerRad: 0, boarderW: 1, boarderColor: myColor.offWhite, act: #selector(IntroVController.tru(_:)), addSubview: true, alpha: 0.0)
+        addButton(name: purcha, x: 59, y: 323, width: 633, height: 85, title: "Purchase", font: "HelveticaNeue-Bold", fontSize: 30, titleColor: myColor.offWhite, bgColor: .clear, cornerRad: 0, boarderW: 1, boarderColor: myColor.offWhite, act: #selector(IntroVController.purch(_:)), addSubview: true, alpha: 0.0)
         addLabel(name: message, text: "Campaign Mode Trial Over\n Purchase for $0.99 or\n Try other game modes for free", textColor: myColor.offWhite, textAlignment: .center, fontName: "HelveticaNeue-Bold", fontSize: 18, x: 100, y: 60, width: 550, height: 200, lines: 0)
         message.alpha = 0.0
         view.addSubview(message)

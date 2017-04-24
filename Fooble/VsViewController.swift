@@ -34,9 +34,9 @@ class VsViewController: GameSetupViewController {
     var test = false
     var timerRanOutOn: Team = .red
     var yellowPointsInt = Int() {didSet{yellowPointsString = String(yellowPointsInt)}}
-    var yellowPointsString = "Score"
+    var yellowPointsString = ""
     var redPointsInt = Int() {didSet{redPointsString = String(redPointsInt)}}
-    var redPointsString = "Score"
+    var redPointsString = ""
    
     
     override var prefersStatusBarHidden: Bool {
@@ -905,22 +905,22 @@ class VsViewController: GameSetupViewController {
     }
     
     func addButtons() {
-        addLabel(name: yellowScore, text: currentScoreString, textColor: myColor.yellow, textAlignment: .left, fontName: "HelveticaNeue-Bold", fontSize: 20, x: 49, y: 1230, width: 150, height: 60, lines: 0)
+        addLabel(name: yellowScore, text: currentScoreString, textColor: .white , textAlignment: .left, fontName: "HelveticaNeue-Bold", fontSize: 20, x: 49, y: 1230, width: 150, height: 60, lines: 0)
         // red score label
-        addLabel(name: redScore, text: currentScoreString, textColor: myColor.pink, textAlignment: .right, fontName: "HelveticaNeue-Bold", fontSize: 55, x: 300, y: 1180, width: 400, height: 106, lines: 0)
+        addLabel(name: redScore, text: currentScoreString, textColor: .white, textAlignment: .right, fontName: "HelveticaNeue-Bold", fontSize: 30, x: 300, y: 1180, width: 400, height: 106, lines: 0)
         //back button
-        addButton(name: back, x: 59, y: 594, width: 633, height: 85, title: "Resume Game", font: "HelveticaNeue-Bold", fontSize: 30, titleColor: myColor.offWhite, bgColor: .clear, cornerRad: 5, boarderW: 1, boarderColor: myColor.offWhite, act: #selector(VsViewController.back(_:)), addSubview: false)
+        addButton(name: back, x: 59, y: 594, width: 633, height: 85, title: "Resume Game", font: "HelveticaNeue-Bold", fontSize: 20, titleColor: myColor.offWhite, bgColor: .clear, cornerRad: 0, boarderW: 1, boarderColor: myColor.offWhite, act: #selector(VsViewController.back(_:)), addSubview: false)
         //sequencebutton
-        addButton(name: sequence, x: 59, y: 460, width: 633, height: 85, title: "Sequences", font: "HelveticaNeue-Bold", fontSize: 30, titleColor: myColor.offWhite, bgColor: .clear, cornerRad: 5, boarderW: 1, boarderColor: myColor.offWhite, act: #selector(VsViewController.sequence(_:)), addSubview: false)
+        addButton(name: sequence, x: 59, y: 460, width: 633, height: 85, title: "Sequences", font: "HelveticaNeue-Bold", fontSize: 20, titleColor: myColor.offWhite, bgColor: .clear, cornerRad: 0, boarderW: 1, boarderColor: myColor.offWhite, act: #selector(VsViewController.sequence(_:)), addSubview: false)
         //sequence label
         addLabel(name: sequences, text: "Sequences", textColor: myColor.offWhite, textAlignment: .center, fontName: "HelveticaNeue-Bold", fontSize: 50, x: 0, y: 100, width: 750, height: 110, lines: 0)
         //Menux Button (transition in exiting game)
         addButton(name: menuX, x: 20, y: 25, width: 65, height: 65, title: "X", font: "HelveticaNeue-Bold", fontSize: 20, titleColor: myColor.offWhite, bgColor: .clear, cornerRad: 0, boarderW: 0, boarderColor: .clear, act: #selector(VsViewController.menuX(_:)), addSubview: false)
         //Menux2 Button (transition in exiting game)
-        addButton(name: menuX2, x: 0, y: 0, width: 116, height: 122, title: "", font: "HelveticaNeue-Bold", fontSize: 30, titleColor: myColor.offWhite, bgColor: .clear, cornerRad: 0, boarderW: 0, boarderColor: .clear, act: #selector(VsViewController.menuX2(_:)), addSubview: false)
+        addButton(name: menuX2, x: 0, y: 0, width: 116, height: 122, title: "", font: "HelveticaNeue-Bold", fontSize: 20, titleColor: myColor.offWhite, bgColor: .clear, cornerRad: 0, boarderW: 0, boarderColor: .clear, act: #selector(VsViewController.menuX2(_:)), addSubview: false)
         menuX2.setImage(#imageLiteral(resourceName: "menu215"), for: .normal)
         //Exit Button
-        addButton(name: exit, x: 50, y: 1145, width: 650, height: 87, title: "Exit", font: "HelveticaNeue-Bold", fontSize: 30, titleColor: myColor.offWhite, bgColor: .clear, cornerRad: 5, boarderW: 1, boarderColor: myColor.offWhite, act: #selector(VsViewController.exit(_:)), addSubview: false)
+        addButton(name: exit, x: 50, y: 1145, width: 650, height: 87, title: "Exit", font: "HelveticaNeue-Bold", fontSize: 20, titleColor: myColor.offWhite, bgColor: .clear, cornerRad: 0, boarderW: 1, boarderColor: myColor.offWhite, act: #selector(VsViewController.exit(_:)), addSubview: false)
     }
     
    
