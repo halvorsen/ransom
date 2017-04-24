@@ -19,7 +19,7 @@ class GameViewController: GameSetupViewController {
     var lastIndex = Int()
     let myNarrative = Narrative()
         let myGameCenter = GameCenter()
-    var isFirst = true
+    var isFirst = false
     
     
     override var prefersStatusBarHidden: Bool {
@@ -59,6 +59,16 @@ class GameViewController: GameSetupViewController {
     
     override func viewWillAppear(_ animated: Bool) {
         populateDotsExtended()
+        let launchedBefore = UserDefaults.standard.bool(forKey: "launchedBefore2")
+        if launchedBefore {
+            print("Not first launch.")
+        } else {
+            print("is first launch")
+           
+            UserDefaults.standard.set(true, forKey: "launchedBefore2")
+            isFirst = true
+        }
+        
         if tagLevelIdentifier == 1 && isFirst {
             isFirst = false
             let vc = IntroViewController()
