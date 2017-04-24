@@ -435,28 +435,28 @@ class GameViewController: GameSetupViewController {
         gameCenter.addTarget(self, action: #selector(GameViewController.showGameCenterVC(_:)), for: .touchUpInside)
         
         //leaderboard button
-        addButton(name: leaderboard, x: 59, y: 726, width: 633, height: 85, title: "Game Center", font: "HelveticaNeue-Bold", fontSize: 30, titleColor: myColor.offWhite, bgColor: .clear, cornerRad: 5, boarderW: 1, boarderColor: myColor.white, act: #selector(GameViewController.showGameCenterVC(_:)), addSubview: false)
+        addButton(name: leaderboard, x: 59, y: 726, width: 633, height: 85, title: "Game Center", font: "HelveticaNeue-Bold", fontSize: 20, titleColor: myColor.offWhite, bgColor: .clear, cornerRad: 0, boarderW: 1, boarderColor: myColor.white, act: #selector(GameViewController.showGameCenterVC(_:)), addSubview: false)
         //restart button
-        addButton(name: restart, x: 59, y: 324, width: 633, height: 85, title: "Restart", font: "HelveticaNeue-Bold", fontSize: 30, titleColor: myColor.white, bgColor: .clear, cornerRad: 5, boarderW: 1, boarderColor: myColor.offWhite, act: #selector(GameViewController.restart(_:)), addSubview: false)
+        addButton(name: restart, x: 59, y: 324, width: 633, height: 85, title: "Restart", font: "HelveticaNeue-Bold", fontSize: 20, titleColor: myColor.white, bgColor: .clear, cornerRad: 0, boarderW: 1, boarderColor: myColor.offWhite, act: #selector(GameViewController.restart(_:)), addSubview: false)
         
         
         // show list button
-        addButton(name: showList, x: 50, y: 1044, width: 650, height: 87, title: "List On", font: "HelveticaNeue-Bold", fontSize: 30, titleColor: myColor.offWhite, bgColor: .clear, cornerRad: 5, boarderW: 1, boarderColor: myColor.offWhite, act: #selector(GameViewController.showList(_:)), addSubview: false)
+        addButton(name: showList, x: 50, y: 1044, width: 650, height: 87, title: "Play", font: "HelveticaNeue-Bold", fontSize: 30, titleColor: myColor.offWhite, bgColor: .clear, cornerRad: 0, boarderW: 1, boarderColor: myColor.offWhite, act: #selector(GameViewController.showList(_:)), addSubview: false)
         addLabel(name: yellowScore, text: currentScoreString, textColor: UIColor(red: 190/255, green: 154/255, blue: 35/255, alpha: 1.0), textAlignment: .left, fontName: "HelveticaNeue-Bold", fontSize: 36, x: 50, y: 1231, width: 250, height: 46, lines: 0)
         // red score label
         addLabel(name: redScore, text: currentScoreString, textColor: myColor.red, textAlignment: .right, fontName: "HelveticaNeue-Bold", fontSize: 36, x: 450, y: 1231, width: 250, height: 46, lines: 0)
-        addLabel(name: tutorialAnnotation2, text: "Pair; 3 Flush; 3 Straight; 3 of a Kind; 3 Straight Flush; 5 Straight; 5 Flush; 5 Full House; 4 of a Kind; 5 of a Kind; 5 Straight Flush\nTAP TO REMOVE", textColor: myColor.offWhite, textAlignment: .center, fontName: "HelveticaNeue-Bold", fontSize: 12, x: 100, y: 1077, width: 550, height: 150, lines: 0)
+        addLabel(name: tutorialAnnotation2, text: "", textColor: myColor.offWhite, textAlignment: .center, fontName: "HelveticaNeue-Bold", fontSize: 12, x: 100, y: 1077, width: 550, height: 150, lines: 0)
         tutorialAnnotation2.isUserInteractionEnabled = true
         let tap: UITapGestureRecognizer = UITapGestureRecognizer(
             target: self, action: #selector(GameViewController.disappear(_:)))
         tutorialAnnotation2.addGestureRecognizer(tap)
         //tutorialAnnotation label
-        addLabel(name: tutorialAnnotation, text: "Find the following sequences to score points and climb the Game Center ranks\n(draw finger over dots to select).", textColor: myColor.offWhite, textAlignment: .center, fontName: "HelveticaNeue-Bold", fontSize: 14, x: 100, y: 60, width: 550, height: 130, lines: 0)
+        addLabel(name: tutorialAnnotation, text: "", textColor: myColor.offWhite, textAlignment: .center, fontName: "HelveticaNeue-Bold", fontSize: 14, x: 100, y: 60, width: 550, height: 130, lines: 0)
         //tutorialAnnotation3 label
         addLabel(name: tutorialAnnotation3, text: "", textColor: myColor.offWhite, textAlignment: .center, fontName: "HelveticaNeue-Bold", fontSize: 14, x: 100, y: 60, width: 550, height: 130, lines: 0)
         
         //Okay Button
-        addButton(name: okay, x: 199, y: 1250, width: 353, height: 55, title: "Okay", font: "HelveticaNeue-Bold", fontSize: 20, titleColor: myColor.offWhite, bgColor: myColor.background, cornerRad: 5, boarderW: 1, boarderColor: myColor.offWhite, act: #selector(GameViewController.okay(_:)), addSubview: false)
+        addButton(name: okay, x: 199, y: 1250, width: 353, height: 85, title: "Okay", font: "HelveticaNeue-Bold", fontSize: 20, titleColor: myColor.offWhite, bgColor: UIColor(colorLiteralRed: 24/255, green: 23/255, blue: 67/255, alpha: 1.0), cornerRad: 0, boarderW: 1, boarderColor: myColor.offWhite, act: #selector(GameViewController.okay(_:)), addSubview: false)
         if tagLevelIdentifier == 100 {
             okay.frame.origin.y -= 50
         }
@@ -471,11 +471,11 @@ class GameViewController: GameSetupViewController {
         //sequence row one label
         addLabel(name: sequenceRowOne, text: "Pair\n3 Flush\n3 Straight\n3 of a Kind\n3 Straight Flush\n5 Straight\n5 Flush\n5 Full House\n4 of a Kind\n5 of a Kind\n5 Straight Flush", textColor: myColor.offWhite, textAlignment: .left, fontName: "HelveticaNeue-Bold", fontSize: 20, x: 80, y: 237, width: 500, height: 750, lines: 0)
         //Continue To Play Button
-        addButton(name: continueToPlay, x: 59, y: 1209, width: 633, height: 85, title: "Continue To Play", font: "HelveticaNeue-Bold", fontSize: 30, titleColor: myColor.offWhite, bgColor: .clear, cornerRad: 5, boarderW: 1, boarderColor: myColor.offWhite, act: #selector(GameViewController.continueToPlay(_:)), addSubview: false)
+        addButton(name: continueToPlay, x: 59, y: 1209, width: 633, height: 85, title: "Continue To Play", font: "HelveticaNeue-Bold", fontSize: 20, titleColor: myColor.offWhite, bgColor: .clear, cornerRad: 0, boarderW: 1, boarderColor: myColor.offWhite, act: #selector(GameViewController.continueToPlay(_:)), addSubview: false)
         //MenuBox Button
-        addButton(name: menuBox, x: 59, y: 1084, width: 633, height: 85, title: "Menu", font: "HelveticaNeue-Bold", fontSize: 30, titleColor: myColor.offWhite, bgColor: .clear, cornerRad: 5, boarderW: 1, boarderColor: myColor.offWhite, act: #selector(GameViewController.menuBox(_:)), addSubview: false)
+        addButton(name: menuBox, x: 59, y: 1084, width: 633, height: 85, title: "Menu", font: "HelveticaNeue-Bold", fontSize: 20, titleColor: myColor.offWhite, bgColor: .clear, cornerRad: 0, boarderW: 1, boarderColor: myColor.offWhite, act: #selector(GameViewController.menuBox(_:)), addSubview: false)
         //score label
-        addLabel(name: score, text: "SCORE", textColor: myColor.offWhite, textAlignment: .right, fontName: "HelveticaNeue-CondensedBold", fontSize: 36, x: 200, y: 1252, width: 525, height: 60, lines: 0)
+        addLabel(name: score, text: "", textColor: myColor.offWhite, textAlignment: .right, fontName: "HelveticaNeue-CondensedBold", fontSize: 36, x: 200, y: 1252, width: 525, height: 60, lines: 0)
         print("taglevel")
         print(tagLevelIdentifier)
         if tagLevelIdentifier == 101 { view.addSubview(score) }
@@ -505,9 +505,9 @@ class GameViewController: GameSetupViewController {
             }
         }
         //back button
-        addButton(name: back, x: 59, y: 594, width: 633, height: 85, title: "Resume Game", font: "HelveticaNeue-Bold", fontSize: 30, titleColor: myColor.offWhite, bgColor: .clear, cornerRad: 5, boarderW: 1, boarderColor: myColor.offWhite, act: #selector(GameViewController.back(_:)), addSubview: false)
+        addButton(name: back, x: 59, y: 594, width: 633, height: 85, title: "Resume Game", font: "HelveticaNeue-Bold", fontSize: 20, titleColor: myColor.offWhite, bgColor: .clear, cornerRad: 0, boarderW: 1, boarderColor: myColor.offWhite, act: #selector(GameViewController.back(_:)), addSubview: false)
         //sequencebutton
-        addButton(name: sequence, x: 59, y: 460, width: 633, height: 85, title: "Sequences", font: "HelveticaNeue-Bold", fontSize: 30, titleColor: myColor.offWhite, bgColor: .clear, cornerRad: 5, boarderW: 1, boarderColor: myColor.offWhite, act: #selector(GameViewController.sequence(_:)), addSubview: false)
+        addButton(name: sequence, x: 59, y: 460, width: 633, height: 85, title: "Sequences", font: "HelveticaNeue-Bold", fontSize: 20, titleColor: myColor.offWhite, bgColor: .clear, cornerRad: 0, boarderW: 1, boarderColor: myColor.offWhite, act: #selector(GameViewController.sequence(_:)), addSubview: false)
         //sequence label
         addLabel(name: sequences, text: "Sequences", textColor: myColor.offWhite, textAlignment: .center, fontName: "HelveticaNeue-Bold", fontSize: 50, x: 0, y: 100, width: 750, height: 110, lines: 0)
         //Menux Button (transition in exiting game)
