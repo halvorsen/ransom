@@ -1,18 +1,25 @@
 PODS:
+  - Crashlytics (3.8.4):
+    - Fabric (~> 1.6.3)
+  - Fabric (1.6.11)
   - GCHelper (0.4.1)
   - Intro (0.1.0)
   - SwiftyStoreKit (0.5.4)
 
 DEPENDENCIES:
+  - Crashlytics
+  - Fabric
   - GCHelper (~> 0.3)
   - Intro
   - SwiftyStoreKit
 
 SPEC CHECKSUMS:
+  Crashlytics: 79e236942ca1e7fc641df1feb9a275360a78ab6a
+  Fabric: 5911403591946b8228ab1c51d98f1d7137e863c6
   GCHelper: 168bb32ef2b045580ccc384cf6be11db5aae8fd8
   Intro: cd665096c67bf7082bf45e88eae09d6bec8f34f9
   SwiftyStoreKit: a8b02a708c6e2bf52207836d58afd3738e2f6670
 
-PODFILE CHECKSUM: c1dd17e852d41d3bb5be6c0a35a146acfd9beef1
+PODFILE CHECKSUM: f706948dbdcbf2d7e0fd7cc5b3ec654463a31f8c
 
-COCOAPODS: 1.1.1
+COCOAPODS: 1.2.1
