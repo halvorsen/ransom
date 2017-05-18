@@ -120,59 +120,151 @@ class IntroVController: UIViewController {
     private func addButtons() {
         
         //princess
+        
         let princessImage = UIImage(named: "Princess.png")
         let princessView = UIImageView(image: princessImage)
-        princessView.alpha = 0.0
-        princessView.frame = CGRect(x: (490/750)*screenWidth, y: 1300*screenHeight/1334 - 242*screenWidth/750, width: 263*screenWidth/750, height: 242*screenWidth/750)
-      //  self.view.addSubview(princessView)
-        UIView.animate(withDuration: 0.3) {
-            princessView.alpha = 1.0
-        }
+        princessView.frame = CGRect(x: (520/750)*screenWidth, y: (1100/750)*screenWidth, width: 0.9*263*screenWidth/750, height: 0.9*242*screenWidth/750)
+        self.view.addSubview(princessView)
         
         //campaign
-        addButton(name: campaign, x: 59, y: 323, width: 633, height: 85, title: "Campaign", font: "HelveticaNeue-Bold", fontSize: 25, titleColor: myColor.offWhite, bgColor: .clear, cornerRad: 0, boarderW: 1, boarderColor: myColor.offWhite, act: #selector(IntroVController.campaign(_:)), addSubview: true, alpha: 0.0)
+        
+        campaign.frame = CGRect(x: (59/750)*screenWidth, y: (323/1334)*screenHeight, width: 633*screenWidth/750, height: 85*screenWidth/750)
+        campaign.setTitle("Campaign", for: UIControlState.normal)
+        campaign.titleLabel!.font = UIFont(name: "HelveticaNeue-Bold", size: fontSizeMultiplier*20)
+        campaign.setTitleColor(UIColor(red: 255/255, green: 255/255, blue: 255/255, alpha: 1.0), for: .normal)
+        campaign.backgroundColor = UIColor(red: 252/255, green: 6/255, blue: 107/255, alpha: 1.0)
+        campaign.layer.cornerRadius = 0
+        campaign.layer.borderWidth = 2
+        campaign.layer.borderColor = UIColor(red: 234/255, green: 39/255, blue: 107/255, alpha: 1.0).cgColor
+        campaign.addTarget(self, action: #selector(IntroVController.campaign(_:)), for: .touchUpInside)
+        self.view.addSubview(campaign)
         
         //multiplayer
-        addButton(name: multiplayer, x: 59, y: 461, width: 633, height: 85, title: "Multiplayer", font: "HelveticaNeue-Bold", fontSize: 25, titleColor: myColor.offWhite, bgColor: .clear, cornerRad: 0, boarderW: 1, boarderColor: myColor.offWhite, act: #selector(IntroVController.multiplayer(_:)), addSubview: true, alpha: 0.0)
+        
+        multiplayer.frame = CGRect(x: (59/750)*screenWidth, y: (461/1334)*screenHeight, width: 633*screenWidth/750, height: 85*screenWidth/750)
+        multiplayer.setTitle("Multiplayer", for: UIControlState.normal)
+        multiplayer.titleLabel!.font = UIFont(name: "HelveticaNeue-Bold", size: fontSizeMultiplier*20)
+        multiplayer.setTitleColor(UIColor(red: 255/255, green: 255/255, blue: 255/255, alpha: 1.0), for: .normal)
+        multiplayer.backgroundColor = UIColor(red: 252/255, green: 216/255, blue: 6/255, alpha: 1.0)
+        multiplayer.layer.cornerRadius = 0
+        multiplayer.layer.borderWidth = 2
+        multiplayer.layer.borderColor = UIColor(red: 228/255, green: 169/255, blue: 51/255, alpha: 1.0).cgColor
+        multiplayer.addTarget(self, action: #selector(IntroVController.multiplayer(_:)), for: .touchUpInside)
+        self.view.addSubview(multiplayer)
         
         //solo
-        addButton(name: solo, x: 59, y: 593, width: 633, height: 85, title: "Solo", font: "HelveticaNeue-Bold", fontSize: 25, titleColor: myColor.offWhite, bgColor: .clear, cornerRad: 0, boarderW: 1, boarderColor: myColor.offWhite, act: #selector(IntroVController.solo(_:)), addSubview: true, alpha: 0.0)
+        
+        solo.frame = CGRect(x: (59/750)*screenWidth, y: (593/1334)*screenHeight, width: 633*screenWidth/750, height: 85*screenWidth/750)
+        solo.setTitle("Quick Play", for: UIControlState.normal)
+        solo.titleLabel!.font = UIFont(name: "HelveticaNeue-Bold", size: fontSizeMultiplier*20)
+        solo.setTitleColor(UIColor(red: 255/255, green: 255/255, blue: 255/255, alpha: 1.0), for: .normal)
+        solo.backgroundColor = UIColor(red: 73/255, green: 188/255, blue: 255/255, alpha: 1.0)
+        solo.layer.cornerRadius = 0
+        solo.layer.borderWidth = 2
+        solo.layer.borderColor = UIColor(red: 48/255, green: 108/255, blue: 241/255, alpha: 1.0).cgColor
+        solo.addTarget(self, action: #selector(IntroVController.solo(_:)), for: .touchUpInside)
+        self.view.addSubview(solo)
 
         //IAP
-        addButton(name: store, x: 59, y: 725, width: 633, height: 85, title: "Store", font: "HelveticaNeue-Bold", fontSize: 25, titleColor: myColor.offWhite, bgColor: .clear, cornerRad: 0, boarderW: 1, boarderColor: myColor.offWhite, act: #selector(IntroVController.store(_:)), addSubview: true, alpha: 0.0)
+        
+        store.frame = CGRect(x: (59/750)*screenWidth, y: (725/1334)*screenHeight, width: 633*screenWidth/750, height: 85*screenWidth/750)
+        store.setTitle("Unlock", for: UIControlState.normal)
+        store.titleLabel!.font = UIFont(name: "HelveticaNeue-Bold", size: fontSizeMultiplier*20)
+        store.setTitleColor(UIColor(red: 24/255, green: 23/255, blue: 67/255, alpha: 1.0), for: .normal)
+        store.backgroundColor = UIColor(red: 255/255, green: 255/255, blue: 255/255, alpha: 1.0)
+        store.layer.cornerRadius = 0
+        store.layer.borderWidth = 2
+        store.layer.borderColor = UIColor(red: 210/255, green: 199/255, blue: 229/255, alpha: 1.0).cgColor
+        store.addTarget(self, action: #selector(IntroVController.store(_:)), for: .touchUpInside)
+        self.view.addSubview(store)
         
         // unlock campaign
-        addButton(name: campaignIAP, x: 59, y: 323, width: 633, height: 85, title: "Unlock Campaign", font: "HelveticaNeue-Bold", fontSize: 25, titleColor: myColor.offWhite, bgColor: .clear, cornerRad: 0, boarderW: 1, boarderColor: myColor.offWhite, act: #selector(IntroVController.campaignIAP(_:)), addSubview: false, alpha: 0.0)
+        
+        campaignIAP.frame = CGRect(x: (59/750)*screenWidth, y: (323/1334)*screenHeight, width: 633*screenWidth/750, height: 85*screenWidth/750)
+        campaignIAP.setTitle("Unlock Campaign", for: UIControlState.normal)
+        campaignIAP.titleLabel!.font = UIFont(name: "HelveticaNeue-Bold", size: fontSizeMultiplier*20)
+        campaignIAP.setTitleColor(UIColor(red: 215/255, green: 215/255, blue: 215/255, alpha: 1.0), for: .normal)
+        campaignIAP.backgroundColor = .clear
+        campaignIAP.layer.cornerRadius = 0
+        campaignIAP.layer.borderWidth = 2
+        campaignIAP.layer.borderColor = UIColor(red: 215/255, green: 215/255, blue: 215/255, alpha: 1.0).cgColor
+        campaignIAP.addTarget(self, action: #selector(IntroVController.campaignIAP(_:)), for: .touchUpInside)
+        
         
         // unlock multiplayer
-        addButton(name: multiplayerIAP, x: 59, y: 461, width: 633, height: 85, title: "Unlock Multiplayer", font: "HelveticaNeue-Bold", fontSize: 25, titleColor: myColor.offWhite, bgColor: .clear, cornerRad: 0, boarderW: 1, boarderColor: myColor.offWhite, act: #selector(IntroVController.multiplayerIAP(_:)), addSubview: false, alpha: 0.0)
+        
+        multiplayerIAP.frame = CGRect(x: (59/750)*screenWidth, y: (461/1334)*screenHeight, width: 633*screenWidth/750, height: 85*screenWidth/750)
+        multiplayerIAP.setTitle("Unlock Multiplayer", for: UIControlState.normal)
+        multiplayerIAP.titleLabel!.font = UIFont(name: "HelveticaNeue-Bold", size: fontSizeMultiplier*20)
+        multiplayerIAP.setTitleColor(UIColor(red: 215/255, green: 215/255, blue: 215/255, alpha: 1.0), for: .normal)
+        multiplayerIAP.backgroundColor = .clear
+        multiplayerIAP.layer.cornerRadius = 0
+        multiplayerIAP.layer.borderWidth = 2
+        multiplayerIAP.layer.borderColor = UIColor(red: 215/255, green: 215/255, blue: 215/255, alpha: 1.0).cgColor
+        multiplayerIAP.addTarget(self, action: #selector(IntroVController.multiplayerIAP(_:)), for: .touchUpInside)
+        
         
         // unlock solo
-        addButton(name: soloIAP, x: 59, y: 593, width: 633, height: 85, title: "Unlock Solo", font: "HelveticaNeue-Bold", fontSize: 25, titleColor: myColor.offWhite, bgColor: .clear, cornerRad: 0, boarderW: 1, boarderColor: myColor.offWhite, act: #selector(IntroVController.soloIAP(_:)), addSubview: false, alpha: 0.0)
+        
+        soloIAP.frame = CGRect(x: (59/750)*screenWidth, y: (593/1334)*screenHeight, width: 633*screenWidth/750, height: 85*screenWidth/750)
+        soloIAP.setTitle("Unlock Solo", for: UIControlState.normal)
+        soloIAP.titleLabel!.font = UIFont(name: "HelveticaNeue-Bold", size: fontSizeMultiplier*20)
+        soloIAP.setTitleColor(UIColor(red: 215/255, green: 215/255, blue: 215/255, alpha: 1.0), for: .normal)
+        soloIAP.backgroundColor = .clear
+        soloIAP.layer.cornerRadius = 0
+        soloIAP.layer.borderWidth = 2
+        soloIAP.layer.borderColor = UIColor(red: 215/255, green: 215/255, blue: 215/255, alpha: 1.0).cgColor
+        soloIAP.addTarget(self, action: #selector(IntroVController.soloIAP(_:)), for: .touchUpInside)
+        
+        
         
         // restore
-        addButton(name: restore, x: 59, y: 725, width: 633, height: 85, title: "Restore Purchases", font: "HelveticaNeue-Bold", fontSize: 25, titleColor: myColor.offWhite, bgColor: .clear, cornerRad: 0, boarderW: 1, boarderColor: myColor.offWhite, act: #selector(IntroVController.restore(_:)), addSubview: false, alpha: 0.0)
-
+        
+        restore.frame = CGRect(x: (59/750)*screenWidth, y: (725/1334)*screenHeight, width: 633*screenWidth/750, height: 85*screenWidth/750)
+        restore.setTitle("Restore Purchases", for: UIControlState.normal)
+        restore.titleLabel!.font = UIFont(name: "HelveticaNeue-Bold", size: fontSizeMultiplier*20)
+        restore.setTitleColor(UIColor(red: 215/255, green: 215/255, blue: 215/255, alpha: 1.0), for: .normal)
+        restore.backgroundColor = .clear
+        restore.layer.cornerRadius = 0
+        restore.layer.borderWidth = 2
+        restore.layer.borderColor = UIColor(red: 215/255, green: 215/255, blue: 215/255, alpha: 1.0).cgColor
+        restore.addTarget(self, action: #selector(IntroVController.restore(_:)), for: .touchUpInside)
+        
+        
+        
         //playerVsPlayer
-        addButton(name: playerVsPlayer, x: 59, y: 323, width: 633, height: 85, title: "Player vs Player", font: "HelveticaNeue-Bold", fontSize: 25, titleColor: myColor.offWhite, bgColor: .clear, cornerRad: 0, boarderW: 1, boarderColor: myColor.offWhite, act: #selector(IntroVController.playerVsPlayer(_:)), addSubview: false, alpha: 0.0)
+        
+        playerVsPlayer.frame = CGRect(x: (59/750)*screenWidth, y: (323/1334)*screenHeight, width: 633*screenWidth/750, height: 85*screenWidth/750)
+        playerVsPlayer.setTitle("Player vs Player", for: UIControlState.normal)
+        playerVsPlayer.titleLabel!.font = UIFont(name: "HelveticaNeue-Bold", size: fontSizeMultiplier*20)
+        playerVsPlayer.setTitleColor(UIColor(red: 215/255, green: 215/255, blue: 215/255, alpha: 1.0), for: .normal)
+        playerVsPlayer.backgroundColor = .clear
         playerVsPlayer.tag = 2000
+        playerVsPlayer.layer.cornerRadius = 0
+        playerVsPlayer.layer.borderWidth = 2
+        playerVsPlayer.layer.borderColor = UIColor(red: 215/255, green: 215/255, blue: 215/255, alpha: 1.0).cgColor
+        playerVsPlayer.addTarget(self, action: #selector(IntroVController.playerVsPlayer(_:)), for: .touchUpInside)
         
         //aI
-        addButton(name: aI, x: 59, y: 461, width: 633, height: 85, title: "Bot", font: "HelveticaNeue-Bold", fontSize: 25, titleColor: myColor.offWhite, bgColor: .clear, cornerRad: 0, boarderW: 1, boarderColor: myColor.offWhite, act: #selector(IntroVController.aI(_:)), addSubview: false, alpha: 0.0)
+        
+        aI.frame = CGRect(x: (59/750)*screenWidth, y: (461/1334)*screenHeight, width: 633*screenWidth/750, height: 85*screenWidth/750)
+        aI.setTitle("Bot", for: UIControlState.normal)
+        aI.titleLabel!.font = UIFont(name: "HelveticaNeue-Bold", size: fontSizeMultiplier*20)
+        aI.setTitleColor(UIColor(red: 215/255, green: 215/255, blue: 215/255, alpha: 1.0), for: .normal)
+        aI.backgroundColor = .clear
         aI.tag = 1000
+        aI.layer.cornerRadius = 0
+        aI.layer.borderWidth = 2
+        aI.layer.borderColor = UIColor(red: 215/255, green: 215/255, blue: 215/255, alpha: 1.0).cgColor
+        aI.addTarget(self, action: #selector(IntroVController.aI(_:)), for: .touchUpInside)
         
         //Menux Button (transition in exiting game)
-        addButton(name: menuX, x: 20, y: 25, width: 65, height: 65, title: "X", font: "HelveticaNeue-Bold", fontSize: 20, titleColor: myColor.offWhite, bgColor: .clear, cornerRad: 0, boarderW: 0, boarderColor: .clear, act: #selector(IntroVController.menuX(_:)), addSubview: false, alpha: 0.0)
         
-       
-        UIView.animate(withDuration: 0.5) {
-        
-            self.store.alpha = 1.0
-            self.solo.alpha = 1.0
-            self.multiplayer.alpha = 1.0
-            self.campaign.alpha = 1.0
-        
-        }
+        menuX.frame = CGRect(x: (25/750)*screenWidth, y: (25/750)*screenWidth, width: 50*screenWidth/750, height: 50*screenWidth/750)
+        menuX.setTitle("X", for: UIControlState.normal)
+        menuX.titleLabel!.font = UIFont(name: "HelveticaNeue-Bold", size: fontSizeMultiplier*20)
+        menuX.setTitleColor(UIColor(red: 215/255, green: 215/255, blue: 215/255, alpha: 1.0), for: .normal)
+        menuX.addTarget(self, action: #selector(IntroVController.menuX(_:)), for: .touchUpInside)
     }
     
     @objc private func campaign(_ button: UIButton) {

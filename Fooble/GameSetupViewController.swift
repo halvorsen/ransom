@@ -298,9 +298,9 @@ class GameSetupViewController: UIViewController {
             
             let dotLabel = UILabel()
             addLabel(name: dotLabel, text: "", textColor: myColor.white, textAlignment: .center, fontName: "HelveticaNeue-Bold", fontSize: 14, x: 750*(xValue - dotSize/2)/screenWidth, y: 1334*(yValue - dotSize/1.9)/screenHeight, width: 750*dotSize/screenWidth, height: 750*dotSize/screenWidth, lines: 0)
-            dotLabel.layer.borderWidth = 1.0
-            dotLabel.layer.cornerRadius = 2
-            dotLabel.clipsToBounds = true
+           // dotLabel.layer.borderWidth = 1.0
+          //  dotLabel.layer.cornerRadius = 2
+          //  dotLabel.clipsToBounds = true
             dotLabel.layer.zPosition = 1
             
             dotLabels.append(dotLabel)
@@ -345,40 +345,35 @@ class GameSetupViewController: UIViewController {
     }
     
     func populateDots() {
-        
         lastCardDisplayed = 999
         for i in 0..<67 {
+            
             switch myShuffleAndDeal.whatColorIsCard(card: deck[i]!) {
-            case .custom1:
-                dotLabels[i]?.layer.borderColor = myColor.pink.cgColor
-           //     shapeLayers[i]!.strokeColor = myColor.pink.cgColor
+            case .custom1: //pink
+                shapeLayers[i]!.strokeColor = UIColor(red: 249/255, green: 22/255, blue: 109/255, alpha: 1.0).cgColor
                 
-            case .custom2:
-                dotLabels[i]?.layer.borderColor = myColor.yellow.cgColor
-          //      shapeLayers[i]!.strokeColor = myColor.yellow.cgColor
+            case .custom2: //yellow
+                shapeLayers[i]!.strokeColor = UIColor(red: 251/255, green: 214/255, blue: 50/255, alpha: 1.0).cgColor
                 
-            case .custom3:
-                dotLabels[i]?.layer.borderColor = myColor.blue.cgColor
-         //       shapeLayers[i]!.strokeColor = myColor.blue.cgColor
+            case .custom3: //blue
+                shapeLayers[i]!.strokeColor = UIColor(red: 80/255, green: 189/255, blue: 252/255, alpha: 1.0).cgColor
                 
-            case .custom4:
-                dotLabels[i]?.layer.borderColor = myColor.white.cgColor
-          //      shapeLayers[i]!.strokeColor = myColor.white.cgColor
+            case .custom4: //white
+                shapeLayers[i]!.strokeColor = UIColor(red: 255/255, green: 255/255, blue: 255/255, alpha: 1.0).cgColor
                 
             }
             let linewidth = 3.0*screenWidth/750
             shapeLayers[i]!.lineWidth = linewidth
-            
             dotLabels[i]!.text = String(deck[i]!%7 + 1)
-       
             view.layer.addSublayer(shapeLayers[i]!)
             self.view.addSubview(dotLabels[i]!)
-            
         }
-     
+        
+        view.addSubview(menuX)
+        
     }
     
-    public func delay(bySeconds seconds: Double, dispatchLevel: DispatchLevel = .main, closure: @escaping () -> Void) {
+    func delay(bySeconds seconds: Double, dispatchLevel: DispatchLevel = .main, closure: @escaping () -> Void) {
         let dispatchTime = DispatchTime.now() + seconds
         dispatchLevel.dispatchQueue.asyncAfter(deadline: dispatchTime, execute: closure)
     }

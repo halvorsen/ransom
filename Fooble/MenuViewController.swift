@@ -230,14 +230,12 @@ class MenuViewController: UIViewController {
         swipeRight.direction = .right
         view.addGestureRecognizer(swipeRight)
         
-        menuX.frame = CGRect(x: (0/750)*screenWidth, y: (0/750)*screenWidth, width: 116*screenWidth/750, height: 122*screenWidth/750)
-        menuX.setTitle("", for: UIControlState.normal)
+        menuX.frame = CGRect(x: (25/750)*screenWidth, y: (25/750)*screenWidth, width: 50*screenWidth/750, height: 50*screenWidth/750)
+        menuX.setTitle("X", for: UIControlState.normal)
         menuX.titleLabel!.font = UIFont(name: "HelveticaNeue-Bold", size: fontSizeMultiplier*20)
-        menuX.setTitleColor(myColor.offWhite, for: .normal)
+        menuX.setTitleColor(UIColor(red: 215/255, green: 215/255, blue: 215/255, alpha: 1.0), for: .normal)
         menuX.addTarget(self, action: #selector(MenuViewController.menuX(_:)), for: .touchUpInside)
         self.view.addSubview(menuX)
-        menuX.setImage(#imageLiteral(resourceName: "menu215"), for: .normal)
-        
         
         
         
