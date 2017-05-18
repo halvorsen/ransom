@@ -371,8 +371,8 @@ class MenuViewController: UIViewController {
         backBlack.frame = CGRect(x: 0, y: 0, width: screenWidth, height: (6000/750)*screenWidth)
         view.addSubview(backBlack)
         view.bringSubview(toFront: backBlack)
-        addButton(name: tru, x: 59, y: 5127, width: 633, height: 85, title: "Try Other Modes", font: "HelveticaNeue-Bold", fontSize: 30, titleColor: myColor.offWhite, bgColor: .clear, cornerRad: 5, boarderW: 1, boarderColor: myColor.offWhite, act: #selector(MenuViewController.tru(_:)), addSubview: true)
-        addButton(name: purcha, x: 59, y: 4989, width: 633, height: 85, title: "Purchase", font: "HelveticaNeue-Bold", fontSize: 30, titleColor: myColor.offWhite, bgColor: .clear, cornerRad: 5, boarderW: 1, boarderColor: myColor.offWhite, act: #selector(MenuViewController.purch(_:)), addSubview: true)
+        addButton(name: tru, x: 59, y: 5127, width: 633, height: 85, title: "Try Other Modes", font: "HelveticaNeue-Bold", fontSize: 20, titleColor: myColor.offWhite, bgColor: .clear, cornerRad: 0, boarderW: 1, boarderColor: myColor.offWhite, act: #selector(MenuViewController.tru(_:)), addSubview: true)
+        addButton(name: purcha, x: 59, y: 4989, width: 633, height: 85, title: "Purchase", font: "HelveticaNeue-Bold", fontSize: 20, titleColor: myColor.offWhite, bgColor: .clear, cornerRad: 0, boarderW: 1, boarderColor: myColor.offWhite, act: #selector(MenuViewController.purch(_:)), addSubview: true)
         addLabel(name: message, text: "Campaign Mode Trial Over\n Purchase for $0.99 or\n Try other game modes for free", textColor: myColor.offWhite, textAlignment: .center, fontName: "HelveticaNeue-Bold", fontSize: 18, x: 100, y: 4726, width: 550, height: 200, lines: 0)
         view.addSubview(message)
         
